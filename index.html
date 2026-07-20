@@ -20,7 +20,6 @@
         input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1); }
         textarea { min-height: 90px; resize: vertical; }
         
-        /* Bảng đánh giá 12 tiêu chí */
         .table-tieu-chi { width: 100%; border-collapse: collapse; margin-top: 10px; margin-bottom: 15px; font-size: 11pt; }
         .table-tieu-chi th, .table-tieu-chi td { border: 1px solid var(--border); padding: 8px; vertical-align: middle; }
         .table-tieu-chi th { background: #e2e8f0; color: #334155; text-align: center; }
@@ -98,7 +97,6 @@
             <div class="form-group"><label>Ngày dạy:</label><input type="date" id="ngayDay"></div>
         </div>
 
-        <!-- BẢNG ĐÁNH GIÁ 12 TIÊU CHÍ CHI TIẾT THEO MẪU SỞ GD&ĐT -->
         <table class="table-tieu-chi">
             <thead>
                 <tr>
@@ -110,71 +108,35 @@
             </thead>
             <tbody>
                 <!-- Phần 1 -->
-                <tr>
-                    <td rowspan="4" style="font-weight: bold; text-align: center;">1. Kế hoạch bài dạy</td>
-                    <td>1. Mức độ phù hợp của các hoạt động học với mục tiêu, nội dung và phương pháp dạy học.</td>
-                    <td style="text-align: center;">1</td>
-                    <td style="text-align: center;"><input type="number" id="Diem_TC1" min="0" max="1" step="0.25" value="1" oninput="tinhTongDiemThanhPhan()"></td>
-                </tr>
-                <tr>
-                    <td>2. Mức độ rõ ràng, chính xác của mục tiêu, nội dung, sản phẩm, cách thức tổ chức thực hiện mỗi hoạt động.</td>
-                    <td style="text-align: center;">2</td>
-                    <td style="text-align: center;"><input type="number" id="Diem_TC2" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan()"></td>
-                </tr>
-                <tr>
-                    <td>3. Mức độ phù hợp của thiết bị dạy học và học liệu được sử dụng để tổ chức hoạt động.</td>
-                    <td style="text-align: center;">1</td>
-                    <td style="text-align: center;"><input type="number" id="Diem_TC3" min="0" max="1" step="0.25" value="1" oninput="tinhTongDiemThanhPhan()"></td>
-                </tr>
-                <tr>
-                    <td>4. Mức độ phù hợp của phương án kiểm tra, đánh giá trong quá trình tổ chức hoạt động học.</td>
-                    <td style="text-align: center;">2</td>
-                    <td style="text-align: center;"><input type="number" id="Diem_TC4" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan()"></td>
-                </tr>
+                <tr><td rowspan="4" style="font-weight: bold; text-align: center;">1. Kế hoạch bài dạy</td>
+                    <td>1. Mức độ phù hợp của các hoạt động học với mục tiêu, nội dung và phương pháp dạy học.</td><td style="text-align: center;">1</td>
+                    <td style="text-align: center;"><input type="number" id="Diem_TC1" min="0" max="1" step="0.25" value="1" oninput="tinhTongDiemThanhPhan()"></td></tr>
+                <tr><td>2. Mức độ rõ ràng, chính xác của mục tiêu, nội dung, sản phẩm, cách thức tổ chức thực hiện mỗi hoạt động.</td><td style="text-align: center;">2</td>
+                    <td style="text-align: center;"><input type="number" id="Diem_TC2" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan()"></td></tr>
+                <tr><td>3. Mức độ phù hợp của thiết bị dạy học và học liệu được sử dụng để tổ chức hoạt động.</td><td style="text-align: center;">1</td>
+                    <td style="text-align: center;"><input type="number" id="Diem_TC3" min="0" max="1" step="0.25" value="1" oninput="tinhTongDiemThanhPhan()"></td></tr>
+                <tr><td>4. Mức độ phù hợp của phương án kiểm tra, đánh giá trong quá trình tổ chức hoạt động học.</td><td style="text-align: center;">2</td>
+                    <td style="text-align: center;"><input type="number" id="Diem_TC4" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan()"></td></tr>
                 <!-- Phần 2 -->
-                <tr>
-                    <td rowspan="4" style="font-weight: bold; text-align: center;">2. Hoạt động của giáo viên</td>
-                    <td>5. Mức độ chính xác, phù hợp, sinh động, hấp dẫn của nội dung, phương pháp giao nhiệm vụ học tập.</td>
-                    <td style="text-align: center;">2</td>
-                    <td style="text-align: center;"><input type="number" id="Diem_TC5" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan()"></td>
-                </tr>
-                <tr>
-                    <td>6. Khả năng theo dõi, quan sát, phát hiện kịp thời những khó khăn của học sinh.</td>
-                    <td style="text-align: center;">1</td>
-                    <td style="text-align: center;"><input type="number" id="Diem_TC6" min="0" max="1" step="0.25" value="1" oninput="tinhTongDiemThanhPhan()"></td>
-                </tr>
-                <tr>
-                    <td>7. Mức độ phù hợp, hiệu quả của các biện pháp hỗ trợ và khuyến khích học sinh hợp tác, giúp đỡ nhau.</td>
-                    <td style="text-align: center;">2</td>
-                    <td style="text-align: center;"><input type="number" id="Diem_TC7" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan()"></td>
-                </tr>
-                <tr>
-                    <td>8. Mức độ chính xác, hiệu quả trong tổng hợp, phân tích, đánh giá quá trình và kết quả học tập.</td>
-                    <td style="text-align: center;">2</td>
-                    <td style="text-align: center;"><input type="number" id="Diem_TC8" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan()"></td>
-                </tr>
+                <tr><td rowspan="4" style="font-weight: bold; text-align: center;">2. Hoạt động của giáo viên</td>
+                    <td>5. Mức độ chính xác, phù hợp, sinh động, hấp dẫn của nội dung, phương pháp giao nhiệm vụ học tập.</td><td style="text-align: center;">2</td>
+                    <td style="text-align: center;"><input type="number" id="Diem_TC5" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan()"></td></tr>
+                <tr><td>6. Khả năng theo dõi, quan sát, phát hiện kịp thời những khó khăn của học sinh.</td><td style="text-align: center;">1</td>
+                    <td style="text-align: center;"><input type="number" id="Diem_TC6" min="0" max="1" step="0.25" value="1" oninput="tinhTongDiemThanhPhan()"></td></tr>
+                <tr><td>7. Mức độ phù hợp, hiệu quả của các biện pháp hỗ trợ và khuyến khích học sinh hợp tác, giúp đỡ nhau.</td><td style="text-align: center;">2</td>
+                    <td style="text-align: center;"><input type="number" id="Diem_TC7" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan()"></td></tr>
+                <tr><td>8. Mức độ chính xác, hiệu quả trong tổng hợp, phân tích, đánh giá quá trình và kết quả học tập.</td><td style="text-align: center;">2</td>
+                    <td style="text-align: center;"><input type="number" id="Diem_TC8" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan()"></td></tr>
                 <!-- Phần 3 -->
-                <tr>
-                    <td rowspan="4" style="font-weight: bold; text-align: center;">3. Hoạt động của học sinh</td>
-                    <td>9. Khả năng tiếp nhận và sẵn sàng thực hiện nhiệm vụ học tập của học sinh trong lớp.</td>
-                    <td style="text-align: center;">2</td>
-                    <td style="text-align: center;"><input type="number" id="Diem_TC9" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan()"></td>
-                </tr>
-                <tr>
-                    <td>10. Mức độ tích cực, chủ động, sáng tạo, hợp tác của học sinh khi thực hiện nhiệm vụ.</td>
-                    <td style="text-align: center;">2</td>
-                    <td style="text-align: center;"><input type="number" id="Diem_TC10" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan()"></td>
-                </tr>
-                <tr>
-                    <td>11. Mức độ tham gia tích cực của học sinh trong trình bày, thảo luận kết quả học tập.</td>
-                    <td style="text-align: center;">2</td>
-                    <td style="text-align: center;"><input type="number" id="Diem_TC11" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan()"></td>
-                </tr>
-                <tr>
-                    <td>12. Mức độ đúng đắn, chính xác, phù hợp của các kết quả thực hiện nhiệm vụ học tập.</td>
-                    <td style="text-align: center;">1</td>
-                    <td style="text-align: center;"><input type="number" id="Diem_TC12" min="0" max="1" step="0.25" value="1" oninput="tinhTongDiemThanhPhan()"></td>
-                </tr>
+                <tr><td rowspan="4" style="font-weight: bold; text-align: center;">3. Hoạt động của học sinh</td>
+                    <td>9. Khả năng tiếp nhận và sẵn sàng thực hiện nhiệm vụ học tập của học sinh trong lớp.</td><td style="text-align: center;">2</td>
+                    <td style="text-align: center;"><input type="number" id="Diem_TC9" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan()"></td></tr>
+                <tr><td>10. Mức độ tích cực, chủ động, sáng tạo, hợp tác của học sinh khi thực hiện nhiệm vụ.</td><td style="text-align: center;">2</td>
+                    <td style="text-align: center;"><input type="number" id="Diem_TC10" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan()"></td></tr>
+                <tr><td>11. Mức độ tham gia tích cực của học sinh trong trình bày, thảo luận kết quả học tập.</td><td style="text-align: center;">2</td>
+                    <td style="text-align: center;"><input type="number" id="Diem_TC11" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan()"></td></tr>
+                <tr><td>12. Mức độ đúng đắn, chính xác, phù hợp của các kết quả thực hiện nhiệm vụ học tập.</td><td style="text-align: center;">1</td>
+                    <td style="text-align: center;"><input type="number" id="Diem_TC12" min="0" max="1" step="0.25" value="1" oninput="tinhTongDiemThanhPhan()"></td></tr>
             </tbody>
         </table>
 
@@ -193,7 +155,7 @@
         </div>
     </div>
 
-    <!-- MẪU 2 -->
+    <!-- MẪU 2: BIÊN BẢN HÀNH CHÍNH (ĐÃ MỞ KHÓA VÀ NÂNG CẤP KẾT LUẬN AI) -->
     <div id="khoiHienThi_2" class="dynamic-block">
         <div class="section-title">II. NỘI DUNG SỰ VIỆC</div>
         <div class="grid-3">
@@ -202,8 +164,11 @@
             <div class="form-group"><label>Số lượng bản in (Lưu):</label><input type="number" id="soLuongBanIn"></div>
         </div>
         <div class="form-group"><label>Thành phần tham dự (Kèm chức vụ):</label><textarea id="thanhPhanThamDu" style="min-height: 60px;"></textarea></div>
-        <div class="form-group"><label>Nội dung chi tiết (Diễn biến):</label><textarea id="noiDungChiTietSVK" style="min-height: 150px;"></textarea></div>
-        <div class="form-group"><label>Kết luận chung:</label><textarea id="ketLuanChung" style="min-height: 100px;"></textarea></div>
+        <div class="form-group"><label>Nội dung chi tiết diễn biến (Gửi AI tổng hợp):</label><textarea id="noiDungChiTietSVK" style="min-height: 150px;"></textarea></div>
+        <div class="form-group" style="background: #f0fdf4; padding: 10px; border-radius: 6px; border: 1px solid #bbf7d0;">
+            <label style="color:#0284c7;">Kết luận chung (Trợ lý AI tự động tổng hợp & đề xuất từ diễn biến):</label>
+            <textarea id="ketLuanChung" style="min-height: 100px; font-weight: bold;"></textarea>
+        </div>
     </div>
 
     <!-- MẪU 3 -->
@@ -289,7 +254,7 @@
 
 <script>
     // =========================================================================
-    // KHỐI 5: JAVASCRIPT - QUẢN LÝ TÁC VỤ & THUẬT TOÁN TÍNH ĐIỂM 12 TIÊU CHÍ
+    // KHỐI 5: JAVASCRIPT - QUẢN LÝ TÁC VỤ & THUẬT TOÁN 
     // =========================================================================
 
     function khoiTaoOChonVanBan() {
@@ -363,8 +328,9 @@
                 const now = new Date(); now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
                 document.getElementById('ngayGioThucHien').value = now.toISOString().slice(0,16);
             }
+            
+            // LỖI ĐÃ SỬA: Loại bỏ logic khóa nút btnAI với biểu mẫu số 2, chỉ còn khóa nút Đánh giá điểm.
             document.getElementById('btnDanhGia').disabled = (loai !== "1");
-            document.getElementById('btnAI').disabled = (loai === "2"); 
         } else {
             document.getElementById('thanhCongCu').style.display = 'none';
         }
@@ -418,7 +384,6 @@
     // ==========================================
     let boDemThoiGian; 
 
-    // (NÂNG CẤP BỔ SUNG: Dành cho logic cập nhật điểm của AI vào giao diện 12 tiêu chí)
     function dieuPhoiKetQuaAI(ketQuaTraVe, kieuVanBan) {
         if (ketQuaTraVe.indexOf("LỖI") === 0) return alert(ketQuaTraVe);
         try {
@@ -426,28 +391,35 @@
             const duLieuJSON = JSON.parse(chuoiGoc);
             
             if (kieuVanBan === '1') {
-                // 1. Nạp nhận xét vào các ô Textarea
                 if(document.getElementById('nhanXetUuDiem')) document.getElementById('nhanXetUuDiem').value = duLieuJSON.UuDiem || "";
                 if(document.getElementById('nhanXetHanChe')) document.getElementById('nhanXetHanChe').value = duLieuJSON.HanChe || "";
                 if(document.getElementById('nhanXetCaiTien')) document.getElementById('nhanXetCaiTien').value = duLieuJSON.CaiTien || "";
                 
-                // 2. Vòng lặp quét nạp điểm số tự động từ AI vào Bảng 12 tiêu chí
                 for (let i = 1; i <= 12; i++) {
                     let idTruong = 'Diem_TC' + i;
                     let oNhapDiem = document.getElementById(idTruong);
                     if(oNhapDiem && duLieuJSON[idTruong] !== undefined) {
                         oNhapDiem.value = duLieuJSON[idTruong];
-                        // Nháy màu xanh nhạt nhẹ để user biết ô này vừa được AI sửa
                         oNhapDiem.style.backgroundColor = "#dcfce7";
                         setTimeout(() => { oNhapDiem.style.backgroundColor = ""; }, 1500);
                     }
                 }
-                
-                // 3. Tự động kích hoạt lại hàm tính tổng điểm & Xếp loại mới nhất
                 tinhTongDiemThanhPhan();
-                alert("✨ Trợ lý AI đã hoàn tất phân tích và chấm điểm dự kiến dựa trên nội dung bạn nhập.\nVui lòng rà soát lại kết quả!");
+                alert("✨ Trợ lý AI đã hoàn tất phân tích và chấm điểm dự kiến.");
                 
-            } else {
+            } 
+            // NÂNG CẤP: Xử lý dữ liệu trả về cho Biên bản hành chính (Mẫu 2)
+            else if (kieuVanBan === '2') {
+                let oKetLuan = document.getElementById('ketLuanChung');
+                if (oKetLuan) {
+                    oKetLuan.value = duLieuJSON.KetLuan || "";
+                    oKetLuan.style.transition = "background-color 0.4s";
+                    oKetLuan.style.backgroundColor = "#dcfce7"; // Chớp xanh lá báo hiệu AI đã điền
+                    setTimeout(() => { oKetLuan.style.backgroundColor = "#fbfbfb"; }, 1500);
+                }
+                alert("✨ Trợ lý AI đã hoàn tất việc đúc kết biên bản sự việc.");
+            } 
+            else {
                 if(document.getElementById('bcUuDiem')) document.getElementById('bcUuDiem').value = duLieuJSON.UuDiem || "";
                 if(document.getElementById('bcKhuyetDiem')) document.getElementById('bcKhuyetDiem').value = (duLieuJSON.HanChe || "") + "\n* Cải tiến: " + (duLieuJSON.CaiTien || "");
             }
@@ -465,14 +437,19 @@
 
         const laMoiTruongGoogle = (typeof google !== 'undefined' && google.script && google.script.run);
 
-        // --- TÁC VỤ 1: TRỢ LÝ AI ---
         if (loaiHanhDong === 'PhanTichAI') {
             let noiDung = ""; let chuoiPhanLoai = "";
             
             if (kieuVanBan === '1') {
                 noiDung = document.getElementById('noiDungQuanSat') ? document.getElementById('noiDungQuanSat').value : "";
                 chuoiPhanLoai = "Phiếu đánh giá tiết dạy sư phạm";
-            } else if (["3", "5", "6", "9", "10"].includes(kieuVanBan)) {
+            } 
+            // NÂNG CẤP: Bắt nội dung sự việc gửi cho AI
+            else if (kieuVanBan === '2') {
+                noiDung = document.getElementById('noiDungChiTietSVK') ? document.getElementById('noiDungChiTietSVK').value : "";
+                chuoiPhanLoai = "Biên bản hành chính sự việc";
+            } 
+            else if (["3", "5", "6", "9", "10"].includes(kieuVanBan)) {
                 noiDung = document.getElementById('noiDungKiemTraDang') ? document.getElementById('noiDungKiemTraDang').value : "";
                 chuoiPhanLoai = "Nội dung kiểm tra Đảng viên";
             } else if (["4", "7", "8"].includes(kieuVanBan)) {
@@ -483,7 +460,7 @@
 
             if (!noiDung.trim()) return alert("Khung nhập liệu đang trống, AI không có dữ liệu để đọc!");
 
-            hienThiTai("Trợ lý AI đang phân tích dữ liệu và chấm điểm...", true);
+            hienThiTai("Trợ lý AI đang phân tích dữ liệu...", true);
             boDemThoiGian = setTimeout(function() { hienThiTai("", false); alert("Lỗi 408: Hệ thống phản hồi quá chậm."); }, 60000);
 
             if (laMoiTruongGoogle) {
@@ -503,7 +480,6 @@
             }
         }
 
-        // --- TÁC VỤ 2: TẠO VĂN BẢN ---
         if (loaiHanhDong === 'LuuHoSo' || loaiHanhDong === 'XuatWord') {
             if(!idMauVanBan) return alert("Hệ thống chưa tìm thấy ID Mẫu!");
 

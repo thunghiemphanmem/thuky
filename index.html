@@ -6,56 +6,222 @@
     <title>Sổ Soạn Thảo Hành Chính Thông Minh</title>
     <script src="ketnoi.js"></script>
     <style>
-        :root { --primary: #0284c7; --secondary: #334155; --bg: #f1f5f9; --card: #ffffff; --text: #0f172a; --border: #cbd5e1; --accent: #38bdf8; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; font-size: 11pt; line-height: 1.5; }
-        
-        .container { max-width: 1100px; margin: auto; background: var(--card); padding: 30px 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
-        .header-title { text-align: center; font-size: 1.6rem; font-weight: 800; color: var(--primary); text-transform: uppercase; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 3px solid var(--accent); letter-spacing: 1px; }
-        
-        .form-panel { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
-        .section-title { font-size: 1.1rem; font-weight: bold; color: var(--secondary); margin: 0 0 15px 0; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
-        
-        .badge-no-ai { background: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; letter-spacing: 0.5px; }
-        .badge-ai { background: #dcfce7; color: #166534; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; letter-spacing: 0.5px; }
+        /* =========================================================================
+           HỆ THỐNG BIẾN TOÀN CỤC & HIỆU ỨNG NỀN (AURORA MESH VÀ GLASSMORPHISM)
+           ========================================================================= */
+        :root { 
+            --primary: #0284c7; 
+            --secondary: #334155; 
+            --text: #0f172a; 
+            --border: #cbd5e1; 
+            --accent: #38bdf8;
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
 
-        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
-        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+        @keyframes aurora-bg {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(-45deg, #e0f2fe, #f0f9ff, #bae6fd, #e0e7ff);
+            background-size: 400% 400%;
+            animation: aurora-bg 15s ease infinite;
+            color: var(--text); 
+            margin: 0; 
+            padding: 30px 20px; 
+            font-size: 11pt; 
+            line-height: 1.5; 
+        }
+        
+        .container { 
+            max-width: 1100px; 
+            margin: auto; 
+            background: var(--glass-bg); 
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 40px 50px; 
+            border-radius: 16px; 
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-soft); 
+        }
+
+        .header-title { 
+            text-align: center; 
+            font-size: 1.8rem; 
+            font-weight: 800; 
+            color: var(--primary); 
+            text-transform: uppercase; 
+            margin-bottom: 30px; 
+            padding-bottom: 15px; 
+            border-bottom: 3px solid var(--accent); 
+            letter-spacing: 1px; 
+            text-shadow: 0 2px 4px rgba(2, 132, 199, 0.1);
+        }
+        
+        /* =========================================================================
+           THIẾT KẾ KHỐI BIỂU MẪU (PANEL) & TYPOGRAPHY
+           ========================================================================= */
+        .form-panel { 
+            background: rgba(248, 250, 252, 0.9); 
+            border: 1px solid #e2e8f0; 
+            border-radius: 10px; 
+            padding: 25px; 
+            margin-bottom: 25px; 
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); 
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .form-panel:hover {
+            box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+        }
+
+        .section-title { 
+            font-size: 1.15rem; 
+            font-weight: 700; 
+            color: var(--secondary); 
+            margin: 0 0 20px 0; 
+            padding-bottom: 10px; 
+            border-bottom: 2px solid #e2e8f0; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        
+        .badge-no-ai { background: #fee2e2; color: #991b1b; padding: 5px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; letter-spacing: 0.5px; border: 1px solid #fecaca; }
+        .badge-ai { background: #dcfce7; color: #166534; padding: 5px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; letter-spacing: 0.5px; border: 1px solid #bbf7d0; box-shadow: 0 0 10px rgba(22, 163, 74, 0.2); }
+
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
         
         .form-group { display: flex; flex-direction: column; margin-bottom: 15px; }
-        .form-group label { font-weight: 600; margin-bottom: 6px; color: #475569; font-size: 0.95rem; }
-        .form-group input, .form-group select, .form-group textarea { padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px; font-family: inherit; font-size: 11pt; background: #ffffff; transition: all 0.2s ease-in-out; }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15); }
-        .form-group textarea { min-height: 80px; resize: vertical; line-height: 1.4; }
+        .form-group label { font-weight: 600; margin-bottom: 8px; color: #475569; font-size: 0.95rem; }
         
-        .table-tieu-chi { width: 100%; border-collapse: collapse; margin-top: 10px; margin-bottom: 15px; font-size: 10pt; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .table-tieu-chi th, .table-tieu-chi td { border: 1px solid var(--border); padding: 10px; vertical-align: middle; }
-        .table-tieu-chi th { background: #f1f5f9; color: #334155; text-align: center; font-weight: bold; }
-        .table-tieu-chi input[type="number"] { width: 70px; text-align: center; padding: 6px; font-size: 11pt; transition: background-color 0.3s; border-radius: 4px; border: 1px solid #cbd5e1; }
+        .form-group input, .form-group select, .form-group textarea { 
+            padding: 12px 14px; 
+            border: 1px solid var(--border); 
+            border-radius: 8px; 
+            font-family: inherit; 
+            font-size: 11pt; 
+            background: #ffffff; 
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { 
+            outline: none; 
+            border-color: var(--primary); 
+            box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.15); 
+            transform: translateY(-1px);
+        }
+        .form-group textarea { min-height: 90px; resize: vertical; line-height: 1.5; }
+        
+        /* =========================================================================
+           BẢNG ĐIỂM TIÊU CHÍ VÀ HIỆU ỨNG ĐỘNG LỰC HỌC (DYNAMIC BLOCKS)
+           ========================================================================= */
+        .table-tieu-chi { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 20px; font-size: 10.5pt; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .table-tieu-chi th, .table-tieu-chi td { border: 1px solid var(--border); padding: 12px; vertical-align: middle; }
+        .table-tieu-chi th { background: #f8fafc; color: #334155; text-align: center; font-weight: bold; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 0.5px; }
+        .table-tieu-chi input[type="number"] { width: 75px; text-align: center; padding: 8px; font-size: 11pt; border-radius: 6px; border: 1px solid #cbd5e1; font-weight: bold; color: #0284c7; }
+        .table-tieu-chi input[type="number"]:focus { box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2); }
 
-        .dynamic-block { display: none; opacity: 0; transform: translateY(10px); transition: opacity 0.4s ease, transform 0.4s ease; }
+        .dynamic-block { display: none; opacity: 0; transform: translateY(15px); transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
         .dynamic-block.active { display: block; opacity: 1; transform: translateY(0); }
         
-        .action-bar { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; position: sticky; bottom: 0; background: rgba(255, 255, 255, 0.98); padding: 15px 0; border-top: 1px solid #e2e8f0; margin-top: 30px; z-index: 100; backdrop-filter: blur(8px); }
-        .btn { padding: 12px 10px; font-size: 10pt; font-weight: bold; color: white; border: none; border-radius: 6px; cursor: pointer; text-align: center; transition: all 0.2s; text-transform: uppercase; letter-spacing: 0.5px; }
-        .btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); filter: brightness(1.1); }
-        .btn:disabled { background: #cbd5e1 !important; color: #94a3b8; cursor: not-allowed; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); }
-        .btn-blue { background: #3b82f6; } .btn-sky { background: #0ea5e9; } .btn-orange { background: #f59e0b; } .btn-green { background: #10b981; } .btn-purple { background: #8b5cf6; } .btn-red { background: #ef4444; }
+        /* =========================================================================
+           THANH CÔNG CỤ (ACTION BAR) & NÚT BẤM (BUTTONS)
+           ========================================================================= */
+        .action-bar { 
+            display: grid; 
+            grid-template-columns: repeat(5, 1fr); 
+            gap: 15px; 
+            position: sticky; 
+            bottom: 0; 
+            background: rgba(255, 255, 255, 0.95); 
+            padding: 20px; 
+            border-radius: 12px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.05), inset 0 1px 0 #e2e8f0; 
+            margin-top: 40px; 
+            z-index: 100; 
+            backdrop-filter: blur(10px); 
+        }
         
-        .loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.85); z-index: 999; justify-content: center; align-items: center; flex-direction: column; font-weight: bold; color: var(--primary); font-size: 1.2rem; backdrop-filter: blur(3px); }
-        .spinner { width: 45px; height: 45px; border: 4px solid #e2e8f0; border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite; margin-bottom: 15px; }
+        .btn { 
+            padding: 14px 10px; 
+            font-size: 10pt; 
+            font-weight: 800; 
+            color: white; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            text-align: center; 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px; 
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Hiệu ứng tia sáng quét qua nút - ReactBits Style */
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: skewX(-20deg);
+            transition: 0.5s;
+        }
+        .btn:hover:not(:disabled)::after { left: 150%; }
+        
+        .btn:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.2); filter: brightness(1.05); }
+        .btn:active:not(:disabled) { transform: translateY(0); }
+        .btn:disabled { background: #cbd5e1 !important; color: #94a3b8; cursor: not-allowed; box-shadow: none; }
+        
+        .btn-blue { background: #3b82f6; } 
+        .btn-sky { background: #0ea5e9; } 
+        .btn-green { background: #10b981; } 
+        .btn-purple { background: #8b5cf6; } 
+        .btn-red { background: #ef4444; }
+        
+        /* =========================================================================
+           THÀNH PHẦN MODAL & TRẠNG THÁI TẢI DỮ LIỆU
+           ========================================================================= */
+        .loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.85); z-index: 999; justify-content: center; align-items: center; flex-direction: column; font-weight: bold; color: var(--primary); font-size: 1.2rem; backdrop-filter: blur(5px); }
+        .spinner { width: 50px; height: 50px; border: 4px solid #e2e8f0; border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite; margin-bottom: 20px; box-shadow: 0 0 15px rgba(2, 132, 199, 0.2); }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
-        .modal-content { background: #fff; width: 95%; max-width: 850px; max-height: 90vh; border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
-        .modal-header { padding: 18px 24px; background: var(--primary); color: white; font-weight: bold; font-size: 1.1rem; display: flex; justify-content: space-between; align-items: center; }
-        .modal-body { padding: 24px; overflow-y: auto; background: #f8fafc; }
-        .modal-footer { padding: 16px 24px; background: #fff; display: flex; justify-content: flex-end; gap: 12px; border-top: 1px solid #e2e8f0; }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.65); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
+        .modal-content { background: #fff; width: 95%; max-width: 900px; max-height: 85vh; border-radius: 16px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3); transform: scale(0.95); transition: transform 0.3s ease; }
+        .modal-overlay.active .modal-content { transform: scale(1); }
         
-        .preview-table { width: 100%; border-collapse: collapse; font-size: 11pt; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-        .preview-table th, .preview-table td { border: 1px solid #e2e8f0; padding: 12px; vertical-align: top; }
-        .preview-table th { background: #f1f5f9; width: 35%; text-align: left; color: #475569; font-weight: 600; }
-        .preview-table td { color: #0f172a; }
+        .modal-header { padding: 20px 30px; background: linear-gradient(135deg, var(--primary), #0ea5e9); color: white; font-weight: bold; font-size: 1.2rem; display: flex; justify-content: space-between; align-items: center; }
+        .modal-body { padding: 30px; overflow-y: auto; background: #f8fafc; }
+        .modal-footer { padding: 20px 30px; background: #fff; display: flex; justify-content: flex-end; gap: 15px; border-top: 1px solid #e2e8f0; }
+        
+        .preview-table { width: 100%; border-collapse: collapse; font-size: 11pt; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .preview-table th, .preview-table td { border: 1px solid #e2e8f0; padding: 15px; vertical-align: top; }
+        .preview-table th { background: #f1f5f9; width: 35%; text-align: left; color: #475569; font-weight: 700; }
+        .preview-table td { color: #0f172a; line-height: 1.6; }
+        
+        /* Chữ ký điện tử bản quyền */
+        .signature-footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #64748b;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        .signature-footer:hover { opacity: 1; color: var(--primary); }
     </style>
 </head>
 <body>
@@ -68,10 +234,10 @@
 <div class="container">
     <div class="header-title">HỆ THỐNG SOẠN THẢO VĂN BẢN CHUYÊN NGHIỆP</div>
 
-    <div class="form-panel" style="background: #e0f2fe; border-color: #bae6fd;">
+    <div class="form-panel" style="background: linear-gradient(to right, #e0f2fe, #f0f9ff); border-color: #bae6fd;">
         <div class="form-group" style="margin-bottom: 0;">
-            <label style="color: #0369a1; font-size: 1.1rem; margin-bottom: 10px;">📌 CHỌN LOẠI VĂN BẢN ĐỂ KHỞI TẠO BIỂU MẪU:</label>
-            <select id="loaiVanBan" onchange="chuyenDoiBieuMau()" style="font-weight: bold; font-size: 12pt; color: #0284c7; padding: 12px;">
+            <label style="color: #0369a1; font-size: 1.15rem; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">📌 Chọn loại văn bản để khởi tạo biểu mẫu:</label>
+            <select id="loaiVanBan" onchange="chuyenDoiBieuMau()" style="font-weight: bold; font-size: 12pt; color: #0284c7; padding: 14px; box-shadow: 0 4px 6px -1px rgba(2, 132, 199, 0.1);">
             </select>
         </div>
     </div>
@@ -100,11 +266,11 @@
             <table class="table-tieu-chi">
                 <thead>
                     <tr>
-                        <th style="width: 10%;">Nội dung</th><th style="width: 65%;">Tiêu chí đánh giá chi tiết</th><th style="width: 10%;">Điểm tối đa</th><th style="width: 15%;">Điểm đánh giá</th>
+                        <th style="width: 15%;">Nội dung</th><th style="width: 60%;">Tiêu chí đánh giá chi tiết</th><th style="width: 10%;">Điểm tối đa</th><th style="width: 15%;">Điểm đánh giá</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td rowspan="4" style="font-weight: bold; text-align: center;">1. Kế hoạch bài dạy</td>
+                    <tr><td rowspan="4" style="font-weight: bold; text-align: center; background: #f8fafc;">1. Kế hoạch bài dạy</td>
                         <td>1. Mức độ phù hợp của các hoạt động học với mục tiêu...</td><td style="text-align: center;">1</td>
                         <td style="text-align: center;"><input type="number" data-key="Diem_TC1" min="0" max="1" step="0.25" value="1" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
                     <tr><td>2. Mức độ rõ ràng, chính xác của mục tiêu, nội dung...</td><td style="text-align: center;">2</td>
@@ -113,7 +279,8 @@
                         <td style="text-align: center;"><input type="number" data-key="Diem_TC3" min="0" max="1" step="0.25" value="1" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
                     <tr><td>4. Mức độ phù hợp của phương án kiểm tra, đánh giá...</td><td style="text-align: center;">2</td>
                         <td style="text-align: center;"><input type="number" data-key="Diem_TC4" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
-                    <tr><td rowspan="4" style="font-weight: bold; text-align: center;">2. Hoạt động của giáo viên</td>
+                    
+                    <tr><td rowspan="4" style="font-weight: bold; text-align: center; background: #f8fafc;">2. Hoạt động của giáo viên</td>
                         <td>5. Mức độ chính xác, phù hợp, sinh động, hấp dẫn...</td><td style="text-align: center;">2</td>
                         <td style="text-align: center;"><input type="number" data-key="Diem_TC5" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
                     <tr><td>6. Khả năng theo dõi, quan sát, phát hiện kịp thời...</td><td style="text-align: center;">1</td>
@@ -122,7 +289,8 @@
                         <td style="text-align: center;"><input type="number" data-key="Diem_TC7" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
                     <tr><td>8. Mức độ chính xác, hiệu quả trong tổng hợp, phân tích...</td><td style="text-align: center;">2</td>
                         <td style="text-align: center;"><input type="number" data-key="Diem_TC8" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
-                    <tr><td rowspan="4" style="font-weight: bold; text-align: center;">3. Hoạt động của học sinh</td>
+                    
+                    <tr><td rowspan="4" style="font-weight: bold; text-align: center; background: #f8fafc;">3. Hoạt động của học sinh</td>
                         <td>9. Khả năng tiếp nhận và sẵn sàng thực hiện nhiệm vụ...</td><td style="text-align: center;">2</td>
                         <td style="text-align: center;"><input type="number" data-key="Diem_TC9" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
                     <tr><td>10. Mức độ tích cực, chủ động, sáng tạo, hợp tác...</td><td style="text-align: center;">2</td>
@@ -133,9 +301,9 @@
                         <td style="text-align: center;"><input type="number" data-key="Diem_TC12" min="0" max="1" step="0.25" value="1" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
                 </tbody>
             </table>
-            <div class="grid-2" style="background: #f0fdf4; padding: 15px; border-radius: 8px; border: 1px solid #bbf7d0;">
-                <div class="form-group" style="margin-bottom:0;"><label>Tổng điểm:</label><input type="number" id="tongDiem_1" data-key="Tong_Diem" readonly style="font-weight: bold; color: #16a34a; background: #fff;"></div>
-                <div class="form-group" style="margin-bottom:0;"><label>Xếp loại giờ dạy:</label><input type="text" id="xepLoai_1" data-key="Xep_Loai" readonly style="font-weight: bold; color: #0284c7; background: #fff;"></div>
+            <div class="grid-2" style="background: linear-gradient(to right, #f0fdf4, #dcfce7); padding: 20px; border-radius: 10px; border: 1px solid #bbf7d0;">
+                <div class="form-group" style="margin-bottom:0;"><label>Tổng điểm:</label><input type="number" id="tongDiem_1" data-key="Tong_Diem" readonly style="font-weight: 800; font-size: 1.2rem; color: #16a34a; background: #fff; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);"></div>
+                <div class="form-group" style="margin-bottom:0;"><label>Xếp loại giờ dạy:</label><input type="text" id="xepLoai_1" data-key="Xep_Loai" readonly style="font-weight: 800; font-size: 1.2rem; color: #0284c7; background: #fff; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);"></div>
             </div>
         </div>
 
@@ -143,12 +311,12 @@
             <div class="section-title">PHÂN TÍCH NHẬN XÉT (AI HỖ TRỢ)</div>
             <div class="form-group">
                 <label>Nội dung quan sát diễn biến (Bấm "Trợ Lý AI" để máy tự chấm điểm và viết nhận xét):</label>
-                <textarea id="noiDungTruyenAI_1" placeholder="VD: Giáo viên giao việc rõ ràng, học sinh hăng hái phát biểu..."></textarea>
+                <textarea id="noiDungTruyenAI_1" placeholder="VD: Giáo viên giao việc rõ ràng, phân bổ thời gian hợp lý, học sinh hăng hái phát biểu..."></textarea>
             </div>
             <div class="grid-3">
-                <div class="form-group"><label style="color:#166534;">Ưu điểm:</label><textarea id="ketQuaUuDiem_1" data-key="Nhan_Xet_Uu_Diem" style="border-color:#bbf7d0;"></textarea></div>
-                <div class="form-group"><label style="color:#991b1b;">Hạn chế:</label><textarea id="ketQuaHanChe_1" data-key="Nhan_Xet_Han_Che" style="border-color:#fecaca;"></textarea></div>
-                <div class="form-group"><label style="color:#8b5cf6;">Cải tiến:</label><textarea id="ketQuaCaiTien_1" data-key="Nhan_Xet_Cai_Tien" style="border-color:#ddd6fe;"></textarea></div>
+                <div class="form-group"><label style="color:#166534;">Ưu điểm:</label><textarea id="ketQuaUuDiem_1" data-key="Nhan_Xet_Uu_Diem" style="border-color:#bbf7d0; background: #f8fafc;"></textarea></div>
+                <div class="form-group"><label style="color:#991b1b;">Hạn chế:</label><textarea id="ketQuaHanChe_1" data-key="Nhan_Xet_Han_Che" style="border-color:#fecaca; background: #f8fafc;"></textarea></div>
+                <div class="form-group"><label style="color:#8b5cf6;">Cải tiến:</label><textarea id="ketQuaCaiTien_1" data-key="Nhan_Xet_Cai_Tien" style="border-color:#ddd6fe; background: #f8fafc;"></textarea></div>
             </div>
         </div>
     </div>
@@ -179,15 +347,15 @@
                 <div class="form-group"><label>Chức vụ (của Chủ tọa):</label><input type="text" data-key="Chuc_Vu"></div>
                 <div class="form-group"><label>Thư ký:</label><input type="text" data-key="Thu_Ky"></div>
             </div>
-            <div class="form-group"><label>Danh sách thành phần tham dự (kèm chức vụ):</label><textarea data-key="Danh_Sach_Tham_Du" style="min-height: 60px;"></textarea></div>
+            <div class="form-group"><label>Danh sách thành phần tham dự (kèm chức vụ):</label><textarea data-key="Danh_Sach_Tham_Du" style="min-height: 70px;"></textarea></div>
             
             <div class="form-group">
                 <label>Nội dung chi tiết diễn biến (Bấm "Trợ Lý AI Phân Tích" để tóm tắt kết luận):</label>
-                <textarea id="noiDungTruyenAI_2" data-key="Noi_Dung_Chi_Tiet" style="min-height: 120px;"></textarea>
+                <textarea id="noiDungTruyenAI_2" data-key="Noi_Dung_Chi_Tiet" style="min-height: 140px;"></textarea>
             </div>
-            <div class="form-group" style="background: #f0f9ff; padding: 15px; border-radius: 8px; border: 1px solid #bae6fd;">
-                <label style="color:#0369a1;">Kết luận chung (AI tự động hỗ trợ):</label>
-                <textarea id="ketQuaKetLuan_2" data-key="Ket_Luan_Chung" style="min-height: 100px; font-weight: bold; border-color:#bae6fd;"></textarea>
+            <div class="form-group" style="background: linear-gradient(145deg, #f0f9ff, #e0f2fe); padding: 20px; border-radius: 10px; border: 1px solid #bae6fd; box-shadow: 0 4px 10px rgba(14, 165, 233, 0.05);">
+                <label style="color:#0369a1; font-weight: 700;">Kết luận chung (AI tự động tổng hợp hỗ trợ):</label>
+                <textarea id="ketQuaKetLuan_2" data-key="Ket_Luan_Chung" style="min-height: 110px; font-weight: bold; border-color:#bae6fd; box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);"></textarea>
             </div>
             
             <div class="grid-2">
@@ -239,7 +407,7 @@
             </div>
         </div>
         
-        <div class="form-panel" style="border-left: 4px solid var(--accent);">
+        <div class="form-panel" style="border-left: 5px solid var(--accent);">
             <div class="section-title">CĂN CỨ VÀ THỜI GIAN TIẾN HÀNH</div>
             <div class="grid-2">
                 <div class="form-group"><label style="color:#b45309;">Số Quyết định CĂN CỨ (Ban hành kèm KH này):</label><input type="text" data-key="So_Quyet_Dinh" style="border-color:#fcd34d; background:#fffbeb;"></div>
@@ -247,11 +415,11 @@
             </div>
             <div class="form-group"><label>Nội dung kiểm tra/giám sát:</label><textarea data-key="Noi_Dung_Kiem_Tra"></textarea></div>
             <div class="grid-2">
-                <div class="form-group" style="background:#f8fafc; padding:15px; border-radius:8px; border:1px solid #e2e8f0;"><label>Thời hiệu KT/GS:</label>
-                    <div style="display:flex; gap:10px;"><input type="date" data-key="Tu_Ngay_Hieu_Luc" style="width:50%;" title="Từ ngày"><input type="date" data-key="Den_Ngay_Hieu_Luc" style="width:50%;" title="Đến ngày"></div>
+                <div class="form-group" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0;"><label>Thời hiệu KT/GS:</label>
+                    <div style="display:flex; gap:15px;"><input type="date" data-key="Tu_Ngay_Hieu_Luc" style="width:50%;" title="Từ ngày"><input type="date" data-key="Den_Ngay_Hieu_Luc" style="width:50%;" title="Đến ngày"></div>
                 </div>
-                <div class="form-group" style="background:#f8fafc; padding:15px; border-radius:8px; border:1px solid #e2e8f0;"><label>Thời gian tiến hành:</label>
-                    <div style="display:flex; gap:10px;"><input type="date" data-key="Tu_Ngay_Tien_Hanh" style="width:50%;" title="Từ ngày"><input type="date" data-key="Den_Ngay_Tien_Hanh" style="width:50%;" title="Đến ngày"></div>
+                <div class="form-group" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0;"><label>Thời gian tiến hành:</label>
+                    <div style="display:flex; gap:15px;"><input type="date" data-key="Tu_Ngay_Tien_Hanh" style="width:50%;" title="Từ ngày"><input type="date" data-key="Den_Ngay_Tien_Hanh" style="width:50%;" title="Đến ngày"></div>
                 </div>
             </div>
         </div>
@@ -313,13 +481,13 @@
                 <div class="form-group"><label>Ngày vào Đảng:</label><input type="date" data-key="Ngay_Vao_Dang"></div>
                 <div class="form-group"><label>Ngày chính thức:</label><input type="date" data-key="Ngay_Chinh_Thuc"></div>
             </div>
-            <div class="form-group"><label>Quá trình công tác:</label><textarea data-key="Qua_Trinh_Cong_Tac" style="min-height: 50px;"></textarea></div>
+            <div class="form-group"><label>Quá trình công tác:</label><textarea data-key="Qua_Trinh_Cong_Tac" style="min-height: 60px;"></textarea></div>
             <div class="grid-2">
-                <div class="form-group"><label>Khen thưởng:</label><textarea data-key="Khen_Thuong" style="min-height: 50px;"></textarea></div>
-                <div class="form-group"><label>Kỷ luật:</label><textarea data-key="Ky_Luat" style="min-height: 50px;"></textarea></div>
+                <div class="form-group"><label>Khen thưởng:</label><textarea data-key="Khen_Thuong" style="min-height: 60px;"></textarea></div>
+                <div class="form-group"><label>Kỷ luật:</label><textarea data-key="Ky_Luat" style="min-height: 60px;"></textarea></div>
             </div>
-            <div class="form-group"><label>Nội dung Giải trình chi tiết:</label><textarea data-key="Giai_Trinh_Chi_Tiet" style="min-height: 100px;"></textarea></div>
-            <div class="form-group"><label>Kiến nghị của cá nhân:</label><textarea data-key="Kien_Nghi_Ca_Nhan" style="min-height: 50px;"></textarea></div>
+            <div class="form-group"><label>Nội dung Giải trình chi tiết:</label><textarea data-key="Giai_Trinh_Chi_Tiet" style="min-height: 120px;"></textarea></div>
+            <div class="form-group"><label>Kiến nghị của cá nhân:</label><textarea data-key="Kien_Nghi_Ca_Nhan" style="min-height: 60px;"></textarea></div>
         </div>
     </div>
 
@@ -354,15 +522,15 @@
                 <div class="form-group"><label>Ngày vào Đảng:</label><input type="date" data-key="Ngay_Vao_Dang"></div>
                 <div class="form-group"><label>Ngày chính thức:</label><input type="date" data-key="Ngay_Chinh_Thuc"></div>
             </div>
-            <div class="form-group"><label>Quá trình công tác:</label><textarea data-key="Qua_Trinh_Cong_Tac" style="min-height: 40px;"></textarea></div>
+            <div class="form-group"><label>Quá trình công tác:</label><textarea data-key="Qua_Trinh_Cong_Tac" style="min-height: 50px;"></textarea></div>
             <div class="grid-2">
-                <div class="form-group"><label>Khen thưởng:</label><textarea data-key="Khen_Thuong" style="min-height: 40px;"></textarea></div>
-                <div class="form-group"><label>Kỷ luật:</label><textarea data-key="Ky_Luat" style="min-height: 40px;"></textarea></div>
+                <div class="form-group"><label>Khen thưởng:</label><textarea data-key="Khen_Thuong" style="min-height: 50px;"></textarea></div>
+                <div class="form-group"><label>Kỷ luật:</label><textarea data-key="Ky_Luat" style="min-height: 50px;"></textarea></div>
             </div>
-            <div class="form-group"><label>Nội dung kiểm tra:</label><textarea data-key="Noi_Dung_Kiem_Tra" style="min-height: 50px;"></textarea></div>
-            <div class="form-group"><label>Kết quả thẩm tra, xác minh:</label><textarea data-key="Ket_Qua_Tham_Tra" style="min-height: 100px;"></textarea></div>
+            <div class="form-group"><label>Nội dung kiểm tra:</label><textarea data-key="Noi_Dung_Kiem_Tra" style="min-height: 60px;"></textarea></div>
+            <div class="form-group"><label>Kết quả thẩm tra, xác minh:</label><textarea data-key="Ket_Qua_Tham_Tra" style="min-height: 120px;"></textarea></div>
             <div class="grid-2">
-                <div class="form-group"><label>Kiến nghị của Tổ:</label><textarea data-key="Kien_Nghi_To_Kiem_Tra" style="min-height: 50px;"></textarea></div>
+                <div class="form-group"><label>Kiến nghị của Tổ:</label><textarea data-key="Kien_Nghi_To_Kiem_Tra" style="min-height: 60px;"></textarea></div>
                 <div class="form-group"><label>Tổ trưởng (Ký tên):</label><input type="text" data-key="To_Truong"></div>
             </div>
         </div>
@@ -393,13 +561,13 @@
             <div class="section-title">Ý KIẾN CHI BỘ (AI TỔNG HỢP)</div>
             <div class="form-group">
                 <label>Nội dung ý kiến tham gia (Bấm "Trợ Lý AI Phân Tích" để đúc kết Ưu/Khuyết điểm):</label>
-                <textarea id="noiDungTruyenAI_8" data-key="Y_Kien_Chi_Bo" style="min-height: 120px;"></textarea>
+                <textarea id="noiDungTruyenAI_8" data-key="Y_Kien_Chi_Bo" style="min-height: 140px;"></textarea>
             </div>
-            <div class="grid-2" style="background: #f0f9ff; padding: 15px; border-radius: 8px; border: 1px solid #bae6fd;">
-                <div class="form-group" style="margin-bottom:0;"><label style="color:#0369a1;">Kết luận Ưu điểm (AI):</label><textarea id="ketQuaUuDiem_8" data-key="Ket_Luan_Uu_Diem" style="font-weight:bold; border-color:#bae6fd;"></textarea></div>
-                <div class="form-group" style="margin-bottom:0;"><label style="color:#b91c1c;">Kết luận Khuyết điểm (AI):</label><textarea id="ketQuaKhuyetDiem_8" data-key="Ket_Luan_Khuyet_Diem" style="font-weight:bold; border-color:#fecaca;"></textarea></div>
+            <div class="grid-2" style="background: linear-gradient(145deg, #f0f9ff, #e0f2fe); padding: 20px; border-radius: 10px; border: 1px solid #bae6fd; box-shadow: 0 4px 10px rgba(14, 165, 233, 0.05);">
+                <div class="form-group" style="margin-bottom:0;"><label style="color:#0369a1; font-weight:700;">Kết luận Ưu điểm (AI):</label><textarea id="ketQuaUuDiem_8" data-key="Ket_Luan_Uu_Diem" style="font-weight:bold; border-color:#bae6fd; box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);"></textarea></div>
+                <div class="form-group" style="margin-bottom:0;"><label style="color:#b91c1c; font-weight:700;">Kết luận Khuyết điểm (AI):</label><textarea id="ketQuaKhuyetDiem_8" data-key="Ket_Luan_Khuyet_Diem" style="font-weight:bold; border-color:#fecaca; box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);"></textarea></div>
             </div>
-            <div class="form-group" style="width: 30%; margin-top: 15px;"><label>Giờ kết thúc:</label><input type="time" data-key="GioKetThuc"></div>
+            <div class="form-group" style="width: 30%; margin-top: 20px;"><label>Giờ kết thúc:</label><input type="time" data-key="GioKetThuc"></div>
         </div>
     </div>
 
@@ -445,32 +613,42 @@
         <button class="btn btn-blue" onclick="tinhTongDiemThanhPhan(1)" id="btnDanhGia">Tính Điểm ĐG</button>
         <button class="btn btn-sky" onclick="chayNghiepVu('PhanTichAI')" id="btnAI" title="Kích hoạt trợ lý AI">Trợ Lý AI Phân Tích</button>
         <button class="btn btn-green" onclick="chayNghiepVu('LuuHoSo')" id="btnHoSo">Tạo Văn Bản</button>
-        <button class="btn btn-purple" onclick="hienThiXemTruoc()">Xem Trước & Xuất Word</button>
+        <button class="btn btn-purple" onclick="hienThiXemTruoc()">Xem Trước Dữ Liệu</button>
         <button class="btn btn-red" onclick="lamMoiForm()">Làm Mới Biểu Mẫu</button>
+    </div>
+
+    <!-- PHẦN CHỮ KÝ BẢN QUYỀN -->
+    <div class="signature-footer">
+        Thiết kế và phát triển<br>Hoàng Ngọc Lâm
     </div>
 </div>
 
+<!-- =========================================================================
+     MODAL XEM TRƯỚC VĂN BẢN (PREVIEW)
+     ========================================================================= -->
 <div class="modal-overlay" id="previewModal">
     <div class="modal-content">
         <div class="modal-header">
-            <span>🔍 XEM TRƯỚC DỮ LIỆU SẼ ĐIỀN</span><span class="close-btn" style="cursor:pointer; font-size:1.5rem;" onclick="dongXemTruoc()">✖</span>
+            <span>🔍 XÉT DUYỆT DỮ LIỆU ĐẦU RA</span>
+            <span class="close-btn" style="cursor:pointer; font-size:1.5rem; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'" onclick="dongXemTruoc()">✖</span>
         </div>
         <div class="modal-body" id="previewBody"></div>
         <div class="modal-footer">
-            <button class="btn btn-red" onclick="dongXemTruoc()">Đóng Lại</button>
-            <button class="btn btn-green" onclick="xacNhanXuatWord()">✓ Tạo File Word</button>
+            <button class="btn btn-red" style="padding: 12px 24px;" onclick="dongXemTruoc()">Quay Lại Chỉnh Sửa</button>
+            <button class="btn btn-green" style="padding: 12px 24px;" onclick="xacNhanXuatWord()">✓ Xác Nhận & Xuất Word</button>
         </div>
     </div>
 </div>
 
 <script>
     // =========================================================================
-    // KHỐI 5: JAVASCRIPT - QUẢN LÝ TÁC VỤ & THUẬT TOÁN 
+    // KHỐI JAVASCRIPT: QUẢN LÝ TÁC VỤ & THUẬT TOÁN ĐIỀU HƯỚNG
+    // Nguyên tắc: Tên biến tiếng Việt, không dùng từ khóa liên quan thu thập info.
     // =========================================================================
 
     function khoiTaoOChonVanBan() {
         const oChon = document.getElementById('loaiVanBan');
-        let chuoiHTML = '<option value="0">-- Bấm vào đây để chọn biểu mẫu --</option>';
+        let chuoiHTML = '<option value="0">-- Vui lòng click để chọn biểu mẫu làm việc --</option>';
         if (typeof KET_NOI !== 'undefined' && KET_NOI.DANH_MUC_VAN_BAN) {
             const danhSach = KET_NOI.DANH_MUC_VAN_BAN;
             for (let i = 0; i < danhSach.length; i++) {
@@ -489,8 +667,8 @@
         if(!khoiActive) return;
 
         for (let i = 1; i <= 12; i++) {
-            const o = khoiActive.querySelector(`input[data-key="Diem_TC${i}"]`);
-            if (o) tong += (parseFloat(o.value) || 0);
+            const oThanhPhan = khoiActive.querySelector(`input[data-key="Diem_TC${i}"]`);
+            if (oThanhPhan) tong += (parseFloat(oThanhPhan.value) || 0);
         }
 
         const oTongDiem = document.getElementById('tongDiem_1');
@@ -508,10 +686,10 @@
     function chuyenDoiBieuMau() {
         const loai = document.getElementById('loaiVanBan').value;
         
-        // Ẩn tất cả với hiệu ứng fade out nhanh
+        // Tạo hiệu ứng fade-out mượt mà
         document.querySelectorAll('.dynamic-block').forEach(khoi => {
             khoi.classList.remove('active');
-            setTimeout(() => { if(!khoi.classList.contains('active')) khoi.style.display = 'none'; }, 200);
+            setTimeout(() => { if(!khoi.classList.contains('active')) khoi.style.display = 'none'; }, 500);
         });
         
         const btnAI = document.getElementById('btnAI');
@@ -522,24 +700,24 @@
             if(khoiActive) {
                 setTimeout(() => {
                     khoiActive.style.display = 'block';
-                    // Ép trình duyệt render trước khi thêm class active để kích hoạt CSS Transition
+                    // Ép trình duyệt render trước khi thêm class để kích hoạt CSS Transition
                     void khoiActive.offsetWidth; 
                     khoiActive.classList.add('active');
-                }, 200);
+                }, 300);
             }
             
             document.getElementById('thanhCongCu').style.display = 'grid';
             
-            // Chỉ hiện tính điểm ở mẫu 1
+            // Logic hiển thị nút tùy biến theo form
             btnDanhGia.style.display = (loai === "1") ? "block" : "none";
 
-            // Khóa/Mở AI: Chỉ mẫu 1, 2, 8 là cần AI
+            // Khóa/Mở AI: Chỉ biểu mẫu 1, 2, 8 là cần AI can thiệp
             if (loai === "1" || loai === "2" || loai === "8") {
                 btnAI.disabled = false;
-                btnAI.title = "Kích hoạt trợ lý AI tổng hợp dữ liệu";
+                btnAI.title = "Kích hoạt trợ lý AI tổng hợp dữ liệu văn bản";
             } else {
                 btnAI.disabled = true;
-                btnAI.title = "Biểu mẫu này không hỗ trợ chức năng AI";
+                btnAI.title = "Biểu mẫu hành chính này không hỗ trợ AI";
             }
         } else {
             document.getElementById('thanhCongCu').style.display = 'none';
@@ -554,40 +732,54 @@
     function layToanBoDuLieuGiaoDien() {
         const loai = document.getElementById('loaiVanBan').value;
         const activeKhoi = document.getElementById('khoi_' + loai);
-        const data = {}; const labels = {};
+        const duLieuGoi = {}; 
+        const nhanDien = {};
         
         if (activeKhoi) {
-            activeKhoi.querySelectorAll('input, textarea, select').forEach(el => {
-                if (el.dataset.key) {
-                    data[el.dataset.key] = el.value;
-                    const lbl = el.previousElementSibling;
-                    labels[el.dataset.key] = lbl ? lbl.innerText.replace(':', '').trim() : el.dataset.key;
+            activeKhoi.querySelectorAll('input, textarea, select').forEach(phanTu => {
+                if (phanTu.dataset.key) {
+                    duLieuGoi[phanTu.dataset.key] = phanTu.value;
+                    const theNhan = phanTu.previousElementSibling;
+                    nhanDien[phanTu.dataset.key] = theNhan ? theNhan.innerText.replace(':', '').trim() : phanTu.dataset.key;
                 }
             });
         }
-        return { data: data, labels: labels };
+        return { data: duLieuGoi, labels: nhanDien };
     }
 
     function hienThiXemTruoc() {
         const tapHopDuLieu = layToanBoDuLieuGiaoDien();
         const kieuVanBan = document.getElementById('loaiVanBan').value;
-        if (kieuVanBan === "0") return alert("Vui lòng chọn loại văn bản!");
+        if (kieuVanBan === "0") return alert("Vui lòng lựa chọn loại văn bản trước khi thực hiện!");
 
-        let html = "<div style='margin-bottom: 15px; color: #475569;'><i>Dưới đây là các dữ liệu độc lập sẽ được điền vào File Word. Bạn vui lòng rà soát lại trước khi tạo văn bản.</i></div><table class='preview-table'><tbody>";
+        let chuoiHtml = "<div style='margin-bottom: 20px; color: #475569; font-style: italic; border-left: 4px solid #0284c7; padding-left: 15px;'>Hệ thống đã thu thập các trường dữ liệu dưới đây. Hãy kiểm tra tính chính xác trước khi khởi tạo tệp Word định dạng hành chính.</div><table class='preview-table'><tbody>";
+        
         for (let idTruong in tapHopDuLieu.data) {
-            let giaTri = tapHopDuLieu.data[idTruong].trim();
-            if (giaTri !== "") html += `<tr><th>${tapHopDuLieu.labels[idTruong]}</th><td>${giaTri.replace(/\n/g, '<br>')}</td></tr>`;
+            let giaTriDien = tapHopDuLieu.data[idTruong].trim();
+            if (giaTriDien !== "") chuoiHtml += `<tr><th>${tapHopDuLieu.labels[idTruong]}</th><td>${giaTriDien.replace(/\n/g, '<br>')}</td></tr>`;
         }
-        document.getElementById('previewBody').innerHTML = html + "</tbody></table>";
-        document.getElementById('previewModal').style.display = 'flex';
+        document.getElementById('previewBody').innerHTML = chuoiHtml + "</tbody></table>";
+        
+        const modal = document.getElementById('previewModal');
+        modal.style.display = 'flex';
+        // Hiệu ứng scale mượt mà
+        setTimeout(() => { modal.classList.add('active'); }, 50);
     }
 
-    function dongXemTruoc() { document.getElementById('previewModal').style.display = 'none'; }
-    function xacNhanXuatWord() { dongXemTruoc(); chayNghiepVu('XuatWord'); }
+    function dongXemTruoc() { 
+        const modal = document.getElementById('previewModal');
+        modal.classList.remove('active');
+        setTimeout(() => { modal.style.display = 'none'; }, 300);
+    }
+    
+    function xacNhanXuatWord() { 
+        dongXemTruoc(); 
+        chayNghiepVu('XuatWord'); 
+    }
 
-    // ==========================================
-    // KHỐI GIAO TIẾP MÁY CHỦ
-    // ==========================================
+    // =========================================================================
+    // KHỐI GIAO TIẾP MÁY CHỦ (API & GOOGLE APPS SCRIPT)
+    // =========================================================================
     let boDemThoiGian; 
 
     function dieuPhoiKetQuaAI(ketQuaTraVe, kieuVanBan) {
@@ -597,9 +789,9 @@
             const duLieuJSON = JSON.parse(chuoiGoc);
             
             if (kieuVanBan === '1') {
-                const oUu = document.getElementById('ketQuaUuDiem_1'); if(oUu) { oUu.value = duLieuJSON.UuDiem || ""; oUu.style.backgroundColor = "#dcfce7"; setTimeout(()=>oUu.style.backgroundColor="#fff", 1500); }
-                const oHan = document.getElementById('ketQuaHanChe_1'); if(oHan) { oHan.value = duLieuJSON.HanChe || ""; oHan.style.backgroundColor = "#dcfce7"; setTimeout(()=>oHan.style.backgroundColor="#fff", 1500); }
-                const oCai = document.getElementById('ketQuaCaiTien_1'); if(oCai) { oCai.value = duLieuJSON.CaiTien || ""; oCai.style.backgroundColor = "#dcfce7"; setTimeout(()=>oCai.style.backgroundColor="#fff", 1500); }
+                const oUu = document.getElementById('ketQuaUuDiem_1'); if(oUu) { oUu.value = duLieuJSON.UuDiem || ""; oUu.style.backgroundColor = "#dcfce7"; setTimeout(()=>oUu.style.backgroundColor="#f8fafc", 1500); }
+                const oHan = document.getElementById('ketQuaHanChe_1'); if(oHan) { oHan.value = duLieuJSON.HanChe || ""; oHan.style.backgroundColor = "#dcfce7"; setTimeout(()=>oHan.style.backgroundColor="#f8fafc", 1500); }
+                const oCai = document.getElementById('ketQuaCaiTien_1'); if(oCai) { oCai.value = duLieuJSON.CaiTien || ""; oCai.style.backgroundColor = "#dcfce7"; setTimeout(()=>oCai.style.backgroundColor="#f8fafc", 1500); }
                 
                 const khoi1 = document.getElementById('khoi_1');
                 for (let i = 1; i <= 12; i++) {
@@ -611,7 +803,7 @@
                     }
                 }
                 tinhTongDiemThanhPhan(1);
-                alert("✨ Trợ lý AI đã hoàn tất phân tích và chấm điểm.");
+                alert("✨ Trợ lý AI đã hoàn tất phân tích và chấm điểm thành công.");
             } 
             else if (kieuVanBan === '2') {
                 let oKetLuan = document.getElementById('ketQuaKetLuan_2');
@@ -620,103 +812,109 @@
                     oKetLuan.style.backgroundColor = "#dcfce7"; 
                     setTimeout(() => { oKetLuan.style.backgroundColor = "#ffffff"; }, 1500);
                 }
-                alert("✨ Trợ lý AI đã tổng hợp xong biên bản.");
+                alert("✨ Trợ lý AI đã đúc kết xong nội dung biên bản.");
             }
             else if (kieuVanBan === '8') {
                 let oUu = document.getElementById('ketQuaUuDiem_8');
                 let oKhuyet = document.getElementById('ketQuaKhuyetDiem_8');
                 if (oUu) { oUu.value = duLieuJSON.UuDiem || ""; oUu.style.backgroundColor = "#dcfce7"; setTimeout(() => oUu.style.backgroundColor = "#ffffff", 1500); }
                 if (oKhuyet) { oKhuyet.value = duLieuJSON.HanChe || ""; oKhuyet.style.backgroundColor = "#fecaca"; setTimeout(() => oKhuyet.style.backgroundColor = "#ffffff", 1500); }
-                alert("✨ Trợ lý AI đã bóc tách xong ý kiến chi bộ.");
+                alert("✨ Trợ lý AI đã bóc tách xong ý kiến đánh giá Đảng viên.");
             }
-        } catch(e) { alert("Trợ lý AI trả về sai định dạng. Chi tiết: " + e.message + "\n\nChuỗi nhận được:\n" + ketQuaTraVe); }
+        } catch(loiPhanTich) { 
+            alert("Tiến trình AI phản hồi không đồng nhất định dạng. Chi tiết: " + loiPhanTich.message); 
+            console.error(ketQuaTraVe);
+        }
     }
 
     function chayNghiepVu(loaiHanhDong) {
         const kieuVanBan = document.getElementById('loaiVanBan').value;
-        let idMauVanBan = "";
+        let idMauHienTai = "";
         
         if (typeof KET_NOI !== 'undefined' && KET_NOI.DANH_MUC_VAN_BAN) {
             const mauTonTai = KET_NOI.DANH_MUC_VAN_BAN.find(item => item.giaTri === kieuVanBan);
-            if (mauTonTai) idMauVanBan = mauTonTai.idMau;
+            if (mauTonTai) idMauHienTai = mauTonTai.idMau;
         }
 
         const laMoiTruongGoogle = (typeof google !== 'undefined' && google.script && google.script.run);
 
         if (loaiHanhDong === 'PhanTichAI') {
-            let noiDung = ""; let chuoiPhanLoai = "";
+            let noiDungTruyen = ""; let chuoiPhanLoai = "";
             
             if (kieuVanBan === '1') {
-                noiDung = document.getElementById('noiDungTruyenAI_1') ? document.getElementById('noiDungTruyenAI_1').value : "";
+                noiDungTruyen = document.getElementById('noiDungTruyenAI_1') ? document.getElementById('noiDungTruyenAI_1').value : "";
                 chuoiPhanLoai = "Phiếu đánh giá tiết dạy sư phạm";
             } 
             else if (kieuVanBan === '2') {
-                noiDung = document.getElementById('noiDungTruyenAI_2') ? document.getElementById('noiDungTruyenAI_2').value : "";
+                noiDungTruyen = document.getElementById('noiDungTruyenAI_2') ? document.getElementById('noiDungTruyenAI_2').value : "";
                 chuoiPhanLoai = "Biên bản hành chính sự việc";
             } 
             else if (kieuVanBan === '8') {
-                noiDung = document.getElementById('noiDungTruyenAI_8') ? document.getElementById('noiDungTruyenAI_8').value : "";
+                noiDungTruyen = document.getElementById('noiDungTruyenAI_8') ? document.getElementById('noiDungTruyenAI_8').value : "";
                 chuoiPhanLoai = "Biên bản họp chi bộ";
             }
 
-            if (!noiDung.trim()) return alert("Khung nhập liệu đang trống, AI không có dữ liệu để đọc!");
+            if (!noiDungTruyen.trim()) return alert("Khung nhập liệu văn bản đang trống, hệ thống AI không thể tiến hành đọc quét!");
 
-            hienThiTai("Trợ lý AI đang phân tích dữ liệu...", true);
-            boDemThoiGian = setTimeout(function() { hienThiTai("", false); alert("Lỗi 408: Hệ thống phản hồi quá chậm."); }, 60000);
+            hienThiTai("Thuật toán AI đang phân tích dữ liệu...", true);
+            boDemThoiGian = setTimeout(function() { hienThiTai("", false); alert("Mã lỗi 408: Hệ thống máy chủ phản hồi quá thời gian quy định."); }, 60000);
 
             if (laMoiTruongGoogle) {
                 google.script.run
                     .withSuccessHandler(function(ketQuaTraVe) { clearTimeout(boDemThoiGian); hienThiTai("", false); dieuPhoiKetQuaAI(ketQuaTraVe, kieuVanBan); })
-                    .withFailureHandler(function(loiMang) { clearTimeout(boDemThoiGian); hienThiTai("", false); alert("Lỗi kết nối nội bộ: " + loiMang.message); })
-                    .phanTichUuKhuyetDiem(noiDung, chuoiPhanLoai);
+                    .withFailureHandler(function(loiMang) { clearTimeout(boDemThoiGian); hienThiTai("", false); alert("Mất kết nối nội bộ GAS: " + loiMang.message); })
+                    .phanTichUuKhuyetDiem(noiDungTruyen, chuoiPhanLoai);
             } 
             else if (typeof KET_NOI !== 'undefined' && KET_NOI.URL_API_BACKEND) {
-                const dongGoi = { hanhDong: 'PhanTichAI', noiDung: noiDung, chuoiPhanLoai: chuoiPhanLoai };
+                const dongGoi = { hanhDong: 'PhanTichAI', noiDung: noiDungTruyen, chuoiPhanLoai: chuoiPhanLoai };
                 fetch(KET_NOI.URL_API_BACKEND, { method: 'POST', body: JSON.stringify(dongGoi), headers: { 'Content-Type': 'text/plain;charset=utf-8' } })
                 .then(res => res.text()).then(ketQuaTraVe => { clearTimeout(boDemThoiGian); hienThiTai("", false); dieuPhoiKetQuaAI(ketQuaTraVe, kieuVanBan); })
-                .catch(loiMang => { clearTimeout(boDemThoiGian); hienThiTai("", false); alert("Lỗi kết nối API: " + loiMang.message); });
+                .catch(loiMang => { clearTimeout(boDemThoiGian); hienThiTai("", false); alert("Mất kết nối API bên ngoài: " + loiMang.message); });
             }
         }
 
         if (loaiHanhDong === 'LuuHoSo' || loaiHanhDong === 'XuatWord') {
-            if(!idMauVanBan) return alert("Hệ thống chưa tìm thấy ID File Mẫu trong cấu hình!");
+            if(!idMauHienTai) return alert("Cảnh báo: Hệ thống chưa xác định được ID Bản gốc lưu trữ.");
 
-            hienThiTai(`Hệ thống đang tiến hành điền dữ liệu...`, true);
-            boDemThoiGian = setTimeout(function() { hienThiTai("", false); alert("Mất quá nhiều thời gian kết xuất File!"); }, 60000);
+            hienThiTai(`Hệ thống đang tiến hành nạp dữ liệu và xuất tài liệu...`, true);
+            boDemThoiGian = setTimeout(function() { hienThiTai("", false); alert("Mất quá nhiều thời gian kết xuất File. Vui lòng kiểm tra lại mạng Internet!"); }, 60000);
 
-            const duLieu = layToanBoDuLieuGiaoDien().data;
-            const dongGoi = { hanhDong: loaiHanhDong, dongGoiTruyenLen: { idMau: idMauVanBan, duLieuForm: duLieu } };
+            const duLieuForm = layToanBoDuLieuGiaoDien().data;
+            const dongGoiTruyen = { hanhDong: loaiHanhDong, dongGoiTruyenLen: { idMau: idMauHienTai, duLieuForm: duLieuForm } };
             
             if (laMoiTruongGoogle) {
                 google.script.run
                     .withSuccessHandler(function(phanHoi) {
                         clearTimeout(boDemThoiGian); hienThiTai("", false);
-                        if (phanHoi.trangThai === "ThanhCong") { if(confirm(phanHoi.thongBao + "\n\nBấm OK để mở File Word.")) window.open(phanHoi.lienKet, '_blank'); } 
+                        if (phanHoi.trangThai === "ThanhCong") { if(confirm(phanHoi.thongBao + "\n\nNhấn OK để điều hướng tới tài liệu Word vừa tạo.")) window.open(phanHoi.lienKet, '_blank'); } 
                         else alert(phanHoi.thongBao);
                     })
-                    .withFailureHandler(function(loiMang) { clearTimeout(boDemThoiGian); hienThiTai("", false); alert("Lỗi lưu trữ: " + loiMang.message); })
-                    .xuLyLuuHoSo(dongGoi.dongGoiTruyenLen);
+                    .withFailureHandler(function(loiMang) { clearTimeout(boDemThoiGian); hienThiTai("", false); alert("Xảy ra lỗi lưu trữ hệ thống: " + loiMang.message); })
+                    .xuLyLuuHoSo(dongGoiTruyen.dongGoiTruyenLen);
             } else if (typeof KET_NOI !== 'undefined' && KET_NOI.URL_API_BACKEND) {
-                fetch(KET_NOI.URL_API_BACKEND, { method: 'POST', body: JSON.stringify(dongGoi), headers: { 'Content-Type': 'text/plain;charset=utf-8' } })
+                fetch(KET_NOI.URL_API_BACKEND, { method: 'POST', body: JSON.stringify(dongGoiTruyen), headers: { 'Content-Type': 'text/plain;charset=utf-8' } })
                 .then(res => res.text()) 
                 .then(textPhanHoi => {
                     clearTimeout(boDemThoiGian); hienThiTai("", false);
                     try {
                         const phanHoi = JSON.parse(textPhanHoi); 
-                        if (phanHoi.trangThai === "ThanhCong") { if(confirm(phanHoi.thongBao + "\n\nBấm OK để mở File Word.")) window.open(phanHoi.lienKet, '_blank'); } 
-                        else alert("Lỗi từ Máy chủ GAS: " + phanHoi.thongBao);
-                    } catch(e) { alert("Hệ thống trả về lỗi. Nhấn F12 để xem chi tiết log."); console.error(textPhanHoi); }
+                        if (phanHoi.trangThai === "ThanhCong") { if(confirm(phanHoi.thongBao + "\n\nNhấn OK để điều hướng tới tài liệu Word vừa tạo.")) window.open(phanHoi.lienKet, '_blank'); } 
+                        else alert("Cảnh báo từ máy chủ trung tâm: " + phanHoi.thongBao);
+                    } catch(loiPhanGiai) { 
+                        alert("Hệ thống trả về thông báo không xác định. Nhấn F12 để theo dõi log máy chủ."); 
+                        console.error(textPhanHoi); 
+                    }
                 })
-                .catch(loiMang => { clearTimeout(boDemThoiGian); hienThiTai("", false); alert("Lỗi đường truyền mạng: " + loiMang.message); });
+                .catch(loiMang => { clearTimeout(boDemThoiGian); hienThiTai("", false); alert("Đứt gãy đường truyền mạng: " + loiMang.message); });
             }
         }
     }
 
     function lamMoiForm() {
-        if(confirm("Xóa toàn bộ dữ liệu hiện tại trên biểu mẫu này?")) {
+        if(confirm("Bạn có chắc chắn muốn xóa toàn bộ dữ liệu đang nhập để làm mới biểu mẫu?")) {
             const loai = document.getElementById('loaiVanBan').value;
             if(loai !== "0") {
-                document.getElementById('khoi_' + loai).querySelectorAll('input:not([type="datetime-local"]), textarea').forEach(o => o.value = '');
+                document.getElementById('khoi_' + loai).querySelectorAll('input:not([type="datetime-local"]), textarea').forEach(truongNhap => truongNhap.value = '');
             }
         }
     }

@@ -107,7 +107,6 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Phần 1 -->
                 <tr><td rowspan="4" style="font-weight: bold; text-align: center;">1. Kế hoạch bài dạy</td>
                     <td>1. Mức độ phù hợp của các hoạt động học với mục tiêu, nội dung và phương pháp dạy học.</td><td style="text-align: center;">1</td>
                     <td style="text-align: center;"><input type="number" id="Diem_TC1" min="0" max="1" step="0.25" value="1" oninput="tinhTongDiemThanhPhan()"></td></tr>
@@ -117,7 +116,6 @@
                     <td style="text-align: center;"><input type="number" id="Diem_TC3" min="0" max="1" step="0.25" value="1" oninput="tinhTongDiemThanhPhan()"></td></tr>
                 <tr><td>4. Mức độ phù hợp của phương án kiểm tra, đánh giá trong quá trình tổ chức hoạt động học.</td><td style="text-align: center;">2</td>
                     <td style="text-align: center;"><input type="number" id="Diem_TC4" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan()"></td></tr>
-                <!-- Phần 2 -->
                 <tr><td rowspan="4" style="font-weight: bold; text-align: center;">2. Hoạt động của giáo viên</td>
                     <td>5. Mức độ chính xác, phù hợp, sinh động, hấp dẫn của nội dung, phương pháp giao nhiệm vụ học tập.</td><td style="text-align: center;">2</td>
                     <td style="text-align: center;"><input type="number" id="Diem_TC5" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan()"></td></tr>
@@ -127,7 +125,6 @@
                     <td style="text-align: center;"><input type="number" id="Diem_TC7" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan()"></td></tr>
                 <tr><td>8. Mức độ chính xác, hiệu quả trong tổng hợp, phân tích, đánh giá quá trình và kết quả học tập.</td><td style="text-align: center;">2</td>
                     <td style="text-align: center;"><input type="number" id="Diem_TC8" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan()"></td></tr>
-                <!-- Phần 3 -->
                 <tr><td rowspan="4" style="font-weight: bold; text-align: center;">3. Hoạt động của học sinh</td>
                     <td>9. Khả năng tiếp nhận và sẵn sàng thực hiện nhiệm vụ học tập của học sinh trong lớp.</td><td style="text-align: center;">2</td>
                     <td style="text-align: center;"><input type="number" id="Diem_TC9" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan()"></td></tr>
@@ -229,6 +226,57 @@
         </div>
     </div>
 
+    <!-- MẪU 11 (MỚI): QUYẾT ĐỊNH HÀNH CHÍNH -->
+    <div id="khoiHienThi_5" class="dynamic-block">
+        <div class="section-title">II. NỘI DUNG QUYẾT ĐỊNH</div>
+        <div class="grid-2">
+            <div class="form-group"><label>Số Quyết định:</label><input type="text" id="soQuyetDinhDungChung" placeholder="Nhập nếu khác mục chung"></div>
+            <div class="form-group"><label>Tên Quyết định (Về việc...):</label><input type="text" id="tenQuyetDinh"></div>
+        </div>
+        <div class="form-group">
+            <label>Căn cứ ban hành (Luật, Nghị định, Thông tư...):</label>
+            <textarea id="canCuBanHanh" style="min-height: 80px;" placeholder="Căn cứ Luật...&#10;Căn cứ Nghị định..."></textarea>
+        </div>
+        <div class="form-group">
+            <label>Người/Đơn vị chịu tác động (Điều 1 - Ai, Đơn vị nào?):</label>
+            <input type="text" id="dieu1NhanSu">
+        </div>
+        <div class="form-group">
+            <label>Nội dung cốt lõi Quyết định (Nhập tóm tắt để AI dự thảo ngôn từ pháp lý):</label>
+            <textarea id="tomTatQuyetDinh" style="min-height: 80px;" placeholder="Tóm tắt yêu cầu để AI viết Điều 1..."></textarea>
+        </div>
+        <div class="form-group" style="background: #f0fdf4; padding: 10px; border-radius: 6px; border: 1px solid #bbf7d0;">
+            <label style="color:#0284c7;">Dự thảo Nội dung Điều 1 (Trợ lý AI tự động biên soạn):</label>
+            <textarea id="ketLuanQuyetDinh" style="min-height: 100px; font-weight: bold;"></textarea>
+        </div>
+        <div class="form-group">
+            <label>Điều khoản thi hành (Nơi nhận, Đơn vị phối hợp...):</label>
+            <textarea id="dieuKhoanThiHanh" style="min-height: 60px;" placeholder="Các ông/bà có tên tại Điều 1 chịu trách nhiệm thi hành..."></textarea>
+        </div>
+    </div>
+
+    <!-- MẪU 12 (MỚI): KẾ HOẠCH CÔNG TÁC -->
+    <div id="khoiHienThi_6" class="dynamic-block">
+        <div class="section-title">II. NỘI DUNG KẾ HOẠCH</div>
+        <div class="form-group"><label>Tên Kế hoạch:</label><input type="text" id="tenKeHoach"></div>
+        <div class="form-group">
+            <label>Mục đích, Yêu cầu:</label>
+            <textarea id="mucDichYeuCau" style="min-height: 80px;"></textarea>
+        </div>
+        <div class="form-group">
+            <label>Ý tưởng trọng tâm (Nhập tóm tắt để AI lên danh sách công việc chi tiết):</label>
+            <textarea id="yTuongKeHoach" style="min-height: 80px;" placeholder="Ví dụ: Tổ chức hội thao chào mừng 20/11 gồm bóng chuyền và cắm hoa..."></textarea>
+        </div>
+        <div class="form-group" style="background: #fdf4ff; padding: 10px; border-radius: 6px; border: 1px solid #fbcfe8;">
+            <label style="color:#c026d3;">Chi tiết các bước thực hiện (Trợ lý AI tự động triển khai):</label>
+            <textarea id="chiTietKeHoach" style="min-height: 120px; font-weight: bold;"></textarea>
+        </div>
+        <div class="form-group">
+            <label>Tổ chức thực hiện (Phân công nhiệm vụ):</label>
+            <textarea id="toChucThucHien" style="min-height: 80px;"></textarea>
+        </div>
+    </div>
+
     <!-- THANH CÔNG CỤ -->
     <div class="action-bar" id="thanhCongCu" style="display: none;">
         <button class="btn btn-blue" onclick="tinhTongDiemThanhPhan()" id="btnDanhGia">Tính Điểm ĐG</button>
@@ -311,10 +359,14 @@
         if (loai !== "0") {
             document.getElementById('khoiChung').classList.add('active');
             let idKhoiKichHoat = "";
+            
             if (loai === "1") { idKhoiKichHoat = "khoiHienThi_1"; }
             else if (loai === "2") { idKhoiKichHoat = "khoiHienThi_2"; }
             else if (["3", "5", "6", "9", "10"].includes(loai)) { idKhoiKichHoat = "khoiHienThi_3"; }
             else if (["4", "7", "8"].includes(loai)) { idKhoiKichHoat = "khoiHienThi_4"; }
+            // Mở khóa giao diện mới cho Quyết định và Kế hoạch
+            else if (["11"].includes(loai)) { idKhoiKichHoat = "khoiHienThi_5"; }
+            else if (["12"].includes(loai)) { idKhoiKichHoat = "khoiHienThi_6"; }
             
             if(idKhoiKichHoat) document.getElementById(idKhoiKichHoat).classList.add('active');
             document.getElementById('thanhCongCu').style.display = 'grid';
@@ -386,7 +438,6 @@
     function dieuPhoiKetQuaAI(ketQuaTraVe, kieuVanBan) {
         if (ketQuaTraVe.indexOf("LỖI") === 0) return alert(ketQuaTraVe);
         try {
-            // vì backend đã khóa trả về chuẩn json, ta chỉ cần phân tích chuỗi
             let chuoiGoc = ketQuaTraVe.replace(/```json/gi, '').replace(/```/g, '').trim();
             const duLieuJSON = JSON.parse(chuoiGoc);
             
@@ -418,6 +469,28 @@
                 }
                 alert("✨ Trợ lý AI đã hoàn tất việc đúc kết biên bản sự việc.");
             } 
+            // Luồng điều phối mới cho Quyết định
+            else if (kieuVanBan === '11') {
+                let oDuThao = document.getElementById('ketLuanQuyetDinh');
+                if (oDuThao) {
+                    oDuThao.value = duLieuJSON.NoiDungQuyetDinh || "";
+                    oDuThao.style.transition = "background-color 0.4s";
+                    oDuThao.style.backgroundColor = "#dcfce7"; 
+                    setTimeout(() => { oDuThao.style.backgroundColor = "#fbfbfb"; }, 1500);
+                }
+                alert("✨ Trợ lý AI đã dự thảo xong nội dung Quyết định.");
+            }
+            // Luồng điều phối mới cho Kế hoạch
+            else if (kieuVanBan === '12') {
+                let oKeHoach = document.getElementById('chiTietKeHoach');
+                if (oKeHoach) {
+                    oKeHoach.value = duLieuJSON.ChiTietKeHoach || "";
+                    oKeHoach.style.transition = "background-color 0.4s";
+                    oKeHoach.style.backgroundColor = "#fce7f3"; 
+                    setTimeout(() => { oKeHoach.style.backgroundColor = "#fbfbfb"; }, 1500);
+                }
+                alert("✨ Trợ lý AI đã triển khai xong các bước Kế hoạch.");
+            }
             else {
                 if(document.getElementById('bcUuDiem')) document.getElementById('bcUuDiem').value = duLieuJSON.UuDiem || "";
                 if(document.getElementById('bcKhuyetDiem')) document.getElementById('bcKhuyetDiem').value = (duLieuJSON.HanChe || "") + "\n* Cải tiến: " + (duLieuJSON.CaiTien || "");
@@ -447,6 +520,16 @@
                 noiDung = document.getElementById('noiDungChiTietSVK') ? document.getElementById('noiDungChiTietSVK').value : "";
                 chuoiPhanLoai = "Biên bản hành chính sự việc";
             } 
+            // Luồng lấy dữ liệu để gửi lên AI cho Quyết định
+            else if (kieuVanBan === '11') {
+                noiDung = document.getElementById('tomTatQuyetDinh') ? document.getElementById('tomTatQuyetDinh').value : "";
+                chuoiPhanLoai = "Quyết định hành chính";
+            }
+            // Luồng lấy dữ liệu để gửi lên AI cho Kế hoạch
+            else if (kieuVanBan === '12') {
+                noiDung = document.getElementById('yTuongKeHoach') ? document.getElementById('yTuongKeHoach').value : "";
+                chuoiPhanLoai = "Kế hoạch công tác";
+            }
             else if (["3", "5", "6", "9", "10"].includes(kieuVanBan)) {
                 noiDung = document.getElementById('noiDungKiemTraDang') ? document.getElementById('noiDungKiemTraDang').value : "";
                 chuoiPhanLoai = "Nội dung kiểm tra Đảng viên";

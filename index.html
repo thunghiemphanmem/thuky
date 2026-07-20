@@ -42,6 +42,17 @@
         .spinner { width: 40px; height: 40px; border: 4px solid #cbd5e1; border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
+        /* KHỐI CSS CHO MODAL XEM TRƯỚC VĂN BẢN */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
+        .modal-content { background: #fff; width: 95%; max-width: 800px; max-height: 90vh; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2); }
+        .modal-header { padding: 15px 20px; background: var(--primary); color: white; font-weight: bold; font-size: 1.2rem; display: flex; justify-content: space-between; align-items: center; }
+        .modal-body { padding: 20px; overflow-y: auto; background: #f8fafc; }
+        .modal-footer { padding: 15px 20px; background: #fff; display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid #cbd5e1; }
+        .preview-table { width: 100%; border-collapse: collapse; font-size: 12pt; }
+        .preview-table th, .preview-table td { border: 1px solid #cbd5e1; padding: 10px; vertical-align: top; }
+        .preview-table th { background: #e2e8f0; width: 30%; text-align: left; color: #334155; }
+        .preview-table td { background: #fff; }
+
         .footer-credit { text-align: center; margin-top: 30px; font-size: 11pt; color: #64748b; font-style: italic; line-height: 1.4; }
     </style>
 </head>
@@ -61,7 +72,6 @@
     <div class="form-group" style="background: #e0f2fe; padding: 15px; border-radius: 6px; border: 1px solid #bae6fd;">
         <label style="color: #0369a1; font-size: 1.1rem;">📌 CHỌN LOẠI VĂN BẢN ĐỂ KHỞI TẠO BIỂU MẪU:</label>
         <select id="loaiVanBan" onchange="chuyenDoiBieuMau()" style="font-weight: bold; font-size: 14pt; color: #0284c7;">
-            <!-- Nội dung Select tải từ Javascript -->
         </select>
     </div>
 
@@ -191,9 +201,12 @@
     <!-- KHỐI 4: THANH CÔNG CỤ XỬ LÝ -->
     <!-- ========================================================= -->
     <div class="action-bar" id="thanhCongCu" style="display: none;">
-        <button class="btn btn-blue" onclick="chayNghiepVu('DanhGia')" id="btnDanhGia">Tính Điểm ĐG</button>
+        <button class="btn btn-blue" onclick="alert('Thuật toán tính điểm sẽ cập nhật sau.')">Tính Điểm ĐG</button>
         <button class="btn btn-sky" onclick="chayNghiepVu('PhanTichAI')" id="btnAI">Trợ Lý AI Phân Tích</button>
-        <button class="btn btn-green" onclick="chayNghiepVu('LuuHoSo')" id="btnHoSo">Tạo Văn Bản Đích</button>
+        <button class="btn btn-orange" onclick="alert('Thuật toán lưu dự thảo sẽ cập nhật sau.')">Lưu Dự Thảo</button>
+        <button class="btn btn-green" onclick="chayNghiepVu('LuuHoSo')" id="btnHoSo">Chốt Hồ Sơ</button>
+        <!-- Nút Xem Trước Mới Nâng Cấp -->
+        <button class="btn btn-purple" onclick="hienThiXemTruoc()">Xem Trước & Xuất Word</button>
         <button class="btn btn-red" onclick="lamMoiForm()">Làm Mới Biểu Mẫu</button>
     </div>
 
@@ -204,9 +217,28 @@
     </div>
 </div>
 
+<!-- ========================================================= -->
+<!-- MÀN HÌNH MODAL XEM TRƯỚC BẢNG DỮ LIỆU SẼ ĐƯỢC CHÈN VÀO WORD -->
+<!-- ========================================================= -->
+<div class="modal-overlay" id="previewModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span>🔍 XEM TRƯỚC DỮ LIỆU TRƯỚC KHI XUẤT FILE</span>
+            <span class="close-btn" style="cursor:pointer;" onclick="dongXemTruoc()">✖</span>
+        </div>
+        <div class="modal-body" id="previewBody">
+            <!-- Nội dung bảng dữ liệu sẽ được Javascript bơm vào đây -->
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-red" onclick="dongXemTruoc()" style="padding: 10px 20px;">Đóng Lại (Sửa Tiếp)</button>
+            <button class="btn btn-green" onclick="xacNhanXuatWord()" style="padding: 10px 20px;">✓ Xác Nhận Tạo File Word</button>
+        </div>
+    </div>
+</div>
+
 <script>
     // =========================================================
-    // KHỐI 5: LOGIC HOẠT ĐỘNG JAVASCRIPT ĐÃ CẬP NHẬT 10 BIỂU MẪU
+    // KHỐI 5: LOGIC HOẠT ĐỘNG JAVASCRIPT
     // =========================================================
 
     function khoiTaoOChonVanBan() {
@@ -272,48 +304,92 @@
         boDem.style.display = trangThai ? 'flex' : 'none';
     }
 
-    /**
-     * Hàm quét lấy toàn bộ dữ liệu có trên giao diện để gửi đi
-     */
-    function layToanBoDuLieuForm() {
+    function layToanBoDuLieuGiaoDien() {
         const duLieu = {};
-        document.querySelectorAll('input, textarea, select').forEach(truong => {
-            if (truong.id) { 
-                duLieu[truong.id] = truong.value; 
+        const labels = {};
+        
+        // Quét lấy tất cả các trường Input đang được phép hiển thị trên màn hình
+        document.querySelectorAll('.dynamic-block.active .form-group').forEach(group => {
+            const labelEl = group.querySelector('label');
+            const inputEl = group.querySelector('input, textarea, select');
+            if (inputEl && inputEl.id && labelEl) {
+                duLieu[inputEl.id] = inputEl.value;
+                labels[inputEl.id] = labelEl.innerText.replace(':', '').trim();
             }
         });
-        return duLieu;
+        return { data: duLieu, labels: labels };
     }
 
+    // =========================================================
+    // HÀM XỬ LÝ XEM TRƯỚC VĂN BẢN (PREVIEW)
+    // =========================================================
+    function hienThiXemTruoc() {
+        const tapHopDuLieu = layToanBoDuLieuGiaoDien();
+        const kieuVanBan = document.getElementById('loaiVanBan').value;
+        
+        if (kieuVanBan === "0") return alert("Vui lòng chọn loại văn bản!");
+
+        let html = "<div style='margin-bottom: 10px; color: #475569;'><i>Dưới đây là các dữ liệu sẽ được điền vào File Word. Vui lòng kiểm tra lại chính tả.</i></div>";
+        html += "<table class='preview-table'><tbody>";
+        
+        for (let idTruong in tapHopDuLieu.data) {
+            let giaTri = tapHopDuLieu.data[idTruong].trim();
+            let tenTruong = tapHopDuLieu.labels[idTruong];
+            
+            if (giaTri !== "") {
+                html += `<tr><th>${tenTruong}</th><td>${giaTri.replace(/\n/g, '<br>')}</td></tr>`;
+            }
+        }
+        
+        html += "</tbody></table>";
+        document.getElementById('previewBody').innerHTML = html;
+        document.getElementById('previewModal').style.display = 'flex';
+    }
+
+    function dongXemTruoc() {
+        document.getElementById('previewModal').style.display = 'none';
+    }
+
+    function xacNhanXuatWord() {
+        dongXemTruoc();
+        chayNghiepVu('XuatWord');
+    }
+
+    // =========================================================
+    // HÀM QUẢN LÝ LÕI TÁC VỤ AI & LƯU HỒ SƠ
+    // =========================================================
     function chayNghiepVu(loaiHanhDong) {
         const kieuVanBan = document.getElementById('loaiVanBan').value;
         let idMauVanBan = "";
         
         if (typeof KET_NOI !== 'undefined' && KET_NOI.DANH_MUC_VAN_BAN) {
             const mauTonTai = KET_NOI.DANH_MUC_VAN_BAN.find(item => item.giaTri === kieuVanBan);
-            if(mauTonTai) idMauVanBan = mauTonTai.idMau;
+            if (mauTonTai) idMauVanBan = mauTonTai.idMau;
         }
 
-        // ==========================================
-        // TÁC VỤ 1: TRỢ LÝ AI TRÍCH XUẤT
-        // ==========================================
+        // ---------------------------------------------------------
+        // TÁC VỤ 1: TRỢ LÝ AI TRÍCH XUẤT KHÔNG TREO
+        // ---------------------------------------------------------
         if (loaiHanhDong === 'PhanTichAI') {
             let noiDung = "";
             let chuoiPhanLoai = "";
             
+            // Bắt lỗi an toàn nếu thẻ không tồn tại
             if (kieuVanBan === '1') {
-                noiDung = document.getElementById('noiDungQuanSat').value;
+                noiDung = document.getElementById('noiDungQuanSat') ? document.getElementById('noiDungQuanSat').value : "";
                 chuoiPhanLoai = "Phiếu đánh giá tiết dạy sư phạm";
             } else if (["3", "5", "6", "9", "10"].includes(kieuVanBan)) {
-                noiDung = document.getElementById('noiDungKiemTraDang').value;
+                noiDung = document.getElementById('noiDungKiemTraDang') ? document.getElementById('noiDungKiemTraDang').value : "";
                 chuoiPhanLoai = "Nội dung kiểm tra/giám sát Đảng viên";
             } else if (["4", "7", "8"].includes(kieuVanBan)) {
-                noiDung = document.getElementById('giaiTrinhChiTiet').value + "\n\n" + document.getElementById('ketQuaThamTra').value;
+                let gt = document.getElementById('giaiTrinhChiTiet') ? document.getElementById('giaiTrinhChiTiet').value : "";
+                let tt = document.getElementById('ketQuaThamTra') ? document.getElementById('ketQuaThamTra').value : "";
+                noiDung = gt + "\n\n" + tt;
                 chuoiPhanLoai = "Báo cáo giải trình/thẩm tra Đảng viên";
             }
 
             if (!noiDung.trim()) {
-                alert("Vui lòng nhập nội dung (diễn biến/báo cáo) vào khung trước khi kích hoạt Trợ lý AI!");
+                alert("Vui lòng nhập nội dung diễn biến/báo cáo vào khung trước khi gọi Trợ lý AI!");
                 return;
             }
 
@@ -331,41 +407,38 @@
                         const duLieuJSON = JSON.parse(chuoiGoc);
                         
                         if (kieuVanBan === '1') {
-                            document.getElementById('nhanXetUuDiem').value = duLieuJSON.UuDiem || "";
-                            document.getElementById('nhanXetHanChe').value = duLieuJSON.HanChe || "";
-                            document.getElementById('nhanXetCaiTien').value = duLieuJSON.CaiTien || "";
+                            if(document.getElementById('nhanXetUuDiem')) document.getElementById('nhanXetUuDiem').value = duLieuJSON.UuDiem || "";
+                            if(document.getElementById('nhanXetHanChe')) document.getElementById('nhanXetHanChe').value = duLieuJSON.HanChe || "";
+                            if(document.getElementById('nhanXetCaiTien')) document.getElementById('nhanXetCaiTien').value = duLieuJSON.CaiTien || "";
                         } else {
-                            document.getElementById('bcUuDiem').value = duLieuJSON.UuDiem || "";
-                            document.getElementById('bcKhuyetDiem').value = (duLieuJSON.HanChe || "") + "\n\n* Cải tiến đề xuất: " + (duLieuJSON.CaiTien || "");
+                            if(document.getElementById('bcUuDiem')) document.getElementById('bcUuDiem').value = duLieuJSON.UuDiem || "";
+                            if(document.getElementById('bcKhuyetDiem')) document.getElementById('bcKhuyetDiem').value = (duLieuJSON.HanChe || "") + "\n\n* Cải tiến đề xuất: " + (duLieuJSON.CaiTien || "");
                         }
                     } catch(e) {
-                        alert("Quá trình ép kiểu dữ liệu AI gặp sự cố. Trợ lý AI phản hồi sai định dạng.\n\nChi tiết lỗi: " + e.message);
+                        alert("Quá trình phân giải kết quả AI thất bại.\nChi tiết lỗi: " + e.message);
                     }
                 })
                 .withFailureHandler(function(loiMang) {
                     hienThiTai("", false);
-                    alert("Kết nối máy chủ thất bại hoặc thời gian chờ quá lâu. Vui lòng thử lại!\nLỗi: " + loiMang.message);
+                    alert("Kết nối máy chủ AI thất bại hoặc quá tải. Vui lòng thử lại!\nLỗi: " + loiMang.message);
                 })
                 .phanTichUuKhuyetDiem(noiDung, chuoiPhanLoai);
                 
             return;
         }
 
-        // ==========================================
-        // TÁC VỤ 2: TẠO VĂN BẢN VÀ LƯU VÀO FOLDER CHỈ ĐỊNH
-        // ==========================================
+        // ---------------------------------------------------------
+        // TÁC VỤ 2: TẠO VĂN BẢN WORD
+        // ---------------------------------------------------------
         if (loaiHanhDong === 'LuuHoSo' || loaiHanhDong === 'XuatWord') {
             if(!idMauVanBan) {
-                alert("Chưa cấu hình ID mẫu chuẩn cho loại văn bản này!");
+                alert("Hệ thống chưa tìm thấy ID Google Docs mẫu của loại văn bản này!");
                 return;
             }
 
-            hienThiTai(`Hệ thống đang tiến hành kết xuất Dữ liệu và Lưu File...`, true);
+            hienThiTai(`Hệ thống đang tiến hành Copy và điền dữ liệu vào File...`, true);
             
-            // Lệnh thu gom toàn bộ dữ liệu đang có trên màn hình
-            const duLieu = layToanBoDuLieuForm();
-            
-            // Đóng gói gửi máy chủ
+            const duLieu = layToanBoDuLieuGiaoDien().data;
             const dongGoiTruyenLen = { 
                 hanhDong: loaiHanhDong, 
                 formId: kieuVanBan, 
@@ -379,7 +452,7 @@
                     if (phanHoi.trangThai === "ThanhCong") {
                         let textAlert = phanHoi.thongBao;
                         if(phanHoi.lienKet) {
-                            textAlert += "\n\nBấm OK để mở trực tiếp văn bản vừa được hệ thống tạo.";
+                            textAlert += "\n\nBấm OK để mở ngay cửa sổ chứa văn bản Word (Google Docs) vừa được điền.";
                         }
                         if(confirm(textAlert) && phanHoi.lienKet) {
                             window.open(phanHoi.lienKet, '_blank');
@@ -390,7 +463,7 @@
                 })
                 .withFailureHandler(function(loiMang) {
                     hienThiTai("", false);
-                    alert("Lỗi lưu trữ: " + loiMang.message);
+                    alert("Gặp sự cố khi lưu tệp trên Google Drive:\n" + loiMang.message);
                 })
                 .xuLyLuuHoSo(dongGoiTruyenLen);
         }

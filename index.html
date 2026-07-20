@@ -178,7 +178,7 @@
 
     <!-- THANH CÔNG CỤ -->
     <div class="action-bar" id="thanhCongCu" style="display: none;">
-        <button class="btn btn-blue" onclick="alert('Đang xây dựng.')">Tính Điểm ĐG</button>
+        <button class="btn btn-blue" onclick="tinhXepLoaiTietDay()" id="btnDanhGia">Tính Xếp Loại ĐG</button>
         <button class="btn btn-sky" onclick="chayNghiepVu('PhanTichAI')" id="btnAI">Trợ Lý AI Phân Tích</button>
         <button class="btn btn-green" onclick="chayNghiepVu('LuuHoSo')" id="btnHoSo">Tạo Văn Bản</button>
         <button class="btn btn-purple" onclick="hienThiXemTruoc()">Xem Trước & Xuất Word</button>
@@ -403,7 +403,53 @@
             }
         }
     }
+// =========================================================================
+    // KHỐI TÍNH TOÁN: NGHIỆP VỤ ĐÁNH GIÁ TIẾT DẠY SƯ PHẠM
+    // =========================================================================
+    function tinhXepLoaiTietDay() {
+        const oDiem = document.getElementById('tongDiem');
+        const oXepLoai = document.getElementById('xepLoaiGiayDay');
 
+        if (!oDiem || !oXepLoai) return;
+
+        // Lấy giá trị điểm và chuyển thành số thực
+        let diem = parseFloat(oDiem.value);
+
+        // Kiểm tra tính hợp lệ của dữ liệu đầu vào
+        if (isNaN(diem)) {
+            alert("HỆ THỐNG BÁO LỖI: Vui lòng nhập tổng điểm (là một số) trước khi tính xếp loại!");
+            oDiem.focus();
+            return;
+        }
+
+        if (diem < 0 || diem > 20) {
+            alert("HỆ THỐNG BÁO LỖI: Cấu hình hiện tại đang dùng thang điểm 20. Vui lòng nhập điểm trong khoảng từ 0 đến 20!");
+            oDiem.focus();
+            return;
+        }
+
+        // Thuật toán xếp loại theo chuẩn quy định sư phạm
+        let xepLoai = "";
+        if (diem >= 17) {
+            xepLoai = "Giỏi";
+        } else if (diem >= 13) {
+            xepLoai = "Khá";
+        } else if (diem >= 10) {
+            xepLoai = "Đạt";
+        } else {
+            xepLoai = "Chưa đạt";
+        }
+
+        // Đổ dữ liệu vào ô kết quả
+        oXepLoai.value = xepLoai;
+
+        // Bổ sung hiệu ứng UX chớp xanh nhẹ để báo hiệu đã xử lý thành công (giúp giao diện mượt mà)
+        oXepLoai.style.transition = "background-color 0.3s ease";
+        oXepLoai.style.backgroundColor = "#dcfce7"; // Xanh lá nhạt
+        setTimeout(() => { 
+            oXepLoai.style.backgroundColor = "#fbfbfb"; // Trả về màu nền gốc của input
+        }, 800);
+    }
     function lamMoiForm() {
         if(confirm("Xóa toàn bộ dữ liệu hiện tại?")) {
             document.querySelectorAll('input:not([type="datetime-local"]), textarea').forEach(o => o.value = '');

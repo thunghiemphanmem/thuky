@@ -200,9 +200,9 @@
 </div>
 
 <script>
-    // =========================================================
-    // KHỐI 5: LOGIC HOẠT ĐỘNG JAVASCRIPT (THEO DÕI LỖI CHẶT CHẼ)
-    // =========================================================
+    // =========================================================================
+    // KHỐI 5: JAVASCRIPT - TỰ ĐỘNG NHẬN DIỆN & TƯƠNG THÍCH ĐA MÔI TRƯỜNG
+    // =========================================================================
 
     function khoiTaoOChonVanBan() {
         const oChon = document.getElementById('loaiVanBan');
@@ -285,9 +285,26 @@
     function xacNhanXuatWord() { dongXemTruoc(); chayNghiepVu('XuatWord'); }
 
     // ==========================================
-    // KHỐI QUẢN LÝ TÁC VỤ MÁY CHỦ
+    // KHỐI QUẢN LÝ TÁC VỤ & NHẬN DIỆN ĐƯỜNG TRUYỀN
     // ==========================================
     let boDemThoiGian; 
+
+    // Hàm phụ trợ: Bóc tách JSON sau khi máy chủ phản hồi
+    function dieuPhoiKetQuaAI(ketQuaTraVe, kieuVanBan) {
+        if (ketQuaTraVe.indexOf("LỖI") === 0) return alert(ketQuaTraVe);
+        try {
+            let chuoiGoc = ketQuaTraVe.replace(/```json/gi, '').replace(/```/g, '').trim();
+            const duLieuJSON = JSON.parse(chuoiGoc);
+            if (kieuVanBan === '1') {
+                if(document.getElementById('nhanXetUuDiem')) document.getElementById('nhanXetUuDiem').value = duLieuJSON.UuDiem || "";
+                if(document.getElementById('nhanXetHanChe')) document.getElementById('nhanXetHanChe').value = duLieuJSON.HanChe || "";
+                if(document.getElementById('nhanXetCaiTien')) document.getElementById('nhanXetCaiTien').value = duLieuJSON.CaiTien || "";
+            } else {
+                if(document.getElementById('bcUuDiem')) document.getElementById('bcUuDiem').value = duLieuJSON.UuDiem || "";
+                if(document.getElementById('bcKhuyetDiem')) document.getElementById('bcKhuyetDiem').value = (duLieuJSON.HanChe || "") + "\n* Cải tiến: " + (duLieuJSON.CaiTien || "");
+            }
+        } catch(e) { alert("Trợ lý AI trả về sai định dạng. Chi tiết: " + e.message); }
+    }
 
     function chayNghiepVu(loaiHanhDong) {
         const kieuVanBan = document.getElementById('loaiVanBan').value;
@@ -298,9 +315,12 @@
             if (mauTonTai) idMauVanBan = mauTonTai.idMau;
         }
 
+        // Tự động kiểm tra xem giao diện đang chạy trên GAS hay Github Pages
+        const laMoiTruongGoogle = (typeof google !== 'undefined' && google.script && google.script.run);
+
+        // --- TÁC VỤ 1: TRỢ LÝ AI ---
         if (loaiHanhDong === 'PhanTichAI') {
-            let noiDung = "";
-            let chuoiPhanLoai = "";
+            let noiDung = ""; let chuoiPhanLoai = "";
             
             if (kieuVanBan === '1') {
                 noiDung = document.getElementById('noiDungQuanSat') ? document.getElementById('noiDungQuanSat').value : "";
@@ -311,68 +331,87 @@
             } else if (["4", "7", "8"].includes(kieuVanBan)) {
                 let gt = document.getElementById('giaiTrinhChiTiet') ? document.getElementById('giaiTrinhChiTiet').value : "";
                 let tt = document.getElementById('ketQuaThamTra') ? document.getElementById('ketQuaThamTra').value : "";
-                noiDung = gt + "\n\n" + tt;
-                chuoiPhanLoai = "Báo cáo giải trình/thẩm tra Đảng viên";
+                noiDung = gt + "\n\n" + tt; chuoiPhanLoai = "Báo cáo giải trình/thẩm tra Đảng viên";
             }
 
             if (!noiDung.trim()) return alert("Khung nhập liệu đang trống, AI không có dữ liệu để đọc!");
 
             hienThiTai("Trợ lý AI đang phân tích dữ liệu...", true);
-            console.log("Đã kích hoạt gửi lệnh lên Google Apps Script..."); // Theo dõi lỗi qua F12
             
             boDemThoiGian = setTimeout(function() {
                 hienThiTai("", false);
-                alert("Lỗi 408: Hệ thống phản hồi quá chậm! Hãy kiểm tra lại API Key hoặc Deploy bản mới.");
-            }, 30000); // 30 giây buộc ngắt vòng xoay
+                alert("Lỗi 408: Hệ thống phản hồi quá chậm (vượt quá 60 giây).");
+            }, 60000); // Đã nâng cấp thời gian chờ lên 60 giây
 
-            google.script.run
-                .withSuccessHandler(function(ketQuaTraVe) {
-                    clearTimeout(boDemThoiGian);
-                    hienThiTai("", false);
-                    console.log("Máy chủ trả về:", ketQuaTraVe);
-                    
-                    if (ketQuaTraVe.indexOf("LỖI") === 0) return alert(ketQuaTraVe);
-                    
-                    try {
-                        let chuoiGoc = ketQuaTraVe.replace(/```json/gi, '').replace(/```/g, '').trim();
-                        const duLieuJSON = JSON.parse(chuoiGoc);
-                        
-                        if (kieuVanBan === '1') {
-                            if(document.getElementById('nhanXetUuDiem')) document.getElementById('nhanXetUuDiem').value = duLieuJSON.UuDiem || "";
-                            if(document.getElementById('nhanXetHanChe')) document.getElementById('nhanXetHanChe').value = duLieuJSON.HanChe || "";
-                            if(document.getElementById('nhanXetCaiTien')) document.getElementById('nhanXetCaiTien').value = duLieuJSON.CaiTien || "";
-                        } else {
-                            if(document.getElementById('bcUuDiem')) document.getElementById('bcUuDiem').value = duLieuJSON.UuDiem || "";
-                            if(document.getElementById('bcKhuyetDiem')) document.getElementById('bcKhuyetDiem').value = (duLieuJSON.HanChe || "") + "\n* Cải tiến: " + (duLieuJSON.CaiTien || "");
-                        }
-                    } catch(e) { alert("Trợ lý AI trả về sai định dạng. Chi tiết: " + e.message); }
+            if (laMoiTruongGoogle) {
+                // Đang chạy trên nền tảng Google Apps Script
+                google.script.run
+                    .withSuccessHandler(function(ketQuaTraVe) {
+                        clearTimeout(boDemThoiGian); hienThiTai("", false);
+                        dieuPhoiKetQuaAI(ketQuaTraVe, kieuVanBan);
+                    })
+                    .withFailureHandler(function(loiMang) {
+                        clearTimeout(boDemThoiGian); hienThiTai("", false);
+                        alert("Lỗi kết nối nội bộ GAS: " + loiMang.message);
+                    })
+                    .phanTichUuKhuyetDiem(noiDung, chuoiPhanLoai);
+            } 
+            else if (typeof KET_NOI !== 'undefined' && KET_NOI.URL_API_BACKEND) {
+                // Đang chạy độc lập trên Github Pages
+                const dongGoi = { hanhDong: 'PhanTichAI', noiDung: noiDung, chuoiPhanLoai: chuoiPhanLoai };
+                fetch(KET_NOI.URL_API_BACKEND, {
+                    method: 'POST',
+                    body: JSON.stringify(dongGoi),
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' }
                 })
-                .withFailureHandler(function(loiMang) {
-                    clearTimeout(boDemThoiGian);
-                    hienThiTai("", false);
-                    console.error("Lỗi sập mạng ngầm:", loiMang);
-                    alert("Kết nối máy chủ bị sập ngang (Code 500)!\nNguyên nhân: Thường do lỗi Code.gs chưa được TẠO BẢN TRIỂN KHAI MỚI (Deploy).");
+                .then(res => res.text())
+                .then(ketQuaTraVe => {
+                    clearTimeout(boDemThoiGian); hienThiTai("", false);
+                    dieuPhoiKetQuaAI(ketQuaTraVe, kieuVanBan);
                 })
-                .phanTichUuKhuyetDiem(noiDung, chuoiPhanLoai);
+                .catch(loiMang => {
+                    clearTimeout(boDemThoiGian); hienThiTai("", false);
+                    alert("Lỗi đường truyền API Github Pages: Bạn đã Triển khai (Deploy) bản mới ở file Code.gs chưa?\nChi tiết: " + loiMang.message);
+                });
+            } else {
+                clearTimeout(boDemThoiGian); hienThiTai("", false);
+                alert("Lỗi Cấu Hình: Chưa khai báo URL_API_BACKEND trong tệp ketnoi.js.");
+            }
         }
 
+        // --- TÁC VỤ 2: TẠO VĂN BẢN ---
         if (loaiHanhDong === 'LuuHoSo' || loaiHanhDong === 'XuatWord') {
             if(!idMauVanBan) return alert("Hệ thống chưa tìm thấy ID Mẫu!");
-            hienThiTai(`Hệ thống đang tiến hành Copy và điền dữ liệu...`, true);
-            boDemThoiGian = setTimeout(function() { hienThiTai("", false); alert("Mất quá nhiều thời gian kết xuất File!"); }, 30000);
+            
+            hienThiTai(`Hệ thống đang tiến hành điền dữ liệu...`, true);
+            boDemThoiGian = setTimeout(function() { hienThiTai("", false); alert("Mất quá nhiều thời gian kết xuất File!"); }, 60000);
 
             const duLieu = layToanBoDuLieuGiaoDien().data;
-            const dongGoiTruyenLen = { hanhDong: loaiHanhDong, formId: kieuVanBan, idMau: idMauVanBan, duLieuForm: duLieu };
+            const dongGoi = { hanhDong: loaiHanhDong, formId: kieuVanBan, idMau: idMauVanBan, dongGoiTruyenLen: { idMau: idMauVanBan, duLieuForm: duLieu } };
             
-            google.script.run
-                .withSuccessHandler(function(phanHoi) {
+            if (laMoiTruongGoogle) {
+                google.script.run
+                    .withSuccessHandler(function(phanHoi) {
+                        clearTimeout(boDemThoiGian); hienThiTai("", false);
+                        if (phanHoi.trangThai === "ThanhCong") {
+                            if(confirm(phanHoi.thongBao + "\n\nBấm OK để mở File Word.")) window.open(phanHoi.lienKet, '_blank');
+                        } else alert(phanHoi.thongBao);
+                    })
+                    .withFailureHandler(function(loiMang) { clearTimeout(boDemThoiGian); hienThiTai("", false); alert("Lỗi lưu trữ: " + loiMang.message); })
+                    .xuLyLuuHoSo(dongGoi.dongGoiTruyenLen);
+            } else if (typeof KET_NOI !== 'undefined' && KET_NOI.URL_API_BACKEND) {
+                fetch(KET_NOI.URL_API_BACKEND, {
+                    method: 'POST', body: JSON.stringify(dongGoi), headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+                })
+                .then(res => res.json())
+                .then(phanHoi => {
                     clearTimeout(boDemThoiGian); hienThiTai("", false);
                     if (phanHoi.trangThai === "ThanhCong") {
                         if(confirm(phanHoi.thongBao + "\n\nBấm OK để mở File Word.")) window.open(phanHoi.lienKet, '_blank');
                     } else alert(phanHoi.thongBao);
                 })
-                .withFailureHandler(function(loiMang) { clearTimeout(boDemThoiGian); hienThiTai("", false); alert("Lỗi lưu trữ: " + loiMang.message); })
-                .xuLyLuuHoSo(dongGoiTruyenLen);
+                .catch(loiMang => { clearTimeout(boDemThoiGian); hienThiTai("", false); alert("Lỗi kết nối API lưu trữ: " + loiMang.message); });
+            }
         }
     }
 

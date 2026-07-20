@@ -66,18 +66,11 @@
 <div class="container">
     <div class="header-title">HỆ THỐNG SOẠN THẢO VĂN BẢN CHUYÊN NGHIỆP</div>
 
-    <!-- ========================================================= -->
-    <!-- KHỐI 2: ĐIỀU HƯỚNG LOẠI VĂN BẢN TỰ ĐỘNG -->
-    <!-- ========================================================= -->
     <div class="form-group" style="background: #e0f2fe; padding: 15px; border-radius: 6px; border: 1px solid #bae6fd;">
         <label style="color: #0369a1; font-size: 1.1rem;">📌 CHỌN LOẠI VĂN BẢN ĐỂ KHỞI TẠO BIỂU MẪU:</label>
         <select id="loaiVanBan" onchange="chuyenDoiBieuMau()" style="font-weight: bold; font-size: 14pt; color: #0284c7;">
         </select>
     </div>
-
-    <!-- ========================================================= -->
-    <!-- KHỐI 3: CÁC TRƯỜNG DỮ LIỆU ĐỘNG THEO BIỂU MẪU -->
-    <!-- ========================================================= -->
 
     <!-- KHỐI CHUNG: BỐI CẢNH & THỜI GIAN -->
     <div id="khoiChung" class="dynamic-block">
@@ -197,20 +190,17 @@
         </div>
     </div>
 
-    <!-- ========================================================= -->
-    <!-- KHỐI 4: THANH CÔNG CỤ XỬ LÝ -->
-    <!-- ========================================================= -->
+    <!-- THANH CÔNG CỤ -->
     <div class="action-bar" id="thanhCongCu" style="display: none;">
-        <button class="btn btn-blue" onclick="alert('Thuật toán tính điểm sẽ cập nhật sau.')">Tính Điểm ĐG</button>
+        <button class="btn btn-blue" onclick="alert('Tính năng đang xây dựng.')">Tính Điểm ĐG</button>
         <button class="btn btn-sky" onclick="chayNghiepVu('PhanTichAI')" id="btnAI">Trợ Lý AI Phân Tích</button>
-        <button class="btn btn-orange" onclick="alert('Thuật toán lưu dự thảo sẽ cập nhật sau.')">Lưu Dự Thảo</button>
-        <button class="btn btn-green" onclick="chayNghiepVu('LuuHoSo')" id="btnHoSo">Chốt Hồ Sơ</button>
-        <!-- Nút Xem Trước Mới Nâng Cấp -->
+        <button class="btn btn-orange" onclick="alert('Tính năng đang xây dựng.')">Lưu Dự Thảo</button>
+        <button class="btn btn-green" onclick="chayNghiepVu('LuuHoSo')" id="btnHoSo">Tạo Văn Bản Trực Tiếp</button>
         <button class="btn btn-purple" onclick="hienThiXemTruoc()">Xem Trước & Xuất Word</button>
         <button class="btn btn-red" onclick="lamMoiForm()">Làm Mới Biểu Mẫu</button>
     </div>
 
-    <!-- CHỮ KÝ BẢN QUYỀN TRANG -->
+    <!-- CHỮ KÝ BẢN QUYỀN -->
     <div class="footer-credit">
         Thiết kế và phát triển<br>
         Hoàng Ngọc Lâm
@@ -227,7 +217,7 @@
             <span class="close-btn" style="cursor:pointer;" onclick="dongXemTruoc()">✖</span>
         </div>
         <div class="modal-body" id="previewBody">
-            <!-- Nội dung bảng dữ liệu sẽ được Javascript bơm vào đây -->
+            <!-- Nội dung bảng dữ liệu -->
         </div>
         <div class="modal-footer">
             <button class="btn btn-red" onclick="dongXemTruoc()" style="padding: 10px 20px;">Đóng Lại (Sửa Tiếp)</button>
@@ -238,13 +228,12 @@
 
 <script>
     // =========================================================
-    // KHỐI 5: LOGIC HOẠT ĐỘNG JAVASCRIPT
+    // KHỐI 5: LOGIC HOẠT ĐỘNG JAVASCRIPT (CHỐNG TREO 100%)
     // =========================================================
 
     function khoiTaoOChonVanBan() {
         const oChon = document.getElementById('loaiVanBan');
         let chuoiHTML = '<option value="0">-- Bấm vào đây để chọn biểu mẫu --</option>';
-        
         if (typeof KET_NOI !== 'undefined' && KET_NOI.DANH_MUC_VAN_BAN) {
             const danhSach = KET_NOI.DANH_MUC_VAN_BAN;
             for (let i = 0; i < danhSach.length; i++) {
@@ -260,22 +249,17 @@
 
     function chuyenDoiBieuMau() {
         const loai = document.getElementById('loaiVanBan').value;
-        const cacKhoi = document.querySelectorAll('.dynamic-block');
-        
-        cacKhoi.forEach(khoi => khoi.classList.remove('active'));
+        document.querySelectorAll('.dynamic-block').forEach(khoi => khoi.classList.remove('active'));
         
         if (loai !== "0") {
             document.getElementById('khoiChung').classList.add('active');
-            
             let idKhoiKichHoat = "";
             if (loai === "1") { idKhoiKichHoat = "khoiHienThi_1"; }
             else if (loai === "2") { idKhoiKichHoat = "khoiHienThi_2"; }
             else if (["3", "5", "6", "9", "10"].includes(loai)) { idKhoiKichHoat = "khoiHienThi_3"; }
             else if (["4", "7", "8"].includes(loai)) { idKhoiKichHoat = "khoiHienThi_4"; }
             
-            if(idKhoiKichHoat) {
-                document.getElementById(idKhoiKichHoat).classList.add('active');
-            }
+            if(idKhoiKichHoat) document.getElementById(idKhoiKichHoat).classList.add('active');
 
             document.getElementById('thanhCongCu').style.display = 'grid';
             
@@ -284,7 +268,6 @@
                 if(!document.getElementById('tenToChuc').value) document.getElementById('tenToChuc').value = KET_NOI.TEN_TO_CHUC || "";
                 if(!document.getElementById('noiBanHanh').value) document.getElementById('noiBanHanh').value = KET_NOI.NOI_BAN_HANH || "";
             }
-
             if(!document.getElementById('ngayGioThucHien').value) {
                 const now = new Date();
                 now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
@@ -299,16 +282,13 @@
     }
 
     function hienThiTai(tinNhan, trangThai) {
-        const boDem = document.getElementById('boDemTai');
         document.getElementById('chuoiThongBao').innerText = tinNhan;
-        boDem.style.display = trangThai ? 'flex' : 'none';
+        document.getElementById('boDemTai').style.display = trangThai ? 'flex' : 'none';
     }
 
     function layToanBoDuLieuGiaoDien() {
         const duLieu = {};
         const labels = {};
-        
-        // Quét lấy tất cả các trường Input đang được phép hiển thị trên màn hình
         document.querySelectorAll('.dynamic-block.active .form-group').forEach(group => {
             const labelEl = group.querySelector('label');
             const inputEl = group.querySelector('input, textarea, select');
@@ -320,22 +300,17 @@
         return { data: duLieu, labels: labels };
     }
 
-    // =========================================================
-    // HÀM XỬ LÝ XEM TRƯỚC VĂN BẢN (PREVIEW)
-    // =========================================================
     function hienThiXemTruoc() {
         const tapHopDuLieu = layToanBoDuLieuGiaoDien();
         const kieuVanBan = document.getElementById('loaiVanBan').value;
-        
         if (kieuVanBan === "0") return alert("Vui lòng chọn loại văn bản!");
 
-        let html = "<div style='margin-bottom: 10px; color: #475569;'><i>Dưới đây là các dữ liệu sẽ được điền vào File Word. Vui lòng kiểm tra lại chính tả.</i></div>";
+        let html = "<div style='margin-bottom: 10px; color: #475569;'><i>Dưới đây là các dữ liệu sẽ được điền vào File Word. Vui lòng kiểm tra lại.</i></div>";
         html += "<table class='preview-table'><tbody>";
         
         for (let idTruong in tapHopDuLieu.data) {
             let giaTri = tapHopDuLieu.data[idTruong].trim();
             let tenTruong = tapHopDuLieu.labels[idTruong];
-            
             if (giaTri !== "") {
                 html += `<tr><th>${tenTruong}</th><td>${giaTri.replace(/\n/g, '<br>')}</td></tr>`;
             }
@@ -355,9 +330,11 @@
         chayNghiepVu('XuatWord');
     }
 
-    // =========================================================
-    // HÀM QUẢN LÝ LÕI TÁC VỤ AI & LƯU HỒ SƠ
-    // =========================================================
+    // ==========================================
+    // KHỐI QUẢN LÝ TÁC VỤ MÁY CHỦ (BẮT LỖI)
+    // ==========================================
+    let boDemThoiGian; // Biến lưu đếm ngược chống treo
+
     function chayNghiepVu(loaiHanhDong) {
         const kieuVanBan = document.getElementById('loaiVanBan').value;
         let idMauVanBan = "";
@@ -367,14 +344,10 @@
             if (mauTonTai) idMauVanBan = mauTonTai.idMau;
         }
 
-        // ---------------------------------------------------------
-        // TÁC VỤ 1: TRỢ LÝ AI TRÍCH XUẤT KHÔNG TREO
-        // ---------------------------------------------------------
         if (loaiHanhDong === 'PhanTichAI') {
             let noiDung = "";
             let chuoiPhanLoai = "";
             
-            // Bắt lỗi an toàn nếu thẻ không tồn tại
             if (kieuVanBan === '1') {
                 noiDung = document.getElementById('noiDungQuanSat') ? document.getElementById('noiDungQuanSat').value : "";
                 chuoiPhanLoai = "Phiếu đánh giá tiết dạy sư phạm";
@@ -395,8 +368,15 @@
 
             hienThiTai("Trợ lý AI đang đọc nội dung và tự động gán kết quả...", true);
             
+            // Đặt thời gian ngắt kết nối an toàn (40 giây)
+            boDemThoiGian = setTimeout(function() {
+                hienThiTai("", false);
+                alert("Hệ thống AI phản hồi quá chậm hoặc mất kết nối mạng. Vui lòng thử lại!");
+            }, 40000);
+
             google.script.run
                 .withSuccessHandler(function(ketQuaTraVe) {
+                    clearTimeout(boDemThoiGian);
                     hienThiTai("", false);
                     if (ketQuaTraVe.indexOf("LỖI") === 0) {
                         alert(ketQuaTraVe);
@@ -415,21 +395,19 @@
                             if(document.getElementById('bcKhuyetDiem')) document.getElementById('bcKhuyetDiem').value = (duLieuJSON.HanChe || "") + "\n\n* Cải tiến đề xuất: " + (duLieuJSON.CaiTien || "");
                         }
                     } catch(e) {
-                        alert("Quá trình phân giải kết quả AI thất bại.\nChi tiết lỗi: " + e.message);
+                        alert("Trợ lý AI phản hồi sai định dạng hoặc quá trình ép kiểu thất bại.\nChi tiết lỗi: " + e.message);
                     }
                 })
                 .withFailureHandler(function(loiMang) {
+                    clearTimeout(boDemThoiGian);
                     hienThiTai("", false);
-                    alert("Kết nối máy chủ AI thất bại hoặc quá tải. Vui lòng thử lại!\nLỗi: " + loiMang.message);
+                    alert("Kết nối máy chủ AI thất bại hoặc quá tải!\nChi tiết: " + loiMang.message);
                 })
                 .phanTichUuKhuyetDiem(noiDung, chuoiPhanLoai);
                 
             return;
         }
 
-        // ---------------------------------------------------------
-        // TÁC VỤ 2: TẠO VĂN BẢN WORD
-        // ---------------------------------------------------------
         if (loaiHanhDong === 'LuuHoSo' || loaiHanhDong === 'XuatWord') {
             if(!idMauVanBan) {
                 alert("Hệ thống chưa tìm thấy ID Google Docs mẫu của loại văn bản này!");
@@ -438,6 +416,11 @@
 
             hienThiTai(`Hệ thống đang tiến hành Copy và điền dữ liệu vào File...`, true);
             
+            boDemThoiGian = setTimeout(function() {
+                hienThiTai("", false);
+                alert("Quá trình kết xuất File tốn nhiều thời gian hơn dự kiến hoặc mất mạng. Vui lòng làm mới trang và thử lại!");
+            }, 45000);
+
             const duLieu = layToanBoDuLieuGiaoDien().data;
             const dongGoiTruyenLen = { 
                 hanhDong: loaiHanhDong, 
@@ -448,6 +431,7 @@
             
             google.script.run
                 .withSuccessHandler(function(phanHoi) {
+                    clearTimeout(boDemThoiGian);
                     hienThiTai("", false);
                     if (phanHoi.trangThai === "ThanhCong") {
                         let textAlert = phanHoi.thongBao;
@@ -462,6 +446,7 @@
                     }
                 })
                 .withFailureHandler(function(loiMang) {
+                    clearTimeout(boDemThoiGian);
                     hienThiTai("", false);
                     alert("Gặp sự cố khi lưu tệp trên Google Drive:\n" + loiMang.message);
                 })
@@ -471,8 +456,7 @@
 
     function lamMoiForm() {
         if(confirm("Xóa toàn bộ dữ liệu hiện tại để soạn văn bản mới?")) {
-            const tatCaOTruong = document.querySelectorAll('input:not([type="datetime-local"]), textarea');
-            tatCaOTruong.forEach(o => o.value = '');
+            document.querySelectorAll('input:not([type="datetime-local"]), textarea').forEach(o => o.value = '');
             document.getElementById('loaiVanBan').value = "0";
             chuyenDoiBieuMau();
         }

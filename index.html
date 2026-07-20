@@ -660,15 +660,32 @@
 
     document.addEventListener("DOMContentLoaded", function() { khoiTaoOChonVanBan(); });
 
-    function tinhTongDiemThanhPhan(laFormDanhGia = 0) {
+function tinhTongDiemThanhPhan(laFormDanhGia = 0) {
         if(laFormDanhGia !== 1 && document.getElementById('loaiVanBan').value !== "1") return;
         let tong = 0;
         const khoiActive = document.getElementById('khoi_1');
         if(!khoiActive) return;
 
+        // NÂNG CẤP 1: Mảng chốt chặn điểm tối đa cho từng tiêu chí tương ứng (Từ TC1 đến TC12)
+        const maTranDiemToiDa = [1, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 1];
+
         for (let i = 1; i <= 12; i++) {
             const oThanhPhan = khoiActive.querySelector(`input[data-key="Diem_TC${i}"]`);
-            if (oThanhPhan) tong += (parseFloat(oThanhPhan.value) || 0);
+            if (oThanhPhan) {
+                let diem = parseFloat(oThanhPhan.value) || 0;
+                
+                // Thuật toán kìm kẹp: Nếu AI hay người dùng nhập lố, ép điểm về mốc Max của tiêu chí đó
+                if (diem > maTranDiemToiDa[i-1]) {
+                    diem = maTranDiemToiDa[i-1];
+                    oThanhPhan.value = diem; // Cập nhật lại giao diện ngay lập tức
+                    
+                    // Nháy đỏ báo hiệu dữ liệu đã bị ép lại cho đúng chuẩn
+                    oThanhPhan.style.backgroundColor = "#fee2e2"; 
+                    setTimeout(() => { oThanhPhan.style.backgroundColor = "#fff"; }, 1500);
+                }
+                
+                tong += diem;
+            }
         }
 
         const oTongDiem = document.getElementById('tongDiem_1');
@@ -676,10 +693,16 @@
 
         if (oTongDiem) oTongDiem.value = tong;
         if (oXepLoai) {
-            if (tong >= 18) oXepLoai.value = "GIỎI";
-            else if (tong >= 13.5) oXepLoai.value = "KHÁ";
-            else if (tong >= 10) oXepLoai.value = "TRUNG BÌNH";
-            else oXepLoai.value = "KHÔNG ĐẠT";
+            // NÂNG CẤP 2: Chuẩn hóa phân vùng xếp loại theo đúng khung Văn bản
+            if (tong >= 18 && tong <= 20) {
+                oXepLoai.value = "GIỎI";
+            } else if (tong >= 13.5 && tong < 18) {
+                oXepLoai.value = "KHÁ";
+            } else if (tong >= 10 && tong < 13.5) {
+                oXepLoai.value = "TRUNG BÌNH";
+            } else {
+                oXepLoai.value = "KHÔNG ĐẠT";
+            }
         }
     }
 

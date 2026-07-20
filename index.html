@@ -7,237 +7,170 @@
     <script src="ketnoi.js"></script>
     <style>
         /* =========================================================================
-           HỆ THỐNG BIẾN TOÀN CỤC & HIỆU ỨNG NỀN (AURORA MESH VÀ GLASSMORPHISM)
+           HỆ THỐNG BIẾN TOÀN CỤC & HIỆU ỨNG NỀN
            ========================================================================= */
         :root { 
-            --primary: #0284c7; 
-            --secondary: #334155; 
-            --text: #0f172a; 
-            --border: #cbd5e1; 
-            --accent: #38bdf8;
-            --glass-bg: rgba(255, 255, 255, 0.85);
+            --primary: #0284c7; --secondary: #334155; --text: #0f172a; 
+            --border: #cbd5e1; --accent: #38bdf8;
+            --glass-bg: rgba(255, 255, 255, 0.9);
             --glass-border: rgba(255, 255, 255, 0.5);
-            --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --shadow-soft: 0 8px 25px rgba(0, 0, 0, 0.05);
         }
 
-        @keyframes aurora-bg {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+        @keyframes aurora-bg { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             background: linear-gradient(-45deg, #e0f2fe, #f0f9ff, #bae6fd, #e0e7ff);
-            background-size: 400% 400%;
-            animation: aurora-bg 15s ease infinite;
-            color: var(--text); 
-            margin: 0; 
-            padding: 30px 20px; 
-            font-size: 11pt; 
-            line-height: 1.5; 
+            background-size: 400% 400%; animation: aurora-bg 15s ease infinite;
+            color: var(--text); margin: 0; padding: 15px 10px; font-size: 10.5pt; line-height: 1.5; 
         }
         
         .container { 
-            max-width: 1100px; 
-            margin: auto; 
-            background: var(--glass-bg); 
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            padding: 40px 50px; 
-            border-radius: 16px; 
-            border: 1px solid var(--glass-border);
+            max-width: 1100px; margin: auto; background: var(--glass-bg); 
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            padding: 20px 30px; border-radius: 12px; border: 1px solid var(--glass-border);
             box-shadow: var(--shadow-soft); 
         }
 
         .header-title { 
-            text-align: center; 
-            font-size: 1.8rem; 
-            font-weight: 800; 
-            color: var(--primary); 
-            text-transform: uppercase; 
-            margin-bottom: 30px; 
-            padding-bottom: 15px; 
-            border-bottom: 3px solid var(--accent); 
-            letter-spacing: 1px; 
-            text-shadow: 0 2px 4px rgba(2, 132, 199, 0.1);
+            text-align: center; font-size: 1.5rem; font-weight: 800; color: var(--primary); 
+            text-transform: uppercase; margin-bottom: 20px; padding-bottom: 10px; 
+            border-bottom: 3px solid var(--accent); letter-spacing: 1px; 
         }
         
         /* =========================================================================
-           THIẾT KẾ KHỐI BIỂU MẪU (PANEL) & TYPOGRAPHY
+           THIẾT KẾ KHỐI BIỂU MẪU (PANEL) - THU GỌN PADDING
            ========================================================================= */
         .form-panel { 
-            background: rgba(248, 250, 252, 0.9); 
-            border: 1px solid #e2e8f0; 
-            border-radius: 10px; 
-            padding: 25px; 
-            margin-bottom: 25px; 
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); 
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: rgba(248, 250, 252, 0.95); border: 1px solid #e2e8f0; 
+            border-radius: 8px; padding: 15px 20px; margin-bottom: 15px; 
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); transition: box-shadow 0.3s ease;
         }
-        .form-panel:hover {
-            box-shadow: 0 8px 24px rgba(0,0,0,0.04);
-        }
+        .form-panel:hover { box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
 
         .section-title { 
-            font-size: 1.15rem; 
-            font-weight: 700; 
-            color: var(--secondary); 
-            margin: 0 0 20px 0; 
-            padding-bottom: 10px; 
-            border-bottom: 2px solid #e2e8f0; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
+            font-size: 1.05rem; font-weight: 700; color: var(--secondary); 
+            margin: 0 0 12px 0; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; 
+            display: flex; justify-content: space-between; align-items: center; 
         }
         
-        .badge-no-ai { background: #fee2e2; color: #991b1b; padding: 5px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; letter-spacing: 0.5px; border: 1px solid #fecaca; }
-        .badge-ai { background: #dcfce7; color: #166534; padding: 5px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; letter-spacing: 0.5px; border: 1px solid #bbf7d0; box-shadow: 0 0 10px rgba(22, 163, 74, 0.2); }
+        .badge-no-ai { background: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; border: 1px solid #fecaca; }
+        .badge-ai { background: #dcfce7; color: #166534; padding: 4px 10px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; border: 1px solid #bbf7d0; }
 
-        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+        /* =========================================================================
+           GRID SYSTEM & TRÌNH BÀY CÙNG 1 HÀNG (ROW LAYOUT)
+           ========================================================================= */
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 20px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px 20px; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px 20px; }
+        .grid-2-1-1 { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px 20px; }
         
-        .form-group { display: flex; flex-direction: column; margin-bottom: 15px; }
-        .form-group label { font-weight: 600; margin-bottom: 8px; color: #475569; font-size: 0.95rem; }
+        .form-group { 
+            display: flex; flex-direction: row; align-items: center; margin-bottom: 10px; 
+        }
+        .form-group label { 
+            flex: 0 0 auto; margin-right: 10px; font-size: 0.95rem; font-weight: 600; 
+            color: #475569; white-space: nowrap; 
+        }
         
+        /* Chuyên biệt cho các ô nội dung dài: Nhãn nằm trên, ô nhập nằm dưới */
+        .form-group.col-layout { flex-direction: column; align-items: stretch; }
+        .form-group.col-layout label { margin-right: 0; margin-bottom: 6px; white-space: normal; }
+        
+        .form-group.align-top { align-items: flex-start; }
+        .form-group.align-top label { margin-top: 8px; }
+
+        /* =========================================================================
+           THU HẸP Ô NHẬP KÝ TỰ ÍT & TỰ ĐỘNG GIÃN CAO TEXTAREA
+           ========================================================================= */
         .form-group input, .form-group select, .form-group textarea { 
-            padding: 12px 14px; 
-            border: 1px solid var(--border); 
-            border-radius: 8px; 
-            font-family: inherit; 
-            font-size: 11pt; 
-            background: #ffffff; 
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); 
+            flex-grow: 1; width: 100%; padding: 8px 12px; border: 1px solid var(--border); 
+            border-radius: 6px; font-family: inherit; font-size: 11pt; background: #ffffff; 
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); box-sizing: border-box;
         }
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus { 
-            outline: none; 
-            border-color: var(--primary); 
-            box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.15); 
-            transform: translateY(-1px);
+            outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15); 
         }
-        .form-group textarea { min-height: 90px; resize: vertical; line-height: 1.5; }
+        
+        /* Ép kích thước thu hẹp cho ô ít dữ liệu */
+        .tiny-input { flex-grow: 0 !important; width: 80px !important; }
+        .short-input { flex-grow: 0 !important; width: 120px !important; }
+        .med-input { flex-grow: 0 !important; width: 180px !important; }
+
+        /* Textarea tự động giãn cao */
+        textarea { resize: none; overflow: hidden; min-height: 42px; line-height: 1.5; }
         
         /* =========================================================================
-           BẢNG ĐIỂM TIÊU CHÍ VÀ HIỆU ỨNG ĐỘNG LỰC HỌC (DYNAMIC BLOCKS)
+           BẢNG ĐIỂM TIÊU CHÍ
            ========================================================================= */
-        .table-tieu-chi { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 20px; font-size: 10.5pt; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-        .table-tieu-chi th, .table-tieu-chi td { border: 1px solid var(--border); padding: 12px; vertical-align: middle; }
-        .table-tieu-chi th { background: #f8fafc; color: #334155; text-align: center; font-weight: bold; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 0.5px; }
-        .table-tieu-chi input[type="number"] { width: 75px; text-align: center; padding: 8px; font-size: 11pt; border-radius: 6px; border: 1px solid #cbd5e1; font-weight: bold; color: #0284c7; }
-        .table-tieu-chi input[type="number"]:focus { box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2); }
+        .table-tieu-chi { width: 100%; border-collapse: collapse; margin-top: 10px; margin-bottom: 15px; font-size: 10pt; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+        .table-tieu-chi th, .table-tieu-chi td { border: 1px solid var(--border); padding: 8px 12px; vertical-align: middle; }
+        .table-tieu-chi th { background: #f8fafc; color: #334155; text-align: center; font-weight: bold; font-size: 0.9rem; }
+        .table-tieu-chi input[type="number"] { width: 65px; text-align: center; padding: 6px; font-size: 11pt; border-radius: 4px; border: 1px solid #cbd5e1; font-weight: bold; color: #0284c7; }
 
-        .dynamic-block { display: none; opacity: 0; transform: translateY(15px); transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .dynamic-block { display: none; opacity: 0; transform: translateY(10px); transition: opacity 0.4s ease, transform 0.4s ease; }
         .dynamic-block.active { display: block; opacity: 1; transform: translateY(0); }
         
         /* =========================================================================
-           THANH CÔNG CỤ (ACTION BAR) & NÚT BẤM (BUTTONS)
+           THANH CÔNG CỤ (ACTION BAR) & NÚT BẤM
            ========================================================================= */
         .action-bar { 
-            display: grid; 
-            grid-template-columns: repeat(5, 1fr); 
-            gap: 15px; 
-            position: sticky; 
-            bottom: 0; 
-            background: rgba(255, 255, 255, 0.95); 
-            padding: 20px; 
-            border-radius: 12px;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.05), inset 0 1px 0 #e2e8f0; 
-            margin-top: 40px; 
-            z-index: 100; 
-            backdrop-filter: blur(10px); 
+            display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; 
+            position: sticky; bottom: 0; background: rgba(255, 255, 255, 0.95); 
+            padding: 15px; border-radius: 10px; box-shadow: 0 -4px 15px rgba(0,0,0,0.05), inset 0 1px 0 #e2e8f0; 
+            margin-top: 20px; z-index: 100; backdrop-filter: blur(10px); 
         }
         
         .btn { 
-            padding: 14px 10px; 
-            font-size: 10pt; 
-            font-weight: 800; 
-            color: white; 
-            border: none; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            text-align: center; 
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-            text-transform: uppercase; 
-            letter-spacing: 0.5px; 
-            position: relative;
-            overflow: hidden;
+            padding: 12px 8px; font-size: 9.5pt; font-weight: 800; color: white; border: none; 
+            border-radius: 6px; cursor: pointer; text-align: center; transition: all 0.3s; 
+            text-transform: uppercase; position: relative; overflow: hidden;
         }
-        
-        /* Hiệu ứng tia sáng quét qua nút - ReactBits Style */
         .btn::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 50%;
-            height: 100%;
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transform: skewX(-20deg);
-            transition: 0.5s;
+            transform: skewX(-20deg); transition: 0.5s;
         }
         .btn:hover:not(:disabled)::after { left: 150%; }
+        .btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); filter: brightness(1.05); }
+        .btn:disabled { background: #cbd5e1 !important; color: #94a3b8; cursor: not-allowed; }
         
-        .btn:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.2); filter: brightness(1.05); }
-        .btn:active:not(:disabled) { transform: translateY(0); }
-        .btn:disabled { background: #cbd5e1 !important; color: #94a3b8; cursor: not-allowed; box-shadow: none; }
-        
-        .btn-blue { background: #3b82f6; } 
-        .btn-sky { background: #0ea5e9; } 
-        .btn-green { background: #10b981; } 
-        .btn-purple { background: #8b5cf6; } 
-        .btn-red { background: #ef4444; }
+        .btn-blue { background: #3b82f6; } .btn-sky { background: #0ea5e9; } .btn-green { background: #10b981; } .btn-purple { background: #8b5cf6; } .btn-red { background: #ef4444; }
         
         /* =========================================================================
-           THÀNH PHẦN MODAL & TRẠNG THÁI TẢI DỮ LIỆU
+           MODAL & TẢI DỮ LIỆU
            ========================================================================= */
-        .loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.85); z-index: 999; justify-content: center; align-items: center; flex-direction: column; font-weight: bold; color: var(--primary); font-size: 1.2rem; backdrop-filter: blur(5px); }
-        .spinner { width: 50px; height: 50px; border: 4px solid #e2e8f0; border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite; margin-bottom: 20px; box-shadow: 0 0 15px rgba(2, 132, 199, 0.2); }
+        .loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.85); z-index: 999; justify-content: center; align-items: center; flex-direction: column; font-weight: bold; color: var(--primary); font-size: 1.1rem; backdrop-filter: blur(4px); }
+        .spinner { width: 45px; height: 45px; border: 4px solid #e2e8f0; border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s infinite; margin-bottom: 15px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.65); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
-        .modal-content { background: #fff; width: 95%; max-width: 900px; max-height: 85vh; border-radius: 16px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3); transform: scale(0.95); transition: transform 0.3s ease; }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.65); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(6px); }
+        .modal-content { background: #fff; width: 95%; max-width: 850px; max-height: 85vh; border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3); transform: scale(0.95); transition: transform 0.3s ease; }
         .modal-overlay.active .modal-content { transform: scale(1); }
+        .modal-header { padding: 15px 25px; background: linear-gradient(135deg, var(--primary), #0ea5e9); color: white; font-weight: bold; font-size: 1.1rem; display: flex; justify-content: space-between; align-items: center; }
+        .modal-body { padding: 25px; overflow-y: auto; background: #f8fafc; }
+        .modal-footer { padding: 15px 25px; background: #fff; display: flex; justify-content: flex-end; gap: 12px; border-top: 1px solid #e2e8f0; }
         
-        .modal-header { padding: 20px 30px; background: linear-gradient(135deg, var(--primary), #0ea5e9); color: white; font-weight: bold; font-size: 1.2rem; display: flex; justify-content: space-between; align-items: center; }
-        .modal-body { padding: 30px; overflow-y: auto; background: #f8fafc; }
-        .modal-footer { padding: 20px 30px; background: #fff; display: flex; justify-content: flex-end; gap: 15px; border-top: 1px solid #e2e8f0; }
-        
-        .preview-table { width: 100%; border-collapse: collapse; font-size: 11pt; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .preview-table th, .preview-table td { border: 1px solid #e2e8f0; padding: 15px; vertical-align: top; }
+        .preview-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .preview-table th, .preview-table td { border: 1px solid #e2e8f0; padding: 12px; vertical-align: top; }
         .preview-table th { background: #f1f5f9; width: 35%; text-align: left; color: #475569; font-weight: 700; }
-        .preview-table td { color: #0f172a; line-height: 1.6; }
         
-        /* Chữ ký điện tử bản quyền */
-        .signature-footer {
-            text-align: center;
-            margin-top: 40px;
-            color: #64748b;
-            font-size: 0.95rem;
-            line-height: 1.6;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            opacity: 0.8;
-            transition: opacity 0.3s;
-        }
+        .signature-footer { text-align: center; margin-top: 25px; color: #64748b; font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; transition: 0.3s; }
         .signature-footer:hover { opacity: 1; color: var(--primary); }
     </style>
 </head>
 <body>
 
-<div class="loading-overlay" id="boDemTai">
-    <div class="spinner"></div>
-    <span id="chuoiThongBao">Hệ thống đang xử lý...</span>
-</div>
+<div class="loading-overlay" id="boDemTai"><div class="spinner"></div><span id="chuoiThongBao">Hệ thống đang xử lý...</span></div>
 
 <div class="container">
     <div class="header-title">HỆ THỐNG SOẠN THẢO VĂN BẢN CHUYÊN NGHIỆP</div>
 
     <div class="form-panel" style="background: linear-gradient(to right, #e0f2fe, #f0f9ff); border-color: #bae6fd;">
-        <div class="form-group" style="margin-bottom: 0;">
-            <label style="color: #0369a1; font-size: 1.15rem; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">📌 Chọn loại văn bản để khởi tạo biểu mẫu:</label>
-            <select id="loaiVanBan" onchange="chuyenDoiBieuMau()" style="font-weight: bold; font-size: 12pt; color: #0284c7; padding: 14px; box-shadow: 0 4px 6px -1px rgba(2, 132, 199, 0.1);">
+        <div class="form-group col-layout" style="margin-bottom: 0;">
+            <label style="color: #0369a1; font-size: 1.05rem; text-transform: uppercase;">📌 Chọn loại văn bản để khởi tạo biểu mẫu:</label>
+            <select id="loaiVanBan" onchange="chuyenDoiBieuMau()" style="font-weight: bold; font-size: 11pt; color: #0284c7; padding: 10px; box-shadow: 0 2px 4px rgba(2, 132, 199, 0.05);">
             </select>
         </div>
     </div>
@@ -250,13 +183,13 @@
                 <div class="form-group"><label>Tên bài dạy:</label><input type="text" data-key="Ten_Bai_Day"></div>
                 <div class="form-group"><label>Đơn vị công tác:</label><input type="text" data-key="Don_Vi"></div>
             </div>
-            <div class="grid-4">
-                <div class="form-group" style="grid-column: span 2;"><label>Giáo viên dạy:</label><input type="text" data-key="Giao_Vien_Day"></div>
-                <div class="form-group"><label>Lớp:</label><input type="text" data-key="Lop"></div>
-                <div class="form-group"><label>Tiết dạy:</label><input type="text" data-key="Tiet_Day"></div>
+            <div class="grid-2-1-1">
+                <div class="form-group"><label>Giáo viên dạy:</label><input type="text" data-key="Giao_Vien_Day"></div>
+                <div class="form-group"><label>Lớp:</label><input type="text" class="short-input" data-key="Lop"></div>
+                <div class="form-group"><label>Tiết dạy:</label><input type="text" class="tiny-input" data-key="Tiet_Day"></div>
             </div>
             <div class="grid-2">
-                <div class="form-group"><label>Ngày dạy:</label><input type="date" data-key="Ngay_Day"></div>
+                <div class="form-group"><label>Ngày dạy:</label><input type="date" class="med-input" data-key="Ngay_Day"></div>
                 <div class="form-group"><label>Người đánh giá:</label><input type="text" data-key="Nguoi_Thuc_Hien"></div>
             </div>
         </div>
@@ -270,6 +203,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <!-- Đã làm gọn bớt HTML tĩnh của bảng -->
                     <tr><td rowspan="4" style="font-weight: bold; text-align: center; background: #f8fafc;">1. Kế hoạch bài dạy</td>
                         <td>1. Mức độ phù hợp của các hoạt động học với mục tiêu...</td><td style="text-align: center;">1</td>
                         <td style="text-align: center;"><input type="number" data-key="Diem_TC1" min="0" max="1" step="0.25" value="1" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
@@ -301,22 +235,22 @@
                         <td style="text-align: center;"><input type="number" data-key="Diem_TC12" min="0" max="1" step="0.25" value="1" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
                 </tbody>
             </table>
-            <div class="grid-2" style="background: linear-gradient(to right, #f0fdf4, #dcfce7); padding: 20px; border-radius: 10px; border: 1px solid #bbf7d0;">
-                <div class="form-group" style="margin-bottom:0;"><label>Tổng điểm:</label><input type="number" id="tongDiem_1" data-key="Tong_Diem" readonly style="font-weight: 800; font-size: 1.2rem; color: #16a34a; background: #fff; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);"></div>
-                <div class="form-group" style="margin-bottom:0;"><label>Xếp loại giờ dạy:</label><input type="text" id="xepLoai_1" data-key="Xep_Loai" readonly style="font-weight: 800; font-size: 1.2rem; color: #0284c7; background: #fff; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);"></div>
+            <div class="grid-2" style="background: linear-gradient(to right, #f0fdf4, #dcfce7); padding: 15px; border-radius: 8px; border: 1px solid #bbf7d0;">
+                <div class="form-group" style="margin-bottom:0;"><label>Tổng điểm:</label><input type="number" class="tiny-input" id="tongDiem_1" data-key="Tong_Diem" readonly style="font-weight: 800; color: #16a34a; background: #fff;"></div>
+                <div class="form-group" style="margin-bottom:0;"><label>Xếp loại giờ dạy:</label><input type="text" class="short-input" id="xepLoai_1" data-key="Xep_Loai" readonly style="font-weight: 800; color: #0284c7; background: #fff;"></div>
             </div>
         </div>
 
         <div class="form-panel">
             <div class="section-title">PHÂN TÍCH NHẬN XÉT (AI HỖ TRỢ)</div>
-            <div class="form-group">
+            <div class="form-group col-layout">
                 <label>Nội dung quan sát diễn biến (Bấm "Trợ Lý AI" để máy tự chấm điểm và viết nhận xét):</label>
-                <textarea id="noiDungTruyenAI_1" placeholder="VD: Giáo viên giao việc rõ ràng, phân bổ thời gian hợp lý, học sinh hăng hái phát biểu..."></textarea>
+                <textarea id="noiDungTruyenAI_1" placeholder="VD: Giáo viên giao việc rõ ràng, phân bổ thời gian hợp lý..."></textarea>
             </div>
             <div class="grid-3">
-                <div class="form-group"><label style="color:#166534;">Ưu điểm:</label><textarea id="ketQuaUuDiem_1" data-key="Nhan_Xet_Uu_Diem" style="border-color:#bbf7d0; background: #f8fafc;"></textarea></div>
-                <div class="form-group"><label style="color:#991b1b;">Hạn chế:</label><textarea id="ketQuaHanChe_1" data-key="Nhan_Xet_Han_Che" style="border-color:#fecaca; background: #f8fafc;"></textarea></div>
-                <div class="form-group"><label style="color:#8b5cf6;">Cải tiến:</label><textarea id="ketQuaCaiTien_1" data-key="Nhan_Xet_Cai_Tien" style="border-color:#ddd6fe; background: #f8fafc;"></textarea></div>
+                <div class="form-group col-layout"><label style="color:#166534;">Ưu điểm:</label><textarea id="ketQuaUuDiem_1" data-key="Nhan_Xet_Uu_Diem" style="border-color:#bbf7d0; background: #f8fafc;"></textarea></div>
+                <div class="form-group col-layout"><label style="color:#991b1b;">Hạn chế:</label><textarea id="ketQuaHanChe_1" data-key="Nhan_Xet_Han_Che" style="border-color:#fecaca; background: #f8fafc;"></textarea></div>
+                <div class="form-group col-layout"><label style="color:#8b5cf6;">Cải tiến:</label><textarea id="ketQuaCaiTien_1" data-key="Nhan_Xet_Cai_Tien" style="border-color:#ddd6fe; background: #f8fafc;"></textarea></div>
             </div>
         </div>
     </div>
@@ -328,11 +262,11 @@
             <div class="grid-3">
                 <div class="form-group"><label>Cơ quan chủ quản:</label><input type="text" data-key="CQ_Chu_Quan"></div>
                 <div class="form-group"><label>Tên Đơn vị/Tổ chức:</label><input type="text" data-key="Ten_To_Chuc"></div>
-                <div class="form-group"><label>Số Biên bản:</label><input type="text" data-key="So_Bien_Ban"></div>
+                <div class="form-group"><label>Số Biên bản:</label><input type="text" class="short-input" data-key="So_Bien_Ban"></div>
             </div>
             <div class="grid-3">
                 <div class="form-group"><label>Nơi ban hành:</label><input type="text" data-key="Noi_Ban_Hanh"></div>
-                <div class="form-group"><label>Ngày giờ bắt đầu:</label><input type="datetime-local" data-key="NgayGioBatDau"></div>
+                <div class="form-group"><label>Ngày bắt đầu:</label><input type="datetime-local" class="med-input" data-key="NgayGioBatDau"></div>
                 <div class="form-group"><label>Địa điểm:</label><input type="text" data-key="Dia_Diem"></div>
             </div>
         </div>
@@ -341,28 +275,27 @@
             <div class="section-title">THÀNH PHẦN & NỘI DUNG SỰ VIỆC</div>
             <div class="grid-2">
                 <div class="form-group"><label>Tên sự việc:</label><input type="text" data-key="Ten_Su_Viec"></div>
-                <div class="form-group"><label>Chủ tọa (Người chủ trì):</label><input type="text" data-key="Chu_Toa"></div>
+                <div class="form-group"><label>Chủ tọa (Chủ trì):</label><input type="text" data-key="Chu_Toa"></div>
             </div>
             <div class="grid-2">
-                <div class="form-group"><label>Chức vụ (của Chủ tọa):</label><input type="text" data-key="Chuc_Vu"></div>
+                <div class="form-group"><label>Chức vụ Chủ tọa:</label><input type="text" data-key="Chuc_Vu"></div>
                 <div class="form-group"><label>Thư ký:</label><input type="text" data-key="Thu_Ky"></div>
             </div>
-            <div class="form-group"><label>Danh sách thành phần tham dự (kèm chức vụ):</label><textarea data-key="Danh_Sach_Tham_Du" style="min-height: 70px;"></textarea></div>
+            <div class="form-group col-layout"><label>Danh sách thành phần tham dự (kèm chức vụ):</label><textarea data-key="Danh_Sach_Tham_Du"></textarea></div>
             
-            <div class="form-group">
+            <div class="form-group col-layout">
                 <label>Nội dung chi tiết diễn biến (Bấm "Trợ Lý AI Phân Tích" để tóm tắt kết luận):</label>
-                <textarea id="noiDungTruyenAI_2" data-key="Noi_Dung_Chi_Tiet" style="min-height: 140px;"></textarea>
+                <textarea id="noiDungTruyenAI_2" data-key="Noi_Dung_Chi_Tiet"></textarea>
             </div>
-            <div class="form-group" style="background: linear-gradient(145deg, #f0f9ff, #e0f2fe); padding: 20px; border-radius: 10px; border: 1px solid #bae6fd; box-shadow: 0 4px 10px rgba(14, 165, 233, 0.05);">
-                <label style="color:#0369a1; font-weight: 700;">Kết luận chung (AI tự động tổng hợp hỗ trợ):</label>
-                <textarea id="ketQuaKetLuan_2" data-key="Ket_Luan_Chung" style="min-height: 110px; font-weight: bold; border-color:#bae6fd; box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);"></textarea>
+            <div class="form-group col-layout" style="background: linear-gradient(145deg, #f0f9ff, #e0f2fe); padding: 15px; border-radius: 8px; border: 1px solid #bae6fd;">
+                <label style="color:#0369a1; font-weight: 700;">Kết luận chung (AI tự động tổng hợp):</label>
+                <textarea id="ketQuaKetLuan_2" data-key="Ket_Luan_Chung" style="font-weight: bold; border-color:#bae6fd;"></textarea>
             </div>
             
-            <!-- NÂNG CẤP: Tách 2 trường số lượng bản lập và số lượng bản giữ -->
             <div class="grid-3">
-                <div class="form-group"><label>Số lượng bản lập:</label><input type="number" data-key="So_Luong_Lap"></div>
-                <div class="form-group"><label>Mỗi bên giữ:</label><input type="number" data-key="So_Luong_Giu"></div>
-                <div class="form-group"><label>Giờ kết thúc:</label><input type="time" data-key="GioKetThuc"></div>
+                <div class="form-group"><label>Số bản lập:</label><input type="number" class="tiny-input" data-key="So_Luong_Lap"></div>
+                <div class="form-group"><label>Mỗi bên giữ:</label><input type="number" class="tiny-input" data-key="So_Luong_Giu"></div>
+                <div class="form-group"><label>Giờ kết thúc:</label><input type="time" class="short-input" data-key="GioKetThuc"></div>
             </div>
         </div>
     </div>
@@ -370,22 +303,22 @@
     <!-- KHỐI 3: QUYẾT ĐỊNH ĐẢNG (KHÓA AI) -->
     <div id="khoi_3" class="dynamic-block">
         <div class="form-panel">
-            <div class="section-title">THÔNG TIN QUYẾT ĐỊNH KT/GS <span class="badge-no-ai">🔒 Mẫu hành chính (Khóa AI)</span></div>
+            <div class="section-title">THÔNG TIN QUYẾT ĐỊNH KT/GS <span class="badge-no-ai">🔒 Khóa AI</span></div>
             <div class="grid-3">
                 <div class="form-group"><label>Tên Chi bộ:</label><input type="text" data-key="Ten_Chi_Bo"></div>
                 <div class="form-group"><label>Nơi ban hành:</label><input type="text" data-key="Noi_Ban_Hanh"></div>
-                <div class="form-group"><label>Ngày ban hành (Quyết định):</label><input type="date" data-key="NgayBanHanh"></div>
+                <div class="form-group"><label>Ngày ban hành:</label><input type="date" class="med-input" data-key="NgayBanHanh"></div>
             </div>
             <div class="grid-3">
-                <div class="form-group"><label>Số Quyết định (Của văn bản này):</label><input type="text" data-key="So_Quyet_Dinh" placeholder="VD: 12"></div>
-                <div class="form-group"><label>Loại hình (Kiểm tra/Giám sát):</label><input type="text" data-key="Loai_Hinh" placeholder="VD: Kiểm tra"></div>
-                <div class="form-group"><label>Đảng viên được KT/GS:</label><input type="text" data-key="Dang_Vien_Duoc_Kiem_Tra"></div>
+                <div class="form-group"><label>Số Quyết định:</label><input type="text" class="short-input" data-key="So_Quyet_Dinh" placeholder="VD: 12"></div>
+                <div class="form-group"><label>Loại hình:</label><input type="text" class="med-input" data-key="Loai_Hinh" placeholder="VD: Kiểm tra"></div>
+                <div class="form-group"><label>Đảng viên được KT:</label><input type="text" data-key="Dang_Vien_Duoc_Kiem_Tra"></div>
             </div>
         </div>
         
         <div class="form-panel">
             <div class="section-title">NỘI DUNG & TỔ CÔNG TÁC</div>
-            <div class="form-group"><label>Nội dung kiểm tra/giám sát:</label><textarea data-key="Noi_Dung_Kiem_Tra" placeholder="Ghi rõ nội dung Điều 1..."></textarea></div>
+            <div class="form-group col-layout"><label>Nội dung kiểm tra/giám sát:</label><textarea data-key="Noi_Dung_Kiem_Tra"></textarea></div>
             <div class="grid-3">
                 <div class="form-group"><label>Tổ trưởng:</label><input type="text" data-key="To_Truong"></div>
                 <div class="form-group"><label>Thư ký:</label><input type="text" data-key="Thu_Ky"></div>
@@ -397,31 +330,38 @@
     <!-- KHỐI 4: KẾ HOẠCH ĐẢNG (KHÓA AI) -->
     <div id="khoi_4" class="dynamic-block">
         <div class="form-panel">
-            <div class="section-title">THÔNG TIN KẾ HOẠCH KT/GS <span class="badge-no-ai">🔒 Mẫu hành chính (Khóa AI)</span></div>
+            <div class="section-title">THÔNG TIN KẾ HOẠCH KT/GS <span class="badge-no-ai">🔒 Khóa AI</span></div>
             <div class="grid-3">
                 <div class="form-group"><label>Tên Chi bộ:</label><input type="text" data-key="Ten_Chi_Bo"></div>
                 <div class="form-group"><label>Nơi ban hành:</label><input type="text" data-key="Noi_Ban_Hanh"></div>
-                <div class="form-group"><label>Ngày ban hành (Kế hoạch):</label><input type="date" data-key="NgayBanHanh"></div>
+                <div class="form-group"><label>Ngày ban hành:</label><input type="date" class="med-input" data-key="NgayBanHanh"></div>
             </div>
             <div class="grid-2">
-                <div class="form-group"><label>Loại hình (Kiểm tra/Giám sát):</label><input type="text" data-key="Loai_Hinh"></div>
-                <div class="form-group"><label>Đảng viên được KT/GS:</label><input type="text" data-key="Dang_Vien_Duoc_Kiem_Tra"></div>
+                <div class="form-group"><label>Loại hình (KT/GS):</label><input type="text" class="med-input" data-key="Loai_Hinh"></div>
+                <div class="form-group"><label>Đảng viên được KT:</label><input type="text" data-key="Dang_Vien_Duoc_Kiem_Tra"></div>
             </div>
         </div>
         
-        <div class="form-panel" style="border-left: 5px solid var(--accent);">
+        <div class="form-panel" style="border-left: 4px solid var(--accent);">
             <div class="section-title">CĂN CỨ VÀ THỜI GIAN TIẾN HÀNH</div>
             <div class="grid-2">
-                <div class="form-group"><label style="color:#b45309;">Số Quyết định CĂN CỨ (Ban hành kèm KH này):</label><input type="text" data-key="So_Quyet_Dinh" style="border-color:#fcd34d; background:#fffbeb;"></div>
-                <div class="form-group"><label style="color:#b45309;">Ngày ra Quyết định căn cứ:</label><input type="date" data-key="NgayQuyetDinh" style="border-color:#fcd34d; background:#fffbeb;"></div>
+                <div class="form-group"><label style="color:#b45309;">Số Quyết định gốc:</label><input type="text" class="short-input" data-key="So_Quyet_Dinh" style="border-color:#fcd34d; background:#fffbeb;"></div>
+                <div class="form-group"><label style="color:#b45309;">Ngày ra Quyết định:</label><input type="date" class="med-input" data-key="NgayQuyetDinh" style="border-color:#fcd34d; background:#fffbeb;"></div>
             </div>
-            <div class="form-group"><label>Nội dung kiểm tra/giám sát:</label><textarea data-key="Noi_Dung_Kiem_Tra"></textarea></div>
+            <div class="form-group col-layout"><label>Nội dung kiểm tra/giám sát:</label><textarea data-key="Noi_Dung_Kiem_Tra"></textarea></div>
+            
             <div class="grid-2">
-                <div class="form-group" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0;"><label>Thời hiệu KT/GS:</label>
-                    <div style="display:flex; gap:15px;"><input type="date" data-key="Tu_Ngay_Hieu_Luc" style="width:50%;" title="Từ ngày"><input type="date" data-key="Den_Ngay_Hieu_Luc" style="width:50%;" title="Đến ngày"></div>
+                <div class="form-group col-layout" style="background:#f8fafc; padding:15px; border-radius:8px; border:1px solid #e2e8f0;">
+                    <label>Thời hiệu KT/GS:</label>
+                    <div style="display:flex; gap:10px; width:100%;">
+                        <input type="date" data-key="Tu_Ngay_Hieu_Luc"><span style="align-self:center;">đến</span><input type="date" data-key="Den_Ngay_Hieu_Luc">
+                    </div>
                 </div>
-                <div class="form-group" style="background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0;"><label>Thời gian tiến hành:</label>
-                    <div style="display:flex; gap:15px;"><input type="date" data-key="Tu_Ngay_Tien_Hanh" style="width:50%;" title="Từ ngày"><input type="date" data-key="Den_Ngay_Tien_Hanh" style="width:50%;" title="Đến ngày"></div>
+                <div class="form-group col-layout" style="background:#f8fafc; padding:15px; border-radius:8px; border:1px solid #e2e8f0;">
+                    <label>Thời gian tiến hành:</label>
+                    <div style="display:flex; gap:10px; width:100%;">
+                        <input type="date" data-key="Tu_Ngay_Tien_Hanh"><span style="align-self:center;">đến</span><input type="date" data-key="Den_Ngay_Tien_Hanh">
+                    </div>
                 </div>
             </div>
         </div>
@@ -434,20 +374,20 @@
             <div class="grid-3">
                 <div class="form-group"><label>Tên Chi bộ:</label><input type="text" data-key="Ten_Chi_Bo"></div>
                 <div class="form-group"><label>Nơi ban hành:</label><input type="text" data-key="Noi_Ban_Hanh"></div>
-                <div class="form-group"><label>Loại hình:</label><input type="text" data-key="Loai_Hinh"></div>
+                <div class="form-group"><label>Loại hình:</label><input type="text" class="med-input" data-key="Loai_Hinh"></div>
             </div>
             <div class="grid-3">
-                <div class="form-group"><label>Ngày giờ bắt đầu:</label><input type="datetime-local" data-key="NgayGioBatDau"></div>
+                <div class="form-group"><label>Ngày giờ họp:</label><input type="datetime-local" class="med-input" data-key="NgayGioBatDau"></div>
                 <div class="form-group"><label>Địa điểm:</label><input type="text" data-key="Dia_Diem"></div>
-                <div class="form-group"><label>Số QĐ triển khai:</label><input type="text" data-key="So_Quyet_Dinh"></div>
+                <div class="form-group"><label>Số QĐ triển khai:</label><input type="text" class="short-input" data-key="So_Quyet_Dinh"></div>
             </div>
             <div class="grid-3">
                 <div class="form-group"><label>Tổ trưởng:</label><input type="text" data-key="To_Truong"></div>
                 <div class="form-group"><label>Thành viên:</label><input type="text" data-key="Thanh_Vien"></div>
-                <div class="form-group"><label>Đảng viên được KT/GS:</label><input type="text" data-key="Dang_Vien_Duoc_Kiem_Tra"></div>
+                <div class="form-group"><label>Đảng viên được KT:</label><input type="text" data-key="Dang_Vien_Duoc_Kiem_Tra"></div>
             </div>
-            <div class="form-group"><label>Ý kiến của Đảng viên:</label><textarea data-key="Y_Kien_Dang_Vien"></textarea></div>
-            <div class="form-group" style="width: 30%;"><label>Giờ kết thúc:</label><input type="time" data-key="GioKetThuc"></div>
+            <div class="form-group col-layout"><label>Ý kiến của Đảng viên:</label><textarea data-key="Y_Kien_Dang_Vien"></textarea></div>
+            <div class="form-group"><label>Giờ kết thúc:</label><input type="time" class="short-input" data-key="GioKetThuc"></div>
         </div>
     </div>
 
@@ -457,13 +397,13 @@
             <div class="section-title">THÔNG TIN BÁO CÁO <span class="badge-no-ai">🔒 Khóa AI</span></div>
             <div class="grid-3">
                 <div class="form-group"><label>Nơi ban hành:</label><input type="text" data-key="Noi_Ban_Hanh"></div>
-                <div class="form-group"><label>Ngày ban hành BC:</label><input type="date" data-key="NgayBanHanh"></div>
+                <div class="form-group"><label>Ngày ban hành BC:</label><input type="date" class="med-input" data-key="NgayBanHanh"></div>
                 <div class="form-group"><label>Tên Chi bộ:</label><input type="text" data-key="Ten_Chi_Bo"></div>
             </div>
             <div class="grid-3">
-                <div class="form-group"><label>Số Quyết định căn cứ:</label><input type="text" data-key="So_Quyet_Dinh"></div>
-                <div class="form-group"><label>Ngày Quyết định:</label><input type="date" data-key="NgayQuyetDinh"></div>
-                <div class="form-group"><label>Loại hình:</label><input type="text" data-key="Loai_Hinh"></div>
+                <div class="form-group"><label>Số Quyết định gốc:</label><input type="text" class="short-input" data-key="So_Quyet_Dinh"></div>
+                <div class="form-group"><label>Ngày Quyết định:</label><input type="date" class="med-input" data-key="NgayQuyetDinh"></div>
+                <div class="form-group"><label>Loại hình:</label><input type="text" class="med-input" data-key="Loai_Hinh"></div>
             </div>
         </div>
         
@@ -471,8 +411,8 @@
             <div class="section-title">LÝ LỊCH ĐẢNG VIÊN & NỘI DUNG</div>
             <div class="grid-4">
                 <div class="form-group" style="grid-column: span 2;"><label>Họ và tên Đảng viên:</label><input type="text" data-key="Dang_Vien_Duoc_Kiem_Tra"></div>
-                <div class="form-group"><label>Năm sinh:</label><input type="text" data-key="Nam_Sinh"></div>
-                <div class="form-group"><label>Dân tộc:</label><input type="text" data-key="Dan_Toc"></div>
+                <div class="form-group"><label>Năm sinh:</label><input type="text" class="short-input" data-key="Nam_Sinh"></div>
+                <div class="form-group"><label>Dân tộc:</label><input type="text" class="short-input" data-key="Dan_Toc"></div>
             </div>
             <div class="grid-3">
                 <div class="form-group"><label>Chức vụ:</label><input type="text" data-key="Chuc_Vu"></div>
@@ -480,16 +420,16 @@
                 <div class="form-group"><label>Trình độ học vấn:</label><input type="text" data-key="Trinh_Do_Hoc_Van"></div>
             </div>
             <div class="grid-2">
-                <div class="form-group"><label>Ngày vào Đảng:</label><input type="date" data-key="Ngay_Vao_Dang"></div>
-                <div class="form-group"><label>Ngày chính thức:</label><input type="date" data-key="Ngay_Chinh_Thuc"></div>
+                <div class="form-group"><label>Ngày vào Đảng:</label><input type="date" class="med-input" data-key="Ngay_Vao_Dang"></div>
+                <div class="form-group"><label>Ngày chính thức:</label><input type="date" class="med-input" data-key="Ngay_Chinh_Thuc"></div>
             </div>
-            <div class="form-group"><label>Quá trình công tác:</label><textarea data-key="Qua_Trinh_Cong_Tac" style="min-height: 60px;"></textarea></div>
+            <div class="form-group col-layout"><label>Quá trình công tác:</label><textarea data-key="Qua_Trinh_Cong_Tac"></textarea></div>
             <div class="grid-2">
-                <div class="form-group"><label>Khen thưởng:</label><textarea data-key="Khen_Thuong" style="min-height: 60px;"></textarea></div>
-                <div class="form-group"><label>Kỷ luật:</label><textarea data-key="Ky_Luat" style="min-height: 60px;"></textarea></div>
+                <div class="form-group col-layout"><label>Khen thưởng:</label><textarea data-key="Khen_Thuong"></textarea></div>
+                <div class="form-group col-layout"><label>Kỷ luật:</label><textarea data-key="Ky_Luat"></textarea></div>
             </div>
-            <div class="form-group"><label>Nội dung Giải trình chi tiết:</label><textarea data-key="Giai_Trinh_Chi_Tiet" style="min-height: 120px;"></textarea></div>
-            <div class="form-group"><label>Kiến nghị của cá nhân:</label><textarea data-key="Kien_Nghi_Ca_Nhan" style="min-height: 60px;"></textarea></div>
+            <div class="form-group col-layout"><label>Nội dung Giải trình chi tiết:</label><textarea data-key="Giai_Trinh_Chi_Tiet"></textarea></div>
+            <div class="form-group col-layout"><label>Kiến nghị của cá nhân:</label><textarea data-key="Kien_Nghi_Ca_Nhan"></textarea></div>
         </div>
     </div>
 
@@ -499,12 +439,12 @@
             <div class="section-title">THÔNG TIN BÁO CÁO THẨM TRA <span class="badge-no-ai">🔒 Khóa AI</span></div>
             <div class="grid-3">
                 <div class="form-group"><label>Nơi ban hành:</label><input type="text" data-key="Noi_Ban_Hanh"></div>
-                <div class="form-group"><label>Ngày ban hành BC:</label><input type="date" data-key="NgayBanHanh"></div>
-                <div class="form-group"><label>Loại hình:</label><input type="text" data-key="Loai_Hinh"></div>
+                <div class="form-group"><label>Ngày ban hành BC:</label><input type="date" class="med-input" data-key="NgayBanHanh"></div>
+                <div class="form-group"><label>Loại hình:</label><input type="text" class="med-input" data-key="Loai_Hinh"></div>
             </div>
             <div class="grid-2">
-                <div class="form-group"><label>Số Quyết định căn cứ:</label><input type="text" data-key="So_Quyet_Dinh"></div>
-                <div class="form-group"><label>Ngày Quyết định:</label><input type="date" data-key="NgayQuyetDinh"></div>
+                <div class="form-group"><label>Số Quyết định căn cứ:</label><input type="text" class="short-input" data-key="So_Quyet_Dinh"></div>
+                <div class="form-group"><label>Ngày Quyết định:</label><input type="date" class="med-input" data-key="NgayQuyetDinh"></div>
             </div>
         </div>
         
@@ -512,8 +452,8 @@
             <div class="section-title">LÝ LỊCH & KẾT QUẢ THẨM TRA</div>
             <div class="grid-4">
                 <div class="form-group" style="grid-column: span 2;"><label>Họ và tên Đảng viên:</label><input type="text" data-key="Dang_Vien_Duoc_Kiem_Tra"></div>
-                <div class="form-group"><label>Năm sinh:</label><input type="text" data-key="Nam_Sinh"></div>
-                <div class="form-group"><label>Dân tộc:</label><input type="text" data-key="Dan_Toc"></div>
+                <div class="form-group"><label>Năm sinh:</label><input type="text" class="short-input" data-key="Nam_Sinh"></div>
+                <div class="form-group"><label>Dân tộc:</label><input type="text" class="short-input" data-key="Dan_Toc"></div>
             </div>
             <div class="grid-3">
                 <div class="form-group"><label>Chức vụ:</label><input type="text" data-key="Chuc_Vu"></div>
@@ -521,19 +461,19 @@
                 <div class="form-group"><label>Trình độ học vấn:</label><input type="text" data-key="Trinh_Do_Hoc_Van"></div>
             </div>
             <div class="grid-2">
-                <div class="form-group"><label>Ngày vào Đảng:</label><input type="date" data-key="Ngay_Vao_Dang"></div>
-                <div class="form-group"><label>Ngày chính thức:</label><input type="date" data-key="Ngay_Chinh_Thuc"></div>
+                <div class="form-group"><label>Ngày vào Đảng:</label><input type="date" class="med-input" data-key="Ngay_Vao_Dang"></div>
+                <div class="form-group"><label>Ngày chính thức:</label><input type="date" class="med-input" data-key="Ngay_Chinh_Thuc"></div>
             </div>
-            <div class="form-group"><label>Quá trình công tác:</label><textarea data-key="Qua_Trinh_Cong_Tac" style="min-height: 50px;"></textarea></div>
+            <div class="form-group col-layout"><label>Quá trình công tác:</label><textarea data-key="Qua_Trinh_Cong_Tac"></textarea></div>
             <div class="grid-2">
-                <div class="form-group"><label>Khen thưởng:</label><textarea data-key="Khen_Thuong" style="min-height: 50px;"></textarea></div>
-                <div class="form-group"><label>Kỷ luật:</label><textarea data-key="Ky_Luat" style="min-height: 50px;"></textarea></div>
+                <div class="form-group col-layout"><label>Khen thưởng:</label><textarea data-key="Khen_Thuong"></textarea></div>
+                <div class="form-group col-layout"><label>Kỷ luật:</label><textarea data-key="Ky_Luat"></textarea></div>
             </div>
-            <div class="form-group"><label>Nội dung kiểm tra:</label><textarea data-key="Noi_Dung_Kiem_Tra" style="min-height: 60px;"></textarea></div>
-            <div class="form-group"><label>Kết quả thẩm tra, xác minh:</label><textarea data-key="Ket_Qua_Tham_Tra" style="min-height: 120px;"></textarea></div>
+            <div class="form-group col-layout"><label>Nội dung kiểm tra:</label><textarea data-key="Noi_Dung_Kiem_Tra"></textarea></div>
+            <div class="form-group col-layout"><label>Kết quả thẩm tra, xác minh:</label><textarea data-key="Ket_Qua_Tham_Tra"></textarea></div>
             <div class="grid-2">
-                <div class="form-group"><label>Kiến nghị của Tổ:</label><textarea data-key="Kien_Nghi_To_Kiem_Tra" style="min-height: 60px;"></textarea></div>
-                <div class="form-group"><label>Tổ trưởng (Ký tên):</label><input type="text" data-key="To_Truong"></div>
+                <div class="form-group col-layout"><label>Kiến nghị của Tổ:</label><textarea data-key="Kien_Nghi_To_Kiem_Tra"></textarea></div>
+                <div class="form-group align-top"><label>Tổ trưởng (Ký tên):</label><input type="text" data-key="To_Truong"></div>
             </div>
         </div>
     </div>
@@ -544,32 +484,32 @@
             <div class="section-title">THÔNG TIN CUỘC HỌP <span class="badge-ai">✨ Có AI hỗ trợ</span></div>
             <div class="grid-3">
                 <div class="form-group"><label>Nơi ban hành:</label><input type="text" data-key="Noi_Ban_Hanh"></div>
-                <div class="form-group"><label>Ngày giờ bắt đầu:</label><input type="datetime-local" data-key="NgayGioBatDau"></div>
+                <div class="form-group"><label>Ngày giờ họp:</label><input type="datetime-local" class="med-input" data-key="NgayGioBatDau"></div>
                 <div class="form-group"><label>Địa điểm:</label><input type="text" data-key="Dia_Diem"></div>
             </div>
             <div class="grid-4">
-                <div class="form-group"><label>Đảng viên có mặt:</label><input type="number" data-key="So_Dang_Vien_Co_Mat"></div>
-                <div class="form-group"><label>Vắng mặt:</label><input type="number" data-key="So_Dang_Vien_Vang"></div>
+                <div class="form-group"><label>Có mặt:</label><input type="number" class="tiny-input" data-key="So_Dang_Vien_Co_Mat"></div>
+                <div class="form-group"><label>Vắng mặt:</label><input type="number" class="tiny-input" data-key="So_Dang_Vien_Vang"></div>
                 <div class="form-group"><label>Chủ tọa:</label><input type="text" data-key="Chu_Toa"></div>
                 <div class="form-group"><label>Thư ký:</label><input type="text" data-key="Thu_Ky"></div>
             </div>
             <div class="grid-2">
-                <div class="form-group"><label>Loại hình:</label><input type="text" data-key="Loai_Hinh"></div>
-                <div class="form-group"><label>Đảng viên được KT/GS:</label><input type="text" data-key="Dang_Vien_Duoc_Kiem_Tra"></div>
+                <div class="form-group"><label>Loại hình:</label><input type="text" class="med-input" data-key="Loai_Hinh"></div>
+                <div class="form-group"><label>Đảng viên được KT:</label><input type="text" data-key="Dang_Vien_Duoc_Kiem_Tra"></div>
             </div>
         </div>
         
         <div class="form-panel">
             <div class="section-title">Ý KIẾN CHI BỘ (AI TỔNG HỢP)</div>
-            <div class="form-group">
+            <div class="form-group col-layout">
                 <label>Nội dung ý kiến tham gia (Bấm "Trợ Lý AI Phân Tích" để đúc kết Ưu/Khuyết điểm):</label>
-                <textarea id="noiDungTruyenAI_8" data-key="Y_Kien_Chi_Bo" style="min-height: 140px;"></textarea>
+                <textarea id="noiDungTruyenAI_8" data-key="Y_Kien_Chi_Bo"></textarea>
             </div>
-            <div class="grid-2" style="background: linear-gradient(145deg, #f0f9ff, #e0f2fe); padding: 20px; border-radius: 10px; border: 1px solid #bae6fd; box-shadow: 0 4px 10px rgba(14, 165, 233, 0.05);">
-                <div class="form-group" style="margin-bottom:0;"><label style="color:#0369a1; font-weight:700;">Kết luận Ưu điểm (AI):</label><textarea id="ketQuaUuDiem_8" data-key="Ket_Luan_Uu_Diem" style="font-weight:bold; border-color:#bae6fd; box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);"></textarea></div>
-                <div class="form-group" style="margin-bottom:0;"><label style="color:#b91c1c; font-weight:700;">Kết luận Khuyết điểm (AI):</label><textarea id="ketQuaKhuyetDiem_8" data-key="Ket_Luan_Khuyet_Diem" style="font-weight:bold; border-color:#fecaca; box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);"></textarea></div>
+            <div class="grid-2" style="background: linear-gradient(145deg, #f0f9ff, #e0f2fe); padding: 15px; border-radius: 8px; border: 1px solid #bae6fd;">
+                <div class="form-group col-layout" style="margin-bottom:0;"><label style="color:#0369a1; font-weight:700;">Kết luận Ưu điểm (AI):</label><textarea id="ketQuaUuDiem_8" data-key="Ket_Luan_Uu_Diem" style="font-weight:bold; border-color:#bae6fd;"></textarea></div>
+                <div class="form-group col-layout" style="margin-bottom:0;"><label style="color:#b91c1c; font-weight:700;">Kết luận Khuyết điểm (AI):</label><textarea id="ketQuaKhuyetDiem_8" data-key="Ket_Luan_Khuyet_Diem" style="font-weight:bold; border-color:#fecaca;"></textarea></div>
             </div>
-            <div class="form-group" style="width: 30%; margin-top: 20px;"><label>Giờ kết thúc:</label><input type="time" data-key="GioKetThuc"></div>
+            <div class="form-group" style="width: 250px; margin-top: 15px;"><label>Giờ kết thúc:</label><input type="time" class="short-input" data-key="GioKetThuc"></div>
         </div>
     </div>
 
@@ -579,34 +519,34 @@
             <div class="section-title">THÔNG TIN CÔNG BỐ <span class="badge-no-ai">🔒 Khóa AI</span></div>
             <div class="grid-3">
                 <div class="form-group"><label>Tên Chi bộ:</label><input type="text" data-key="Ten_Chi_Bo"></div>
-                <div class="form-group"><label>Loại hình:</label><input type="text" data-key="Loai_Hinh"></div>
+                <div class="form-group"><label>Loại hình:</label><input type="text" class="med-input" data-key="Loai_Hinh"></div>
                 <div class="form-group"><label>Nơi ban hành:</label><input type="text" data-key="Noi_Ban_Hanh"></div>
             </div>
             <div class="grid-2">
-                <div class="form-group"><label>Ngày giờ bắt đầu:</label><input type="datetime-local" data-key="NgayGioBatDau"></div>
+                <div class="form-group"><label>Ngày giờ bắt đầu:</label><input type="datetime-local" class="med-input" data-key="NgayGioBatDau"></div>
                 <div class="form-group"><label>Địa điểm:</label><input type="text" data-key="Dia_Diem"></div>
             </div>
             <div class="grid-3">
-                <div class="form-group"><label>Có mặt:</label><input type="number" data-key="So_Dang_Vien_Co_Mat"></div>
-                <div class="form-group"><label>Vắng mặt:</label><input type="number" data-key="So_Dang_Vien_Vang"></div>
+                <div class="form-group"><label>Có mặt:</label><input type="number" class="tiny-input" data-key="So_Dang_Vien_Co_Mat"></div>
+                <div class="form-group"><label>Vắng mặt:</label><input type="number" class="tiny-input" data-key="So_Dang_Vien_Vang"></div>
                 <div class="form-group"><label>Lý do vắng:</label><input type="text" data-key="Ly_Do_Vang"></div>
             </div>
             <div class="grid-3">
-                <div class="form-group"><label>Tổ trưởng (Tổ KT/GS):</label><input type="text" data-key="To_Truong"></div>
-                <div class="form-group"><label>Thư ký (Tổ KT/GS):</label><input type="text" data-key="Thu_Ky"></div>
-                <div class="form-group"><label>Thành viên (Tổ KT/GS):</label><input type="text" data-key="Thanh_Vien"></div>
+                <div class="form-group"><label>Tổ trưởng KT:</label><input type="text" data-key="To_Truong"></div>
+                <div class="form-group"><label>Thư ký KT:</label><input type="text" data-key="Thu_Ky"></div>
+                <div class="form-group"><label>Thành viên KT:</label><input type="text" data-key="Thanh_Vien"></div>
             </div>
             <div class="grid-2">
-                <div class="form-group"><label>Chủ tọa (Đại diện Cấp ủy):</label><input type="text" data-key="Chu_Toa"></div>
+                <div class="form-group"><label>Chủ tọa (Cấp ủy):</label><input type="text" data-key="Chu_Toa"></div>
                 <div class="form-group"><label>Thư ký cuộc họp:</label><input type="text" data-key="Thu_Ky"></div>
             </div>
             <div class="grid-3">
-                <div class="form-group"><label>Số Quyết định gốc:</label><input type="text" data-key="So_Quyet_Dinh"></div>
-                <div class="form-group"><label>Đảng viên được KT/GS:</label><input type="text" data-key="Dang_Vien_Duoc_Kiem_Tra"></div>
-                <div class="form-group"><label>Số TB Kết luận:</label><input type="text" data-key="So_Thong_Bao_Ket_Luan"></div>
+                <div class="form-group"><label>Số Quyết định gốc:</label><input type="text" class="short-input" data-key="So_Quyet_Dinh"></div>
+                <div class="form-group"><label>Đảng viên được KT:</label><input type="text" data-key="Dang_Vien_Duoc_Kiem_Tra"></div>
+                <div class="form-group"><label>Số TB Kết luận:</label><input type="text" class="short-input" data-key="So_Thong_Bao_Ket_Luan"></div>
             </div>
-            <div class="form-group"><label>Ý kiến tham gia:</label><textarea data-key="Y_Kien_Tham_Gia"></textarea></div>
-            <div class="form-group" style="width: 30%;"><label>Giờ kết thúc:</label><input type="time" data-key="GioKetThuc"></div>
+            <div class="form-group col-layout"><label>Ý kiến tham gia:</label><textarea data-key="Y_Kien_Tham_Gia"></textarea></div>
+            <div class="form-group" style="width: 250px;"><label>Giờ kết thúc:</label><input type="time" class="short-input" data-key="GioKetThuc"></div>
         </div>
     </div>
 
@@ -632,12 +572,12 @@
     <div class="modal-content">
         <div class="modal-header">
             <span>🔍 XÉT DUYỆT DỮ LIỆU ĐẦU RA</span>
-            <span class="close-btn" style="cursor:pointer; font-size:1.5rem; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'" onclick="dongXemTruoc()">✖</span>
+            <span class="close-btn" style="cursor:pointer; font-size:1.5rem;" onclick="dongXemTruoc()">✖</span>
         </div>
         <div class="modal-body" id="previewBody"></div>
         <div class="modal-footer">
-            <button class="btn btn-red" style="padding: 12px 24px;" onclick="dongXemTruoc()">Quay Lại Chỉnh Sửa</button>
-            <button class="btn btn-green" style="padding: 12px 24px;" onclick="xacNhanXuatWord()">✓ Xác Nhận & Xuất Word</button>
+            <button class="btn btn-red" onclick="dongXemTruoc()">Quay Lại Chỉnh Sửa</button>
+            <button class="btn btn-green" onclick="xacNhanXuatWord()">✓ Xác Nhận & Xuất Word</button>
         </div>
     </div>
 </div>
@@ -645,8 +585,15 @@
 <script>
     // =========================================================================
     // KHỐI JAVASCRIPT: QUẢN LÝ TÁC VỤ & THUẬT TOÁN ĐIỀU HƯỚNG
-    // Nguyên tắc: Tên biến tiếng Việt, không dùng từ khóa liên quan thu thập info.
     // =========================================================================
+
+    // NÂNG CẤP: Thuật toán tự động tính toán và điều chỉnh độ cao khung nhập Textarea
+    function tuDongGianCao(el) {
+        el.style.height = 'auto'; // Khởi tạo lại độ cao để DOM tính toán chính xác
+        let chieuCaoMoi = el.scrollHeight;
+        if (chieuCaoMoi < 42) chieuCaoMoi = 42; // Chặn chiều cao tối thiểu cho đẹp
+        el.style.height = chieuCaoMoi + 'px';
+    }
 
     function khoiTaoOChonVanBan() {
         const oChon = document.getElementById('loaiVanBan');
@@ -660,32 +607,32 @@
         oChon.innerHTML = chuoiHTML;
     }
 
-    document.addEventListener("DOMContentLoaded", function() { khoiTaoOChonVanBan(); });
+    document.addEventListener("DOMContentLoaded", function() { 
+        khoiTaoOChonVanBan(); 
+        // Lắng nghe sự kiện gõ phím trên tất cả Textarea để giãn dòng real-time
+        document.querySelectorAll('textarea').forEach(ta => {
+            ta.addEventListener('input', function() { tuDongGianCao(this); });
+        });
+    });
 
-function tinhTongDiemThanhPhan(laFormDanhGia = 0) {
+    function tinhTongDiemThanhPhan(laFormDanhGia = 0) {
         if(laFormDanhGia !== 1 && document.getElementById('loaiVanBan').value !== "1") return;
         let tong = 0;
         const khoiActive = document.getElementById('khoi_1');
         if(!khoiActive) return;
 
-        // NÂNG CẤP 1: Mảng chốt chặn điểm tối đa cho từng tiêu chí tương ứng (Từ TC1 đến TC12)
         const maTranDiemToiDa = [1, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 1];
 
         for (let i = 1; i <= 12; i++) {
             const oThanhPhan = khoiActive.querySelector(`input[data-key="Diem_TC${i}"]`);
             if (oThanhPhan) {
                 let diem = parseFloat(oThanhPhan.value) || 0;
-                
-                // Thuật toán kìm kẹp: Nếu AI hay người dùng nhập lố, ép điểm về mốc Max của tiêu chí đó
                 if (diem > maTranDiemToiDa[i-1]) {
                     diem = maTranDiemToiDa[i-1];
-                    oThanhPhan.value = diem; // Cập nhật lại giao diện ngay lập tức
-                    
-                    // Nháy đỏ báo hiệu dữ liệu đã bị ép lại cho đúng chuẩn
+                    oThanhPhan.value = diem; 
                     oThanhPhan.style.backgroundColor = "#fee2e2"; 
                     setTimeout(() => { oThanhPhan.style.backgroundColor = "#fff"; }, 1500);
                 }
-                
                 tong += diem;
             }
         }
@@ -695,26 +642,19 @@ function tinhTongDiemThanhPhan(laFormDanhGia = 0) {
 
         if (oTongDiem) oTongDiem.value = tong;
         if (oXepLoai) {
-            // NÂNG CẤP 2: Chuẩn hóa phân vùng xếp loại theo đúng khung Văn bản
-            if (tong >= 18 && tong <= 20) {
-                oXepLoai.value = "GIỎI";
-            } else if (tong >= 13.5 && tong < 18) {
-                oXepLoai.value = "KHÁ";
-            } else if (tong >= 10 && tong < 13.5) {
-                oXepLoai.value = "TRUNG BÌNH";
-            } else {
-                oXepLoai.value = "KHÔNG ĐẠT";
-            }
+            if (tong >= 18 && tong <= 20) oXepLoai.value = "GIỎI";
+            else if (tong >= 13.5 && tong < 18) oXepLoai.value = "KHÁ";
+            else if (tong >= 10 && tong < 13.5) oXepLoai.value = "TRUNG BÌNH";
+            else oXepLoai.value = "KHÔNG ĐẠT";
         }
     }
 
     function chuyenDoiBieuMau() {
         const loai = document.getElementById('loaiVanBan').value;
         
-        // Tạo hiệu ứng fade-out mượt mà
         document.querySelectorAll('.dynamic-block').forEach(khoi => {
             khoi.classList.remove('active');
-            setTimeout(() => { if(!khoi.classList.contains('active')) khoi.style.display = 'none'; }, 500);
+            setTimeout(() => { if(!khoi.classList.contains('active')) khoi.style.display = 'none'; }, 300);
         });
         
         const btnAI = document.getElementById('btnAI');
@@ -725,18 +665,17 @@ function tinhTongDiemThanhPhan(laFormDanhGia = 0) {
             if(khoiActive) {
                 setTimeout(() => {
                     khoiActive.style.display = 'block';
-                    // Ép trình duyệt render trước khi thêm class để kích hoạt CSS Transition
                     void khoiActive.offsetWidth; 
                     khoiActive.classList.add('active');
+                    
+                    // Xóa mù Textarea: Tự động khởi tạo lại chiều cao sau khi khối ẩn được hiện ra
+                    khoiActive.querySelectorAll('textarea').forEach(ta => tuDongGianCao(ta));
                 }, 300);
             }
             
             document.getElementById('thanhCongCu').style.display = 'grid';
-            
-            // Logic hiển thị nút tùy biến theo form
             btnDanhGia.style.display = (loai === "1") ? "block" : "none";
 
-            // Khóa/Mở AI: Chỉ biểu mẫu 1, 2, 8 là cần AI can thiệp
             if (loai === "1" || loai === "2" || loai === "8") {
                 btnAI.disabled = false;
                 btnAI.title = "Kích hoạt trợ lý AI tổng hợp dữ liệu văn bản";
@@ -787,7 +726,6 @@ function tinhTongDiemThanhPhan(laFormDanhGia = 0) {
         
         const modal = document.getElementById('previewModal');
         modal.style.display = 'flex';
-        // Hiệu ứng scale mượt mà
         setTimeout(() => { modal.classList.add('active'); }, 50);
     }
 
@@ -797,13 +735,10 @@ function tinhTongDiemThanhPhan(laFormDanhGia = 0) {
         setTimeout(() => { modal.style.display = 'none'; }, 300);
     }
     
-    function xacNhanXuatWord() { 
-        dongXemTruoc(); 
-        chayNghiepVu('XuatWord'); 
-    }
+    function xacNhanXuatWord() { dongXemTruoc(); chayNghiepVu('XuatWord'); }
 
     // =========================================================================
-    // KHỐI GIAO TIẾP MÁY CHỦ (API & GOOGLE APPS SCRIPT)
+    // KHỐI GIAO TIẾP MÁY CHỦ
     // =========================================================================
     let boDemThoiGian; 
 
@@ -814,9 +749,9 @@ function tinhTongDiemThanhPhan(laFormDanhGia = 0) {
             const duLieuJSON = JSON.parse(chuoiGoc);
             
             if (kieuVanBan === '1') {
-                const oUu = document.getElementById('ketQuaUuDiem_1'); if(oUu) { oUu.value = duLieuJSON.UuDiem || ""; oUu.style.backgroundColor = "#dcfce7"; setTimeout(()=>oUu.style.backgroundColor="#f8fafc", 1500); }
-                const oHan = document.getElementById('ketQuaHanChe_1'); if(oHan) { oHan.value = duLieuJSON.HanChe || ""; oHan.style.backgroundColor = "#dcfce7"; setTimeout(()=>oHan.style.backgroundColor="#f8fafc", 1500); }
-                const oCai = document.getElementById('ketQuaCaiTien_1'); if(oCai) { oCai.value = duLieuJSON.CaiTien || ""; oCai.style.backgroundColor = "#dcfce7"; setTimeout(()=>oCai.style.backgroundColor="#f8fafc", 1500); }
+                const oUu = document.getElementById('ketQuaUuDiem_1'); if(oUu) { oUu.value = duLieuJSON.UuDiem || ""; tuDongGianCao(oUu); oUu.style.backgroundColor = "#dcfce7"; setTimeout(()=>oUu.style.backgroundColor="#f8fafc", 1500); }
+                const oHan = document.getElementById('ketQuaHanChe_1'); if(oHan) { oHan.value = duLieuJSON.HanChe || ""; tuDongGianCao(oHan); oHan.style.backgroundColor = "#dcfce7"; setTimeout(()=>oHan.style.backgroundColor="#f8fafc", 1500); }
+                const oCai = document.getElementById('ketQuaCaiTien_1'); if(oCai) { oCai.value = duLieuJSON.CaiTien || ""; tuDongGianCao(oCai); oCai.style.backgroundColor = "#dcfce7"; setTimeout(()=>oCai.style.backgroundColor="#f8fafc", 1500); }
                 
                 const khoi1 = document.getElementById('khoi_1');
                 for (let i = 1; i <= 12; i++) {
@@ -834,16 +769,17 @@ function tinhTongDiemThanhPhan(laFormDanhGia = 0) {
                 let oKetLuan = document.getElementById('ketQuaKetLuan_2');
                 if (oKetLuan) {
                     oKetLuan.value = duLieuJSON.KetLuan || "";
+                    tuDongGianCao(oKetLuan); // Ép Textarea phình to ngay lập tức
                     oKetLuan.style.backgroundColor = "#dcfce7"; 
-                    setTimeout(() => { oKetLuan.style.backgroundColor = "#ffffff"; }, 1500);
+                    setTimeout(() => { oKetLuan.style.backgroundColor = "transparent"; }, 1500);
                 }
                 alert("✨ Trợ lý AI đã đúc kết xong nội dung biên bản.");
             }
             else if (kieuVanBan === '8') {
                 let oUu = document.getElementById('ketQuaUuDiem_8');
                 let oKhuyet = document.getElementById('ketQuaKhuyetDiem_8');
-                if (oUu) { oUu.value = duLieuJSON.UuDiem || ""; oUu.style.backgroundColor = "#dcfce7"; setTimeout(() => oUu.style.backgroundColor = "#ffffff", 1500); }
-                if (oKhuyet) { oKhuyet.value = duLieuJSON.HanChe || ""; oKhuyet.style.backgroundColor = "#fecaca"; setTimeout(() => oKhuyet.style.backgroundColor = "#ffffff", 1500); }
+                if (oUu) { oUu.value = duLieuJSON.UuDiem || ""; tuDongGianCao(oUu); oUu.style.backgroundColor = "#dcfce7"; setTimeout(() => oUu.style.backgroundColor = "transparent", 1500); }
+                if (oKhuyet) { oKhuyet.value = duLieuJSON.HanChe || ""; tuDongGianCao(oKhuyet); oKhuyet.style.backgroundColor = "#fecaca"; setTimeout(() => oKhuyet.style.backgroundColor = "transparent", 1500); }
                 alert("✨ Trợ lý AI đã bóc tách xong ý kiến đánh giá Đảng viên.");
             }
         } catch(loiPhanTich) { 
@@ -940,6 +876,8 @@ function tinhTongDiemThanhPhan(laFormDanhGia = 0) {
             const loai = document.getElementById('loaiVanBan').value;
             if(loai !== "0") {
                 document.getElementById('khoi_' + loai).querySelectorAll('input:not([type="datetime-local"]), textarea').forEach(truongNhap => truongNhap.value = '');
+                // Gập lại Textarea sau khi xóa chữ
+                document.getElementById('khoi_' + loai).querySelectorAll('textarea').forEach(ta => tuDongGianCao(ta));
             }
         }
     }

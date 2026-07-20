@@ -53,44 +53,39 @@ const KET_NOI = {
       },
       { 
         giaTri: '3', 
-        tenHienThi: '3. Hồ sơ Đảng (Quyết định / Kế hoạch)', 
+        tenHienThi: '3. Hồ sơ Đảng (Quyết định thành lập)', 
         idMau: '1K4Opl9vLDmb9n-Tfmv92EV8HXvGeQYZDzSt04kbq1WA' 
       },
-      { 
+    { 
         giaTri: '4', 
-        tenHienThi: '4. Báo cáo (Giải trình / Thẩm tra)', 
-        idMau: 'THAY_ID_DOC_BAO_CAO_GIAI_TRINH_VAO_DAY' 
-      },
- 	{ 
-        giaTri: '5', 
-        tenHienThi: '5. Hồ sơ Đảng (Kế hoạch)', 
+        tenHienThi: '4. Hồ sơ Đảng (Kế hoạch)', 
         idMau: '1a_tWkToYqxAR9_GGSzbG7T9aBdjApb-W0ukREDNmneM' 
       },
-{ 
-        giaTri: '6', 
-        tenHienThi: '6. Hồ sơ Đảng (BIÊN BẢN TRIỂN KHAI KIỂM TRA)', 
+    { 
+        giaTri: '5', 
+        tenHienThi: '5. Hồ sơ Đảng (Biên bản triển khai cuộc kiểm tra)', 
         idMau: '11UcC6lR535Bk_t7aqU5ginhzCMNMXltHKdKRrEEzAuM' 
       },
-{ 
-        giaTri: '7', 
-        tenHienThi: '7. Hồ sơ Đảng (Báo cáo giải trình)', 
+      { 
+        giaTri: '6', 
+        tenHienThi: '6. Báo cáo (Giải trình)', 
         idMau: '1ywCHAAc1MV6vfbWyfgjghZ7kXaeF5NbiQAhJ4a0wBCA' 
       },
-{ 
-        giaTri: '8', 
-        tenHienThi: '8. Hồ sơ Đảng (Báo cáo thẩm tra)', 
+ 	{ 
+        giaTri: '7', 
+        tenHienThi: '7. Hồ sơ Đảng (Báo cáo thẩm tra)', 
         idMau: '13SAqCUva3f1DJlzoiMVgCW40KuLxQdy4TbY6CGSXgcg' 
       },
 { 
-        giaTri: '9', 
-        tenHienThi: '9. Hồ sơ Đảng (Biên bản họp chi bộ)', 
+        giaTri: '8', 
+        tenHienThi: '8. Hồ sơ Đảng (Biên bản họp chi bộ)', 
         idMau: '1F1BsnPcTU0e8oCYRjvuqV-f29wZGYZp7F1tIrOIpEY0' 
       },
 { 
-        giaTri: '10', 
-        tenHienThi: '10. Hồ sơ Đảng (Biên bản công bố kết quả kiểm tra)', 
+        giaTri: '9', 
+        tenHienThi: '9. Hồ sơ Đảng (Biên bản công bố kết quả kiểm tra)', 
         idMau: '1PwNt_uf_D1BAzCLg-KIILIsiA2sJeDExE982eJ9gKBA' 
-      }
+      },
 
   ]
 };

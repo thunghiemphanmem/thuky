@@ -141,8 +141,8 @@
         </table>
 
         <div class="form-group">
-            <label>Nội dung quan sát / Ghi chép diễn biến (Cần ghi chi tiết để AI phân tích và cho điểm chuẩn xác nhất):</label>
-            <textarea id="noiDungQuanSat" placeholder="VD: Giao việc bài tập 1 rõ ràng, học sinh làm việc nhóm tích cực nhưng thiết bị trình chiếu bị mờ..."></textarea>
+            <label>Nội dung quan sát / Ghi chép diễn biến:</label>
+            <textarea id="noiDungQuanSat" placeholder="VD: Giao việc bài tập 1 rõ ràng, học sinh làm việc nhóm tích cực..."></textarea>
         </div>
         <div class="grid-3" style="background: #f0fdf4; padding: 15px; border-radius: 6px; border: 1px solid #bbf7d0; margin-top: 10px;">
             <div class="form-group"><label style="color:#166534;">Nhận xét Ưu điểm (AI trả về):</label><textarea id="nhanXetUuDiem"></textarea></div>
@@ -155,7 +155,7 @@
         </div>
     </div>
 
-    <!-- MẪU 2: BIÊN BẢN HÀNH CHÍNH (ĐÃ MỞ KHÓA VÀ NÂNG CẤP KẾT LUẬN AI) -->
+    <!-- MẪU 2: BIÊN BẢN HÀNH CHÍNH -->
     <div id="khoiHienThi_2" class="dynamic-block">
         <div class="section-title">II. NỘI DUNG SỰ VIỆC</div>
         <div class="grid-3">
@@ -329,7 +329,6 @@
                 document.getElementById('ngayGioThucHien').value = now.toISOString().slice(0,16);
             }
             
-            // LỖI ĐÃ SỬA: Loại bỏ logic khóa nút btnAI với biểu mẫu số 2, chỉ còn khóa nút Đánh giá điểm.
             document.getElementById('btnDanhGia').disabled = (loai !== "1");
         } else {
             document.getElementById('thanhCongCu').style.display = 'none';
@@ -387,6 +386,7 @@
     function dieuPhoiKetQuaAI(ketQuaTraVe, kieuVanBan) {
         if (ketQuaTraVe.indexOf("LỖI") === 0) return alert(ketQuaTraVe);
         try {
+            // vì backend đã khóa trả về chuẩn json, ta chỉ cần phân tích chuỗi
             let chuoiGoc = ketQuaTraVe.replace(/```json/gi, '').replace(/```/g, '').trim();
             const duLieuJSON = JSON.parse(chuoiGoc);
             
@@ -408,13 +408,12 @@
                 alert("✨ Trợ lý AI đã hoàn tất phân tích và chấm điểm dự kiến.");
                 
             } 
-            // NÂNG CẤP: Xử lý dữ liệu trả về cho Biên bản hành chính (Mẫu 2)
             else if (kieuVanBan === '2') {
                 let oKetLuan = document.getElementById('ketLuanChung');
                 if (oKetLuan) {
                     oKetLuan.value = duLieuJSON.KetLuan || "";
                     oKetLuan.style.transition = "background-color 0.4s";
-                    oKetLuan.style.backgroundColor = "#dcfce7"; // Chớp xanh lá báo hiệu AI đã điền
+                    oKetLuan.style.backgroundColor = "#dcfce7"; 
                     setTimeout(() => { oKetLuan.style.backgroundColor = "#fbfbfb"; }, 1500);
                 }
                 alert("✨ Trợ lý AI đã hoàn tất việc đúc kết biên bản sự việc.");
@@ -423,7 +422,7 @@
                 if(document.getElementById('bcUuDiem')) document.getElementById('bcUuDiem').value = duLieuJSON.UuDiem || "";
                 if(document.getElementById('bcKhuyetDiem')) document.getElementById('bcKhuyetDiem').value = (duLieuJSON.HanChe || "") + "\n* Cải tiến: " + (duLieuJSON.CaiTien || "");
             }
-        } catch(e) { alert("Trợ lý AI trả về sai định dạng. Chi tiết: " + e.message); }
+        } catch(e) { alert("Trợ lý AI trả về sai định dạng. Chi tiết: " + e.message + "\n\nChuỗi nhận được:\n" + ketQuaTraVe); }
     }
 
     function chayNghiepVu(loaiHanhDong) {
@@ -444,7 +443,6 @@
                 noiDung = document.getElementById('noiDungQuanSat') ? document.getElementById('noiDungQuanSat').value : "";
                 chuoiPhanLoai = "Phiếu đánh giá tiết dạy sư phạm";
             } 
-            // NÂNG CẤP: Bắt nội dung sự việc gửi cho AI
             else if (kieuVanBan === '2') {
                 noiDung = document.getElementById('noiDungChiTietSVK') ? document.getElementById('noiDungChiTietSVK').value : "";
                 chuoiPhanLoai = "Biên bản hành chính sự việc";

@@ -26,12 +26,11 @@
         .table-tieu-chi input[type="number"] { width: 80px; text-align: center; padding: 6px; font-size: 11pt; transition: background-color 0.4s; }
 
         .dynamic-block { display: none; animation: fadeIn 0.4s ease-in-out; }
-        .dynamic-block.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
         .action-bar { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; position: sticky; bottom: 0; background: rgba(255, 255, 255, 0.95); padding: 15px 0; border-top: 1px dashed var(--border); margin-top: 30px; z-index: 100; backdrop-filter: blur(5px); }
         .btn { padding: 12px 5px; font-size: 12pt; font-weight: bold; color: white; border: none; border-radius: 6px; cursor: pointer; text-align: center; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .btn:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.15); }
-        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
         .btn-blue { background: #3b82f6; } .btn-sky { background: #0ea5e9; } .btn-orange { background: #f59e0b; } .btn-green { background: #10b981; } .btn-purple { background: #8b5cf6; } .btn-red { background: #ef4444; }
         .loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); z-index: 999; justify-content: center; align-items: center; flex-direction: column; font-weight: bold; color: var(--primary); font-size: 1.2rem; }
         .spinner { width: 40px; height: 40px; border: 4px solid #cbd5e1; border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px; }
@@ -45,7 +44,6 @@
         .preview-table th, .preview-table td { border: 1px solid #cbd5e1; padding: 10px; vertical-align: top; }
         .preview-table th { background: #e2e8f0; width: 30%; text-align: left; color: #334155; }
         .preview-table td { background: #fff; }
-        .footer-credit { text-align: center; margin-top: 30px; font-size: 11pt; color: #64748b; font-style: italic; line-height: 1.4; }
     </style>
 </head>
 <body>
@@ -64,222 +62,338 @@
         </select>
     </div>
 
-    <!-- KHỐI CHUNG -->
-    <div id="khoiChung" class="dynamic-block">
-        <div class="section-title">I. THÔNG TIN HÀNH CHÍNH & THỜI GIAN</div>
-        <div class="grid-3">
-            <div class="form-group"><label>Cơ quan chủ quản:</label><input type="text" id="cqChuQuan"></div>
-            <div class="form-group"><label>Tên Đơn vị / Chi bộ:</label><input type="text" id="tenToChuc"></div>
-            <div class="form-group"><label>Nơi ban hành:</label><input type="text" id="noiBanHanh"></div>
-        </div>
-        <div class="grid-3">
-            <div class="form-group"><label>Ngày giờ bắt đầu:</label><input type="datetime-local" id="ngayGioThucHien"></div>
-            <div class="form-group"><label>Giờ kết thúc:</label><input type="time" id="gioKetThuc"></div>
-            <div class="form-group"><label>Địa điểm:</label><input type="text" id="diaDiem"></div>
-        </div>
-        <div class="grid-3">
-            <div class="form-group"><label>Chủ tọa / Tổ trưởng:</label><input type="text" id="chuToa"></div>
-            <div class="form-group"><label>Chức vụ Chủ tọa:</label><input type="text" id="chucVuChuToa" placeholder="VD: Hiệu trưởng / Bí thư"></div>
-            <div class="form-group"><label>Thư ký:</label><input type="text" id="thuKy"></div>
-        </div>
-    </div>
-
-    <!-- MẪU 1: PHIẾU ĐÁNH GIÁ BÀI DẠY (CÓ 12 TIÊU CHÍ CHI TIẾT) -->
-    <div id="khoiHienThi_1" class="dynamic-block">
-        <div class="section-title">II. ĐÁNH GIÁ 12 TIÊU CHÍ BÀI DẠY (SỞ GD&ĐT)</div>
+    <!-- KHỐI 1: PHIẾU ĐÁNH GIÁ BÀI DẠY (CẦN AI) -->
+    <div id="khoi_1" class="dynamic-block">
+        <div class="section-title">THÔNG TIN BÀI DẠY</div>
         <div class="grid-2">
-            <div class="form-group"><label>Tên bài dạy:</label><input type="text" id="tenBaiDay"></div>
-            <div class="form-group"><label>Đơn vị công tác:</label><input type="text" id="donViCongTac"></div>
+            <div class="form-group"><label>Tên bài dạy:</label><input type="text" data-key="Ten_Bai_Day"></div>
+            <div class="form-group"><label>Đơn vị công tác:</label><input type="text" data-key="Don_Vi"></div>
         </div>
         <div class="grid-4">
-            <div class="form-group" style="grid-column: span 2;"><label>Giáo viên dạy:</label><input type="text" id="giaoVienDay"></div>
-            <div class="form-group"><label>Lớp / Tiết:</label><input type="text" id="lopTiet"></div>
-            <div class="form-group"><label>Ngày dạy:</label><input type="date" id="ngayDay"></div>
+            <div class="form-group" style="grid-column: span 2;"><label>Giáo viên dạy:</label><input type="text" data-key="Giao_Vien_Day"></div>
+            <div class="form-group"><label>Lớp:</label><input type="text" data-key="Lop"></div>
+            <div class="form-group"><label>Tiết dạy:</label><input type="text" data-key="Tiet_Day"></div>
+        </div>
+        <div class="grid-2">
+            <div class="form-group"><label>Ngày dạy:</label><input type="date" data-key="Ngay_Day"></div>
+            <div class="form-group"><label>Người đánh giá:</label><input type="text" data-key="Nguoi_Thuc_Hien"></div>
         </div>
 
+        <div class="section-title">ĐÁNH GIÁ 12 TIÊU CHÍ</div>
         <table class="table-tieu-chi">
             <thead>
                 <tr>
-                    <th style="width: 10%;">Nội dung</th>
-                    <th style="width: 65%;">Tiêu chí đánh giá chi tiết</th>
-                    <th style="width: 10%;">Điểm tối đa</th>
-                    <th style="width: 15%;">Điểm đánh giá</th>
+                    <th style="width: 10%;">Nội dung</th><th style="width: 65%;">Tiêu chí đánh giá chi tiết</th><th style="width: 10%;">Điểm tối đa</th><th style="width: 15%;">Điểm đánh giá</th>
                 </tr>
             </thead>
             <tbody>
                 <tr><td rowspan="4" style="font-weight: bold; text-align: center;">1. Kế hoạch bài dạy</td>
-                    <td>1. Mức độ phù hợp của các hoạt động học với mục tiêu, nội dung và phương pháp dạy học.</td><td style="text-align: center;">1</td>
-                    <td style="text-align: center;"><input type="number" id="Diem_TC1" min="0" max="1" step="0.25" value="1" oninput="tinhTongDiemThanhPhan()"></td></tr>
-                <tr><td>2. Mức độ rõ ràng, chính xác của mục tiêu, nội dung, sản phẩm, cách thức tổ chức thực hiện mỗi hoạt động.</td><td style="text-align: center;">2</td>
-                    <td style="text-align: center;"><input type="number" id="Diem_TC2" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan()"></td></tr>
-                <tr><td>3. Mức độ phù hợp của thiết bị dạy học và học liệu được sử dụng để tổ chức hoạt động.</td><td style="text-align: center;">1</td>
-                    <td style="text-align: center;"><input type="number" id="Diem_TC3" min="0" max="1" step="0.25" value="1" oninput="tinhTongDiemThanhPhan()"></td></tr>
-                <tr><td>4. Mức độ phù hợp của phương án kiểm tra, đánh giá trong quá trình tổ chức hoạt động học.</td><td style="text-align: center;">2</td>
-                    <td style="text-align: center;"><input type="number" id="Diem_TC4" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan()"></td></tr>
+                    <td>1. Mức độ phù hợp của các hoạt động học với mục tiêu...</td><td style="text-align: center;">1</td>
+                    <td style="text-align: center;"><input type="number" data-key="Diem_TC1" min="0" max="1" step="0.25" value="1" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
+                <tr><td>2. Mức độ rõ ràng, chính xác của mục tiêu, nội dung...</td><td style="text-align: center;">2</td>
+                    <td style="text-align: center;"><input type="number" data-key="Diem_TC2" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
+                <tr><td>3. Mức độ phù hợp của thiết bị dạy học và học liệu...</td><td style="text-align: center;">1</td>
+                    <td style="text-align: center;"><input type="number" data-key="Diem_TC3" min="0" max="1" step="0.25" value="1" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
+                <tr><td>4. Mức độ phù hợp của phương án kiểm tra, đánh giá...</td><td style="text-align: center;">2</td>
+                    <td style="text-align: center;"><input type="number" data-key="Diem_TC4" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
                 <tr><td rowspan="4" style="font-weight: bold; text-align: center;">2. Hoạt động của giáo viên</td>
-                    <td>5. Mức độ chính xác, phù hợp, sinh động, hấp dẫn của nội dung, phương pháp giao nhiệm vụ học tập.</td><td style="text-align: center;">2</td>
-                    <td style="text-align: center;"><input type="number" id="Diem_TC5" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan()"></td></tr>
-                <tr><td>6. Khả năng theo dõi, quan sát, phát hiện kịp thời những khó khăn của học sinh.</td><td style="text-align: center;">1</td>
-                    <td style="text-align: center;"><input type="number" id="Diem_TC6" min="0" max="1" step="0.25" value="1" oninput="tinhTongDiemThanhPhan()"></td></tr>
-                <tr><td>7. Mức độ phù hợp, hiệu quả của các biện pháp hỗ trợ và khuyến khích học sinh hợp tác, giúp đỡ nhau.</td><td style="text-align: center;">2</td>
-                    <td style="text-align: center;"><input type="number" id="Diem_TC7" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan()"></td></tr>
-                <tr><td>8. Mức độ chính xác, hiệu quả trong tổng hợp, phân tích, đánh giá quá trình và kết quả học tập.</td><td style="text-align: center;">2</td>
-                    <td style="text-align: center;"><input type="number" id="Diem_TC8" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan()"></td></tr>
+                    <td>5. Mức độ chính xác, phù hợp, sinh động, hấp dẫn...</td><td style="text-align: center;">2</td>
+                    <td style="text-align: center;"><input type="number" data-key="Diem_TC5" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
+                <tr><td>6. Khả năng theo dõi, quan sát, phát hiện kịp thời...</td><td style="text-align: center;">1</td>
+                    <td style="text-align: center;"><input type="number" data-key="Diem_TC6" min="0" max="1" step="0.25" value="1" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
+                <tr><td>7. Mức độ phù hợp, hiệu quả của các biện pháp hỗ trợ...</td><td style="text-align: center;">2</td>
+                    <td style="text-align: center;"><input type="number" data-key="Diem_TC7" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
+                <tr><td>8. Mức độ chính xác, hiệu quả trong tổng hợp, phân tích...</td><td style="text-align: center;">2</td>
+                    <td style="text-align: center;"><input type="number" data-key="Diem_TC8" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
                 <tr><td rowspan="4" style="font-weight: bold; text-align: center;">3. Hoạt động của học sinh</td>
-                    <td>9. Khả năng tiếp nhận và sẵn sàng thực hiện nhiệm vụ học tập của học sinh trong lớp.</td><td style="text-align: center;">2</td>
-                    <td style="text-align: center;"><input type="number" id="Diem_TC9" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan()"></td></tr>
-                <tr><td>10. Mức độ tích cực, chủ động, sáng tạo, hợp tác của học sinh khi thực hiện nhiệm vụ.</td><td style="text-align: center;">2</td>
-                    <td style="text-align: center;"><input type="number" id="Diem_TC10" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan()"></td></tr>
-                <tr><td>11. Mức độ tham gia tích cực của học sinh trong trình bày, thảo luận kết quả học tập.</td><td style="text-align: center;">2</td>
-                    <td style="text-align: center;"><input type="number" id="Diem_TC11" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan()"></td></tr>
-                <tr><td>12. Mức độ đúng đắn, chính xác, phù hợp của các kết quả thực hiện nhiệm vụ học tập.</td><td style="text-align: center;">1</td>
-                    <td style="text-align: center;"><input type="number" id="Diem_TC12" min="0" max="1" step="0.25" value="1" oninput="tinhTongDiemThanhPhan()"></td></tr>
+                    <td>9. Khả năng tiếp nhận và sẵn sàng thực hiện nhiệm vụ...</td><td style="text-align: center;">2</td>
+                    <td style="text-align: center;"><input type="number" data-key="Diem_TC9" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
+                <tr><td>10. Mức độ tích cực, chủ động, sáng tạo, hợp tác...</td><td style="text-align: center;">2</td>
+                    <td style="text-align: center;"><input type="number" data-key="Diem_TC10" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
+                <tr><td>11. Mức độ tham gia tích cực của học sinh trong trình bày...</td><td style="text-align: center;">2</td>
+                    <td style="text-align: center;"><input type="number" data-key="Diem_TC11" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
+                <tr><td>12. Mức độ đúng đắn, chính xác, phù hợp của các kết quả...</td><td style="text-align: center;">1</td>
+                    <td style="text-align: center;"><input type="number" data-key="Diem_TC12" min="0" max="1" step="0.25" value="1" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
             </tbody>
         </table>
+        <div class="grid-2" style="background: #fffbeb; padding: 15px; border-radius: 6px; border: 1px solid #fde68a;">
+            <div class="form-group"><label>Tổng điểm:</label><input type="number" id="tongDiem_1" data-key="Tong_Diem" readonly style="font-weight: bold; color: #16a34a; background: #f0fdf4;"></div>
+            <div class="form-group"><label>Xếp loại giờ dạy:</label><input type="text" id="xepLoai_1" data-key="Xep_Loai" readonly style="font-weight: bold; color: #0284c7; background: #f0fdf4;"></div>
+        </div>
 
+        <div class="section-title">PHÂN TÍCH NHẬN XÉT (AI HỖ TRỢ)</div>
         <div class="form-group">
-            <label>Nội dung quan sát / Ghi chép diễn biến:</label>
-            <textarea id="noiDungQuanSat" placeholder="VD: Giao việc bài tập 1 rõ ràng, học sinh làm việc nhóm tích cực..."></textarea>
+            <label>Nội dung quan sát diễn biến (Bấm "Trợ Lý AI Phân Tích" để máy tự chấm điểm và viết nhận xét):</label>
+            <textarea id="noiDungTruyenAI_1" placeholder="VD: Giáo viên giao việc rõ ràng..."></textarea>
         </div>
-        <div class="grid-3" style="background: #f0fdf4; padding: 15px; border-radius: 6px; border: 1px solid #bbf7d0; margin-top: 10px;">
-            <div class="form-group"><label style="color:#166534;">Nhận xét Ưu điểm (AI trả về):</label><textarea id="nhanXetUuDiem"></textarea></div>
-            <div class="form-group"><label style="color:#991b1b;">Nhận xét Hạn chế (AI trả về):</label><textarea id="nhanXetHanChe"></textarea></div>
-            <div class="form-group"><label style="color:#8b5cf6;">Hướng cải tiến (AI trả về):</label><textarea id="nhanXetCaiTien"></textarea></div>
-        </div>
-        <div class="grid-2" style="background: #fffbeb; padding: 15px; border-radius: 6px; border: 1px solid #fde68a; margin-top: 10px;">
-            <div class="form-group"><label>Tổng điểm (Tự động cộng 12 tiêu chí):</label><input type="number" id="tongDiem" readonly style="font-weight: bold; color: #16a34a; background: #f0fdf4;"></div>
-            <div class="form-group"><label>Xếp loại giờ dạy:</label><input type="text" id="xepLoaiGiayDay" readonly style="font-weight: bold; color: #0284c7; background: #f0fdf4;"></div>
+        <div class="grid-3" style="background: #f0fdf4; padding: 15px; border-radius: 6px; border: 1px solid #bbf7d0;">
+            <div class="form-group"><label style="color:#166534;">Ưu điểm:</label><textarea id="ketQuaUuDiem_1" data-key="Nhan_Xet_Uu_Diem"></textarea></div>
+            <div class="form-group"><label style="color:#991b1b;">Hạn chế:</label><textarea id="ketQuaHanChe_1" data-key="Nhan_Xet_Han_Che"></textarea></div>
+            <div class="form-group"><label style="color:#8b5cf6;">Cải tiến:</label><textarea id="ketQuaCaiTien_1" data-key="Nhan_Xet_Cai_Tien"></textarea></div>
         </div>
     </div>
 
-    <!-- MẪU 2: BIÊN BẢN HÀNH CHÍNH -->
-    <div id="khoiHienThi_2" class="dynamic-block">
-        <div class="section-title">II. NỘI DUNG SỰ VIỆC</div>
+    <!-- KHỐI 2: BIÊN BẢN SỰ VIỆC (CẦN AI) -->
+    <div id="khoi_2" class="dynamic-block">
+        <div class="section-title">THÔNG TIN HÀNH CHÍNH & THỜI GIAN</div>
         <div class="grid-3">
-            <div class="form-group"><label>Số Văn bản / Biên bản:</label><input type="text" id="soVanBan"></div>
-            <div class="form-group"><label>Tên sự việc:</label><input type="text" id="tenSuViec"></div>
-            <div class="form-group"><label>Số lượng bản in (Lưu):</label><input type="number" id="soLuongBanIn"></div>
-        </div>
-        <div class="form-group"><label>Thành phần tham dự (Kèm chức vụ):</label><textarea id="thanhPhanThamDu" style="min-height: 60px;"></textarea></div>
-        <div class="form-group"><label>Nội dung chi tiết diễn biến (Gửi AI tổng hợp):</label><textarea id="noiDungChiTietSVK" style="min-height: 150px;"></textarea></div>
-        <div class="form-group" style="background: #f0fdf4; padding: 10px; border-radius: 6px; border: 1px solid #bbf7d0;">
-            <label style="color:#0284c7;">Kết luận chung (Trợ lý AI tự động tổng hợp & đề xuất từ diễn biến):</label>
-            <textarea id="ketLuanChung" style="min-height: 100px; font-weight: bold;"></textarea>
-        </div>
-    </div>
-
-    <!-- MẪU 3 -->
-    <div id="khoiHienThi_3" class="dynamic-block">
-        <div class="section-title">II. THÔNG TIN NGHIỆP VỤ ĐẢNG</div>
-        <div class="grid-3">
-            <div class="form-group"><label>Số Quyết định căn cứ:</label><input type="text" id="soQuyetDinh"></div>
-            <div class="form-group"><label>Ngày ra Quyết định:</label><input type="date" id="ngayQuyetDinh"></div>
-            <div class="form-group"><label>Loại hình:</label><input type="text" id="loaiHinh"></div>
-        </div>
-        <div class="grid-2">
-            <div class="form-group"><label>Đảng viên được KT/GS:</label><input type="text" id="dangVienKiemTra"></div>
-            <div class="form-group"><label>Thành viên Tổ KT/GS:</label><input type="text" id="thanhVienTo"></div>
-        </div>
-        <div class="grid-2">
-            <div class="form-group" style="background:#f8fafc; padding:10px; border:1px solid #cbd5e1;"><label>Thời hiệu:</label>
-                <div style="display:flex; gap:10px;"><input type="date" id="tuNgayHieuLuc" style="width:50%;"><input type="date" id="denNgayHieuLuc" style="width:50%;"></div>
-            </div>
-            <div class="form-group" style="background:#f8fafc; padding:10px; border:1px solid #cbd5e1;"><label>Thời gian tiến hành:</label>
-                <div style="display:flex; gap:10px;"><input type="date" id="tuNgayTienHanh" style="width:50%;"><input type="date" id="denNgayTienHanh" style="width:50%;"></div>
-            </div>
-        </div>
-        <div class="grid-4" style="background:#fffbeb; padding:10px; border:1px solid #fde68a; margin-bottom:12px; border-radius:4px;">
-            <div class="form-group"><label>Có mặt:</label><input type="number" id="soCoMat"></div>
-            <div class="form-group"><label>Vắng:</label><input type="number" id="soVangMat"></div>
-            <div class="form-group" style="grid-column: span 2;"><label>Lý do vắng:</label><input type="text" id="lyDoVang"></div>
-        </div>
-        <div class="form-group"><label>Nội dung kiểm tra (Gửi AI):</label><textarea id="noiDungKiemTraDang" style="min-height: 100px;"></textarea></div>
-        <div class="form-group"><label>Số thông báo kết luận:</label><input type="text" id="soThongBaoKetLuan"></div>
-        <div class="form-group"><label>Ý kiến phát biểu:</label><textarea id="yKienThamGia" style="min-height: 80px;"></textarea></div>
-    </div>
-
-    <!-- MẪU 4 -->
-    <div id="khoiHienThi_4" class="dynamic-block">
-        <div class="section-title">II. THÔNG TIN LÝ LỊCH & BÁO CÁO</div>
-        <div class="grid-4">
-            <div class="form-group"><label>Năm sinh:</label><input type="text" id="namSinh"></div>
-            <div class="form-group"><label>Dân tộc:</label><input type="text" id="danToc"></div>
-            <div class="form-group" style="grid-column: span 2;"><label>Chức vụ:</label><input type="text" id="chucVu"></div>
+            <div class="form-group"><label>Cơ quan chủ quản:</label><input type="text" data-key="CQ_Chu_Quan"></div>
+            <div class="form-group"><label>Tên Đơn vị/Tổ chức:</label><input type="text" data-key="Ten_To_Chuc"></div>
+            <div class="form-group"><label>Số Biên bản:</label><input type="text" data-key="So_Bien_Ban"></div>
         </div>
         <div class="grid-3">
-            <div class="form-group"><label>Chỗ ở hiện nay:</label><input type="text" id="choO"></div>
-            <div class="form-group"><label>Trình độ học vấn:</label><input type="text" id="trinhDo"></div>
-            <div class="form-group"><label>Ngày vào Đảng/CT:</label><div style="display:flex; gap:5px;"><input type="date" id="ngayVaoDang" style="width:50%;"><input type="date" id="ngayChinhThuc" style="width:50%;"></div></div>
+            <div class="form-group"><label>Nơi ban hành:</label><input type="text" data-key="Noi_Ban_Hanh"></div>
+            <div class="form-group"><label>Ngày giờ bắt đầu:</label><input type="datetime-local" data-key="NgayGioBatDau"></div>
+            <div class="form-group"><label>Địa điểm:</label><input type="text" data-key="Dia_Diem"></div>
         </div>
-        <div class="form-group"><label>Quá trình công tác:</label><textarea id="quaTrinhCongTac" style="min-height: 60px;"></textarea></div>
-        <div class="grid-2">
-            <div class="form-group"><label>Khen thưởng:</label><textarea id="khenThuong" style="min-height: 60px;"></textarea></div>
-            <div class="form-group"><label>Kỷ luật:</label><textarea id="kyLuat" style="min-height: 60px;"></textarea></div>
-        </div>
-        <div class="form-group"><label>Báo cáo / Giải trình (Gửi AI):</label><textarea id="giaiTrinhChiTiet" style="min-height: 120px;"></textarea></div>
-        <div class="form-group"><label>Kết quả thẩm tra (Gửi AI):</label><textarea id="ketQuaThamTra" style="min-height: 100px;"></textarea></div>
-        <div class="form-group"><label>Kiến nghị / Đề xuất:</label><textarea id="kienNghi" style="min-height: 60px;"></textarea></div>
         
-        <div class="grid-2" style="background: #f8fafc; padding: 15px; border-radius: 6px; border: 1px dashed var(--primary); margin-top: 10px;">
-            <div class="form-group"><label style="color:#0284c7;">Ưu điểm (AI trả về):</label><textarea id="bcUuDiem"></textarea></div>
-            <div class="form-group"><label style="color:#ef4444;">Khuyết điểm (AI trả về):</label><textarea id="bcKhuyetDiem"></textarea></div>
-        </div>
-    </div>
-
-    <!-- MẪU 11: QUYẾT ĐỊNH HÀNH CHÍNH -->
-    <div id="khoiHienThi_5" class="dynamic-block">
-        <div class="section-title">II. NỘI DUNG QUYẾT ĐỊNH</div>
+        <div class="section-title">THÀNH PHẦN & NỘI DUNG SỰ VIỆC</div>
         <div class="grid-2">
-            <div class="form-group"><label>Số Quyết định:</label><input type="text" id="soQuyetDinhDungChung" placeholder="Nhập nếu khác mục chung"></div>
-            <div class="form-group"><label>Tên Quyết định (Về việc...):</label><input type="text" id="tenQuyetDinh"></div>
+            <div class="form-group"><label>Tên sự việc:</label><input type="text" data-key="Ten_Su_Viec"></div>
+            <div class="form-group"><label>Chủ tọa (Người chủ trì):</label><input type="text" data-key="Chu_Toa"></div>
         </div>
+        <div class="grid-2">
+            <div class="form-group"><label>Chức vụ (của Chủ tọa):</label><input type="text" data-key="Chuc_Vu"></div>
+            <div class="form-group"><label>Thư ký:</label><input type="text" data-key="Thu_Ky"></div>
+        </div>
+        <div class="form-group"><label>Danh sách thành phần tham dự (kèm chức vụ):</label><textarea data-key="Danh_Sach_Tham_Du" style="min-height: 60px;"></textarea></div>
+        
         <div class="form-group">
-            <label>Căn cứ ban hành (Luật, Nghị định, Thông tư...):</label>
-            <textarea id="canCuBanHanh" style="min-height: 80px;" placeholder="Căn cứ Luật...&#10;Căn cứ Nghị định..."></textarea>
+            <label>Nội dung chi tiết diễn biến (Bấm "Trợ Lý AI Phân Tích" để tóm tắt kết luận):</label>
+            <textarea id="noiDungTruyenAI_2" data-key="Noi_Dung_Chi_Tiet" style="min-height: 120px;"></textarea>
         </div>
-        <div class="form-group">
-            <label>Người/Đơn vị chịu tác động (Điều 1 - Ai, Đơn vị nào?):</label>
-            <input type="text" id="dieu1NhanSu">
+        <div class="form-group" style="background: #e0f2fe; padding: 10px; border-radius: 6px; border: 1px solid #bae6fd;">
+            <label style="color:#0369a1;">Kết luận chung (AI tự động hỗ trợ):</label>
+            <textarea id="ketQuaKetLuan_2" data-key="Ket_Luan_Chung" style="min-height: 100px; font-weight: bold;"></textarea>
         </div>
-        <div class="form-group">
-            <label>Nội dung cốt lõi Quyết định (Nhập tóm tắt để AI dự thảo ngôn từ pháp lý):</label>
-            <textarea id="tomTatQuyetDinh" style="min-height: 80px;" placeholder="Tóm tắt yêu cầu để AI viết Điều 1..."></textarea>
-        </div>
-        <div class="form-group" style="background: #f0fdf4; padding: 10px; border-radius: 6px; border: 1px solid #bbf7d0;">
-            <label style="color:#0284c7;">Dự thảo Nội dung Điều 1 (Trợ lý AI tự động biên soạn):</label>
-            <textarea id="ketLuanQuyetDinh" style="min-height: 100px; font-weight: bold;"></textarea>
-        </div>
-        <div class="form-group">
-            <label>Điều khoản thi hành (Nơi nhận, Đơn vị phối hợp...):</label>
-            <textarea id="dieuKhoanThiHanh" style="min-height: 60px;" placeholder="Các ông/bà có tên tại Điều 1 chịu trách nhiệm thi hành..."></textarea>
+        
+        <div class="grid-2">
+            <div class="form-group"><label>Số lượng bản in:</label><input type="number" data-key="So_Luong"></div>
+            <div class="form-group"><label>Giờ kết thúc:</label><input type="time" data-key="GioKetThuc"></div>
         </div>
     </div>
 
-    <!-- NÂNG CẤP MỚI: MẪU 12 - KẾ HOẠCH KIỂM TRA/GIÁM SÁT ĐẢNG -->
-    <div id="khoiHienThi_6" class="dynamic-block">
-        <div class="section-title">II. NỘI DUNG KẾ HOẠCH KIỂM TRA, GIÁM SÁT</div>
+    <!-- KHỐI 3: QUYẾT ĐỊNH ĐẢNG (KHÓA AI) -->
+    <div id="khoi_3" class="dynamic-block">
+        <div class="section-title">THÔNG TIN QUYẾT ĐỊNH</div>
         <div class="grid-3">
-            <div class="form-group"><label>Số Quyết định căn cứ:</label><input type="text" id="soQuyetDinh_KH"></div>
-            <div class="form-group"><label>Ngày ra Quyết định:</label><input type="date" id="ngayQuyetDinh_KH"></div>
-            <div class="form-group"><label>Loại hình (Kiểm tra/Giám sát):</label><input type="text" id="loaiHinh_KH"></div>
+            <div class="form-group"><label>Tên Chi bộ:</label><input type="text" data-key="Ten_Chi_Bo"></div>
+            <div class="form-group"><label>Nơi ban hành:</label><input type="text" data-key="Noi_Ban_Hanh"></div>
+            <div class="form-group"><label>Ngày ban hành:</label><input type="date" data-key="NgayBanHanh"></div>
         </div>
-        <div class="form-group"><label>Đảng viên được KT/GS:</label><input type="text" id="dangVienKiemTra_KH"></div>
+        <div class="grid-3">
+            <div class="form-group"><label>Số Quyết định:</label><input type="text" data-key="So_Quyet_Dinh"></div>
+            <div class="form-group"><label>Loại hình (KT hoặc GS):</label><input type="text" data-key="Loai_Hinh"></div>
+            <div class="form-group"><label>Đảng viên được KT/GS:</label><input type="text" data-key="Dang_Vien_Duoc_Kiem_Tra"></div>
+        </div>
+        
+        <div class="section-title">NỘI DUNG & TỔ CÔNG TÁC</div>
+        <div class="form-group"><label>Nội dung kiểm tra/giám sát:</label><textarea data-key="Noi_Dung_Kiem_Tra"></textarea></div>
+        <div class="grid-3">
+            <div class="form-group"><label>Tổ trưởng:</label><input type="text" data-key="To_Truong"></div>
+            <div class="form-group"><label>Thư ký:</label><input type="text" data-key="Thu_Ky"></div>
+            <div class="form-group"><label>Thành viên:</label><input type="text" data-key="Thanh_Vien"></div>
+        </div>
+    </div>
+
+    <!-- KHỐI 4: KẾ HOẠCH ĐẢNG (KHÓA AI) -->
+    <div id="khoi_4" class="dynamic-block">
+        <div class="section-title">THÔNG TIN KẾ HOẠCH</div>
+        <div class="grid-3">
+            <div class="form-group"><label>Tên Chi bộ:</label><input type="text" data-key="Ten_Chi_Bo"></div>
+            <div class="form-group"><label>Nơi ban hành:</label><input type="text" data-key="Noi_Ban_Hanh"></div>
+            <div class="form-group"><label>Ngày ban hành KH:</label><input type="date" data-key="NgayBanHanh"></div>
+        </div>
+        <div class="grid-2">
+            <div class="form-group"><label>Loại hình (KT hoặc GS):</label><input type="text" data-key="Loai_Hinh"></div>
+            <div class="form-group"><label>Đảng viên được KT/GS:</label><input type="text" data-key="Dang_Vien_Duoc_Kiem_Tra"></div>
+        </div>
+        
+        <div class="section-title">CĂN CỨ VÀ THỜI GIAN TIẾN HÀNH</div>
+        <div class="grid-2">
+            <div class="form-group"><label>Số Quyết định căn cứ:</label><input type="text" data-key="So_Quyet_Dinh"></div>
+            <div class="form-group"><label>Ngày ra Quyết định:</label><input type="date" data-key="NgayQuyetDinh"></div>
+        </div>
+        <div class="form-group"><label>Nội dung kiểm tra/giám sát:</label><textarea data-key="Noi_Dung_Kiem_Tra"></textarea></div>
         <div class="grid-2">
             <div class="form-group" style="background:#f8fafc; padding:10px; border:1px solid #cbd5e1;"><label>Thời hiệu KT/GS:</label>
-                <div style="display:flex; gap:10px;"><input type="date" id="tuNgayHieuLuc_KH" style="width:50%;" title="Từ ngày"><input type="date" id="denNgayHieuLuc_KH" style="width:50%;" title="Đến ngày"></div>
+                <div style="display:flex; gap:10px;"><input type="date" data-key="Tu_Ngay_Hieu_Luc" style="width:50%;" title="Từ ngày"><input type="date" data-key="Den_Ngay_Hieu_Luc" style="width:50%;" title="Đến ngày"></div>
             </div>
             <div class="form-group" style="background:#f8fafc; padding:10px; border:1px solid #cbd5e1;"><label>Thời gian tiến hành:</label>
-                <div style="display:flex; gap:10px;"><input type="date" id="tuNgayTienHanh_KH" style="width:50%;" title="Từ ngày"><input type="date" id="denNgayTienHanh_KH" style="width:50%;" title="Đến ngày"></div>
+                <div style="display:flex; gap:10px;"><input type="date" data-key="Tu_Ngay_Tien_Hanh" style="width:50%;" title="Từ ngày"><input type="date" data-key="Den_Ngay_Tien_Hanh" style="width:50%;" title="Đến ngày"></div>
             </div>
         </div>
+    </div>
+
+    <!-- KHỐI 5: BIÊN BẢN TRIỂN KHAI (KHÓA AI) -->
+    <div id="khoi_5" class="dynamic-block">
+        <div class="section-title">THÔNG TIN TRIỂN KHAI</div>
+        <div class="grid-3">
+            <div class="form-group"><label>Tên Chi bộ:</label><input type="text" data-key="Ten_Chi_Bo"></div>
+            <div class="form-group"><label>Nơi ban hành:</label><input type="text" data-key="Noi_Ban_Hanh"></div>
+            <div class="form-group"><label>Loại hình:</label><input type="text" data-key="Loai_Hinh"></div>
+        </div>
+        <div class="grid-3">
+            <div class="form-group"><label>Ngày giờ bắt đầu:</label><input type="datetime-local" data-key="NgayGioBatDau"></div>
+            <div class="form-group"><label>Địa điểm:</label><input type="text" data-key="Dia_Diem"></div>
+            <div class="form-group"><label>Số QĐ triển khai:</label><input type="text" data-key="So_Quyet_Dinh"></div>
+        </div>
+        <div class="grid-3">
+            <div class="form-group"><label>Tổ trưởng:</label><input type="text" data-key="To_Truong"></div>
+            <div class="form-group"><label>Thành viên:</label><input type="text" data-key="Thanh_Vien"></div>
+            <div class="form-group"><label>Đảng viên được KT/GS:</label><input type="text" data-key="Dang_Vien_Duoc_Kiem_Tra"></div>
+        </div>
+        <div class="form-group"><label>Ý kiến của Đảng viên:</label><textarea data-key="Y_Kien_Dang_Vien"></textarea></div>
+        <div class="form-group" style="width: 30%;"><label>Giờ kết thúc:</label><input type="time" data-key="GioKetThuc"></div>
+    </div>
+
+    <!-- KHỐI 6: BÁO CÁO GIẢI TRÌNH (KHÓA AI) -->
+    <div id="khoi_6" class="dynamic-block">
+        <div class="section-title">THÔNG TIN BÁO CÁO</div>
+        <div class="grid-3">
+            <div class="form-group"><label>Nơi ban hành:</label><input type="text" data-key="Noi_Ban_Hanh"></div>
+            <div class="form-group"><label>Ngày ban hành BC:</label><input type="date" data-key="NgayBanHanh"></div>
+            <div class="form-group"><label>Tên Chi bộ:</label><input type="text" data-key="Ten_Chi_Bo"></div>
+        </div>
+        <div class="grid-3">
+            <div class="form-group"><label>Số Quyết định căn cứ:</label><input type="text" data-key="So_Quyet_Dinh"></div>
+            <div class="form-group"><label>Ngày Quyết định:</label><input type="date" data-key="NgayQuyetDinh"></div>
+            <div class="form-group"><label>Loại hình:</label><input type="text" data-key="Loai_Hinh"></div>
+        </div>
+        
+        <div class="section-title">LÝ LỊCH ĐẢNG VIÊN</div>
+        <div class="grid-4">
+            <div class="form-group" style="grid-column: span 2;"><label>Họ và tên Đảng viên:</label><input type="text" data-key="Dang_Vien_Duoc_Kiem_Tra"></div>
+            <div class="form-group"><label>Năm sinh:</label><input type="text" data-key="Nam_Sinh"></div>
+            <div class="form-group"><label>Dân tộc:</label><input type="text" data-key="Dan_Toc"></div>
+        </div>
+        <div class="grid-3">
+            <div class="form-group"><label>Chức vụ:</label><input type="text" data-key="Chuc_Vu"></div>
+            <div class="form-group"><label>Chỗ ở hiện nay:</label><input type="text" data-key="Cho_O_Hien_Nay"></div>
+            <div class="form-group"><label>Trình độ học vấn:</label><input type="text" data-key="Trinh_Do_Hoc_Van"></div>
+        </div>
+        <div class="grid-2">
+            <div class="form-group"><label>Ngày vào Đảng:</label><input type="date" data-key="Ngay_Vao_Dang"></div>
+            <div class="form-group"><label>Ngày chính thức:</label><input type="date" data-key="Ngay_Chinh_Thuc"></div>
+        </div>
+        
+        <div class="section-title">NỘI DUNG GIẢI TRÌNH</div>
+        <div class="form-group"><label>Quá trình công tác:</label><textarea data-key="Qua_Trinh_Cong_Tac" style="min-height: 50px;"></textarea></div>
+        <div class="grid-2">
+            <div class="form-group"><label>Khen thưởng:</label><textarea data-key="Khen_Thuong" style="min-height: 50px;"></textarea></div>
+            <div class="form-group"><label>Kỷ luật:</label><textarea data-key="Ky_Luat" style="min-height: 50px;"></textarea></div>
+        </div>
+        <div class="form-group"><label>Nội dung Giải trình chi tiết:</label><textarea data-key="Giai_Trinh_Chi_Tiet" style="min-height: 100px;"></textarea></div>
+        <div class="form-group"><label>Kiến nghị của cá nhân:</label><textarea data-key="Kien_Nghi_Ca_Nhan" style="min-height: 50px;"></textarea></div>
+    </div>
+
+    <!-- KHỐI 7: BÁO CÁO THẨM TRA (KHÓA AI) -->
+    <div id="khoi_7" class="dynamic-block">
+        <div class="section-title">THÔNG TIN BÁO CÁO THẨM TRA</div>
+        <div class="grid-3">
+            <div class="form-group"><label>Nơi ban hành:</label><input type="text" data-key="Noi_Ban_Hanh"></div>
+            <div class="form-group"><label>Ngày ban hành BC:</label><input type="date" data-key="NgayBanHanh"></div>
+            <div class="form-group"><label>Loại hình:</label><input type="text" data-key="Loai_Hinh"></div>
+        </div>
+        <div class="grid-2">
+            <div class="form-group"><label>Số Quyết định căn cứ:</label><input type="text" data-key="So_Quyet_Dinh"></div>
+            <div class="form-group"><label>Ngày Quyết định:</label><input type="date" data-key="NgayQuyetDinh"></div>
+        </div>
+        
+        <div class="section-title">LÝ LỊCH ĐẢNG VIÊN (NHƯ MẪU 6)</div>
+        <div class="grid-4">
+            <div class="form-group" style="grid-column: span 2;"><label>Họ và tên Đảng viên:</label><input type="text" data-key="Dang_Vien_Duoc_Kiem_Tra"></div>
+            <div class="form-group"><label>Năm sinh:</label><input type="text" data-key="Nam_Sinh"></div>
+            <div class="form-group"><label>Dân tộc:</label><input type="text" data-key="Dan_Toc"></div>
+        </div>
+        <div class="grid-3">
+            <div class="form-group"><label>Chức vụ:</label><input type="text" data-key="Chuc_Vu"></div>
+            <div class="form-group"><label>Chỗ ở hiện nay:</label><input type="text" data-key="Cho_O_Hien_Nay"></div>
+            <div class="form-group"><label>Trình độ học vấn:</label><input type="text" data-key="Trinh_Do_Hoc_Van"></div>
+        </div>
+        <div class="grid-2">
+            <div class="form-group"><label>Ngày vào Đảng:</label><input type="date" data-key="Ngay_Vao_Dang"></div>
+            <div class="form-group"><label>Ngày chính thức:</label><input type="date" data-key="Ngay_Chinh_Thuc"></div>
+        </div>
+        
+        <div class="section-title">KẾT QUẢ THẨM TRA</div>
+        <div class="form-group"><label>Quá trình công tác:</label><textarea data-key="Qua_Trinh_Cong_Tac" style="min-height: 40px;"></textarea></div>
+        <div class="grid-2">
+            <div class="form-group"><label>Khen thưởng:</label><textarea data-key="Khen_Thuong" style="min-height: 40px;"></textarea></div>
+            <div class="form-group"><label>Kỷ luật:</label><textarea data-key="Ky_Luat" style="min-height: 40px;"></textarea></div>
+        </div>
+        <div class="form-group"><label>Nội dung kiểm tra:</label><textarea data-key="Noi_Dung_Kiem_Tra" style="min-height: 50px;"></textarea></div>
+        <div class="form-group"><label>Kết quả thẩm tra, xác minh:</label><textarea data-key="Ket_Qua_Tham_Tra" style="min-height: 100px;"></textarea></div>
+        <div class="grid-2">
+            <div class="form-group"><label>Kiến nghị của Tổ:</label><textarea data-key="Kien_Nghi_To_Kiem_Tra" style="min-height: 50px;"></textarea></div>
+            <div class="form-group"><label>Tổ trưởng (Ký tên):</label><input type="text" data-key="To_Truong"></div>
+        </div>
+    </div>
+
+    <!-- KHỐI 8: BIÊN BẢN HỌP CHI BỘ (CẦN AI) -->
+    <div id="khoi_8" class="dynamic-block">
+        <div class="section-title">THÔNG TIN CUỘC HỌP</div>
+        <div class="grid-3">
+            <div class="form-group"><label>Nơi ban hành:</label><input type="text" data-key="Noi_Ban_Hanh"></div>
+            <div class="form-group"><label>Ngày giờ bắt đầu:</label><input type="datetime-local" data-key="NgayGioBatDau"></div>
+            <div class="form-group"><label>Địa điểm:</label><input type="text" data-key="Dia_Diem"></div>
+        </div>
+        <div class="grid-4">
+            <div class="form-group"><label>Đảng viên có mặt:</label><input type="number" data-key="So_Dang_Vien_Co_Mat"></div>
+            <div class="form-group"><label>Vắng mặt:</label><input type="number" data-key="So_Dang_Vien_Vang"></div>
+            <div class="form-group"><label>Chủ tọa:</label><input type="text" data-key="Chu_Toa"></div>
+            <div class="form-group"><label>Thư ký:</label><input type="text" data-key="Thu_Ky"></div>
+        </div>
+        <div class="grid-2">
+            <div class="form-group"><label>Loại hình:</label><input type="text" data-key="Loai_Hinh"></div>
+            <div class="form-group"><label>Đảng viên được KT/GS:</label><input type="text" data-key="Dang_Vien_Duoc_Kiem_Tra"></div>
+        </div>
+        
+        <div class="section-title">Ý KIẾN CHI BỘ (AI TỔNG HỢP ƯU/KHUYẾT)</div>
         <div class="form-group">
-            <label>Tóm tắt sự việc (Để AI dự thảo nội dung):</label>
-            <textarea id="tomTatKeHoachDang" style="min-height: 60px;" placeholder="Nhập tóm tắt để AI viết chi tiết nội dung..."></textarea>
+            <label>Nội dung ý kiến tham gia (Bấm "Trợ Lý AI Phân Tích" để đúc kết Ưu/Khuyết điểm):</label>
+            <textarea id="noiDungTruyenAI_8" data-key="Y_Kien_Chi_Bo" style="min-height: 120px;"></textarea>
         </div>
-        <div class="form-group" style="background: #fdf4ff; padding: 10px; border-radius: 6px; border: 1px solid #fbcfe8;">
-            <label style="color:#c026d3;">Nội dung KT/GS (AI tự động biên soạn):</label>
-            <textarea id="noiDungKiemTraDang_KH" style="min-height: 100px; font-weight: bold;"></textarea>
+        <div class="grid-2" style="background: #e0f2fe; padding: 15px; border-radius: 6px; border: 1px solid #bae6fd;">
+            <div class="form-group"><label style="color:#0369a1;">Kết luận Ưu điểm (AI):</label><textarea id="ketQuaUuDiem_8" data-key="Ket_Luan_Uu_Diem" style="font-weight:bold;"></textarea></div>
+            <div class="form-group"><label style="color:#b91c1c;">Kết luận Khuyết điểm (AI):</label><textarea id="ketQuaKhuyetDiem_8" data-key="Ket_Luan_Khuyet_Diem" style="font-weight:bold;"></textarea></div>
         </div>
+        <div class="form-group" style="width: 30%; margin-top: 15px;"><label>Giờ kết thúc:</label><input type="time" data-key="GioKetThuc"></div>
+    </div>
+
+    <!-- KHỐI 9: BIÊN BẢN CÔNG BỐ (KHÓA AI) -->
+    <div id="khoi_9" class="dynamic-block">
+        <div class="section-title">THÔNG TIN CÔNG BỐ</div>
+        <div class="grid-3">
+            <div class="form-group"><label>Tên Chi bộ:</label><input type="text" data-key="Ten_Chi_Bo"></div>
+            <div class="form-group"><label>Loại hình:</label><input type="text" data-key="Loai_Hinh"></div>
+            <div class="form-group"><label>Nơi ban hành:</label><input type="text" data-key="Noi_Ban_Hanh"></div>
+        </div>
+        <div class="grid-2">
+            <div class="form-group"><label>Ngày giờ bắt đầu:</label><input type="datetime-local" data-key="NgayGioBatDau"></div>
+            <div class="form-group"><label>Địa điểm:</label><input type="text" data-key="Dia_Diem"></div>
+        </div>
+        <div class="grid-3">
+            <div class="form-group"><label>Có mặt:</label><input type="number" data-key="So_Dang_Vien_Co_Mat"></div>
+            <div class="form-group"><label>Vắng mặt:</label><input type="number" data-key="So_Dang_Vien_Vang"></div>
+            <div class="form-group"><label>Lý do vắng:</label><input type="text" data-key="Ly_Do_Vang"></div>
+        </div>
+        <div class="grid-3">
+            <div class="form-group"><label>Tổ trưởng (Tổ KT/GS):</label><input type="text" data-key="To_Truong"></div>
+            <div class="form-group"><label>Thư ký (Tổ KT/GS):</label><input type="text" data-key="Thu_Ky"></div>
+            <div class="form-group"><label>Thành viên (Tổ KT/GS):</label><input type="text" data-key="Thanh_Vien"></div>
+        </div>
+        <div class="grid-2">
+            <div class="form-group"><label>Chủ tọa (Đại diện Cấp ủy):</label><input type="text" data-key="Chu_Toa"></div>
+            <div class="form-group"><label>Thư ký cuộc họp:</label><input type="text" data-key="Thu_Ky"></div>
+        </div>
+        <div class="grid-3">
+            <div class="form-group"><label>Số Quyết định gốc:</label><input type="text" data-key="So_Quyet_Dinh"></div>
+            <div class="form-group"><label>Đảng viên được KT/GS:</label><input type="text" data-key="Dang_Vien_Duoc_Kiem_Tra"></div>
+            <div class="form-group"><label>Số TB Kết luận:</label><input type="text" data-key="So_Thong_Bao_Ket_Luan"></div>
+        </div>
+        <div class="form-group"><label>Ý kiến tham gia:</label><textarea data-key="Y_Kien_Tham_Gia"></textarea></div>
+        <div class="form-group" style="width: 30%;"><label>Giờ kết thúc:</label><input type="time" data-key="GioKetThuc"></div>
     </div>
 
     <!-- THANH CÔNG CỤ -->
@@ -295,7 +409,7 @@
 <div class="modal-overlay" id="previewModal">
     <div class="modal-content">
         <div class="modal-header">
-            <span>🔍 XEM TRƯỚC DỮ LIỆU</span><span class="close-btn" style="cursor:pointer;" onclick="dongXemTruoc()">✖</span>
+            <span>🔍 XEM TRƯỚC DỮ LIỆU SẼ ĐIỀN</span><span class="close-btn" style="cursor:pointer;" onclick="dongXemTruoc()">✖</span>
         </div>
         <div class="modal-body" id="previewBody"></div>
         <div class="modal-footer">
@@ -322,70 +436,53 @@
         oChon.innerHTML = chuoiHTML;
     }
 
-    document.addEventListener("DOMContentLoaded", function() { 
-        khoiTaoOChonVanBan(); 
-        tinhTongDiemThanhPhan(); 
-    });
+    document.addEventListener("DOMContentLoaded", function() { khoiTaoOChonVanBan(); });
 
-    function tinhTongDiemThanhPhan() {
+    function tinhTongDiemThanhPhan(laFormDanhGia = 0) {
+        if(laFormDanhGia !== 1 && document.getElementById('loaiVanBan').value !== "1") return;
         let tong = 0;
+        const khoiActive = document.getElementById('khoi_1');
+        if(!khoiActive) return;
+
         for (let i = 1; i <= 12; i++) {
-            const o = document.getElementById('Diem_TC' + i);
-            if (o) {
-                let val = parseFloat(o.value) || 0;
-                tong += val;
-            }
+            const o = khoiActive.querySelector(`input[data-key="Diem_TC${i}"]`);
+            if (o) tong += (parseFloat(o.value) || 0);
         }
 
-        const oTongDiem = document.getElementById('tongDiem');
-        const oXepLoai = document.getElementById('xepLoaiGiayDay');
+        const oTongDiem = document.getElementById('tongDiem_1');
+        const oXepLoai = document.getElementById('xepLoai_1');
 
         if (oTongDiem) oTongDiem.value = tong;
-
         if (oXepLoai) {
-            let loai = "";
-            if (tong >= 18) {
-                loai = "GIỎI";
-            } else if (tong >= 13.5) {
-                loai = "KHÁ";
-            } else if (tong >= 10) {
-                loai = "TRUNG BÌNH";
-            } else {
-                loai = "KHÔNG ĐẠT";
-            }
-            oXepLoai.value = loai;
+            if (tong >= 18) oXepLoai.value = "GIỎI";
+            else if (tong >= 13.5) oXepLoai.value = "KHÁ";
+            else if (tong >= 10) oXepLoai.value = "TRUNG BÌNH";
+            else oXepLoai.value = "KHÔNG ĐẠT";
         }
     }
 
     function chuyenDoiBieuMau() {
         const loai = document.getElementById('loaiVanBan').value;
-        document.querySelectorAll('.dynamic-block').forEach(khoi => khoi.classList.remove('active'));
+        document.querySelectorAll('.dynamic-block').forEach(khoi => khoi.style.display = 'none');
+        const btnAI = document.getElementById('btnAI');
+        const btnDanhGia = document.getElementById('btnDanhGia');
         
         if (loai !== "0") {
-            document.getElementById('khoiChung').classList.add('active');
-            let idKhoiKichHoat = "";
-            
-            if (loai === "1") { idKhoiKichHoat = "khoiHienThi_1"; }
-            else if (loai === "2") { idKhoiKichHoat = "khoiHienThi_2"; }
-            else if (["3", "5", "6", "9", "10"].includes(loai)) { idKhoiKichHoat = "khoiHienThi_3"; }
-            else if (["4", "7", "8"].includes(loai)) { idKhoiKichHoat = "khoiHienThi_4"; }
-            else if (["11"].includes(loai)) { idKhoiKichHoat = "khoiHienThi_5"; }
-            else if (["12"].includes(loai)) { idKhoiKichHoat = "khoiHienThi_6"; }
-            
-            if(idKhoiKichHoat) document.getElementById(idKhoiKichHoat).classList.add('active');
+            const khoiActive = document.getElementById('khoi_' + loai);
+            if(khoiActive) khoiActive.style.display = 'block';
             document.getElementById('thanhCongCu').style.display = 'grid';
             
-            if (typeof KET_NOI !== 'undefined') {
-                if(!document.getElementById('cqChuQuan').value) document.getElementById('cqChuQuan').value = KET_NOI.CQ_CHU_QUAN || "";
-                if(!document.getElementById('tenToChuc').value) document.getElementById('tenToChuc').value = KET_NOI.TEN_TO_CHUC || "";
-                if(!document.getElementById('noiBanHanh').value) document.getElementById('noiBanHanh').value = KET_NOI.NOI_BAN_HANH || "";
+            // Khóa/Mở nút Tính điểm
+            btnDanhGia.style.display = (loai === "1") ? "block" : "none";
+
+            // Khóa/Mở nút Trợ lý AI theo đúng yêu cầu
+            if (loai === "1" || loai === "2" || loai === "8") {
+                btnAI.disabled = false;
+                btnAI.title = "Kích hoạt AI tổng hợp dữ liệu";
+            } else {
+                btnAI.disabled = true;
+                btnAI.title = "Biểu mẫu này không hỗ trợ AI";
             }
-            if(!document.getElementById('ngayGioThucHien').value) {
-                const now = new Date(); now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-                document.getElementById('ngayGioThucHien').value = now.toISOString().slice(0,16);
-            }
-            
-            document.getElementById('btnDanhGia').disabled = (loai !== "1");
         } else {
             document.getElementById('thanhCongCu').style.display = 'none';
         }
@@ -397,24 +494,20 @@
     }
 
     function layToanBoDuLieuGiaoDien() {
-        const duLieu = {}; const labels = {};
-        document.querySelectorAll('.dynamic-block.active .form-group, .dynamic-block.active td').forEach(group => {
-            const labelEl = group.querySelector('label');
-            const inputEl = group.querySelector('input, textarea, select');
-            if (inputEl && inputEl.id) {
-                duLieu[inputEl.id] = inputEl.value;
-                if(labelEl) labels[inputEl.id] = labelEl.innerText.replace(':', '').trim();
-                else labels[inputEl.id] = inputEl.id;
-            }
-        });
-        for (let i = 1; i <= 12; i++) {
-            const el = document.getElementById('Diem_TC' + i);
-            if(el) {
-                duLieu[el.id] = el.value;
-                labels[el.id] = "Điểm tiêu chí " + i;
-            }
+        const loai = document.getElementById('loaiVanBan').value;
+        const activeKhoi = document.getElementById('khoi_' + loai);
+        const data = {}; const labels = {};
+        
+        if (activeKhoi) {
+            activeKhoi.querySelectorAll('input, textarea, select').forEach(el => {
+                if (el.dataset.key) {
+                    data[el.dataset.key] = el.value;
+                    const lbl = el.previousElementSibling;
+                    labels[el.dataset.key] = lbl ? lbl.innerText.replace(':', '').trim() : el.dataset.key;
+                }
+            });
         }
-        return { data: duLieu, labels: labels };
+        return { data: data, labels: labels };
     }
 
     function hienThiXemTruoc() {
@@ -422,7 +515,7 @@
         const kieuVanBan = document.getElementById('loaiVanBan').value;
         if (kieuVanBan === "0") return alert("Vui lòng chọn loại văn bản!");
 
-        let html = "<div style='margin-bottom: 10px;'><i>Dưới đây là các dữ liệu sẽ được điền vào File Word.</i></div><table class='preview-table'><tbody>";
+        let html = "<div style='margin-bottom: 10px;'><i>Dưới đây là các dữ liệu độc lập sẽ được điền vào File Word.</i></div><table class='preview-table'><tbody>";
         for (let idTruong in tapHopDuLieu.data) {
             let giaTri = tapHopDuLieu.data[idTruong].trim();
             if (giaTri !== "") html += `<tr><th>${tapHopDuLieu.labels[idTruong]}</th><td>${giaTri.replace(/\n/g, '<br>')}</td></tr>`;
@@ -446,57 +539,37 @@
             const duLieuJSON = JSON.parse(chuoiGoc);
             
             if (kieuVanBan === '1') {
-                if(document.getElementById('nhanXetUuDiem')) document.getElementById('nhanXetUuDiem').value = duLieuJSON.UuDiem || "";
-                if(document.getElementById('nhanXetHanChe')) document.getElementById('nhanXetHanChe').value = duLieuJSON.HanChe || "";
-                if(document.getElementById('nhanXetCaiTien')) document.getElementById('nhanXetCaiTien').value = duLieuJSON.CaiTien || "";
+                const oUu = document.getElementById('ketQuaUuDiem_1'); if(oUu) { oUu.value = duLieuJSON.UuDiem || ""; oUu.style.backgroundColor = "#dcfce7"; setTimeout(()=>oUu.style.backgroundColor="", 1500); }
+                const oHan = document.getElementById('ketQuaHanChe_1'); if(oHan) { oHan.value = duLieuJSON.HanChe || ""; oHan.style.backgroundColor = "#dcfce7"; setTimeout(()=>oHan.style.backgroundColor="", 1500); }
+                const oCai = document.getElementById('ketQuaCaiTien_1'); if(oCai) { oCai.value = duLieuJSON.CaiTien || ""; oCai.style.backgroundColor = "#dcfce7"; setTimeout(()=>oCai.style.backgroundColor="", 1500); }
                 
+                const khoi1 = document.getElementById('khoi_1');
                 for (let i = 1; i <= 12; i++) {
-                    let idTruong = 'Diem_TC' + i;
-                    let oNhapDiem = document.getElementById(idTruong);
-                    if(oNhapDiem && duLieuJSON[idTruong] !== undefined) {
-                        oNhapDiem.value = duLieuJSON[idTruong];
+                    let oNhapDiem = khoi1.querySelector(`input[data-key="Diem_TC${i}"]`);
+                    if(oNhapDiem && duLieuJSON['Diem_TC' + i] !== undefined) {
+                        oNhapDiem.value = duLieuJSON['Diem_TC' + i];
                         oNhapDiem.style.backgroundColor = "#dcfce7";
                         setTimeout(() => { oNhapDiem.style.backgroundColor = ""; }, 1500);
                     }
                 }
-                tinhTongDiemThanhPhan();
-                alert("✨ Trợ lý AI đã hoàn tất phân tích và chấm điểm dự kiến.");
-                
+                tinhTongDiemThanhPhan(1);
+                alert("✨ Trợ lý AI đã hoàn tất phân tích và chấm điểm.");
             } 
             else if (kieuVanBan === '2') {
-                let oKetLuan = document.getElementById('ketLuanChung');
+                let oKetLuan = document.getElementById('ketQuaKetLuan_2');
                 if (oKetLuan) {
                     oKetLuan.value = duLieuJSON.KetLuan || "";
-                    oKetLuan.style.transition = "background-color 0.4s";
                     oKetLuan.style.backgroundColor = "#dcfce7"; 
                     setTimeout(() => { oKetLuan.style.backgroundColor = "#fbfbfb"; }, 1500);
                 }
-                alert("✨ Trợ lý AI đã hoàn tất việc đúc kết biên bản sự việc.");
-            } 
-            else if (kieuVanBan === '11') {
-                let oDuThao = document.getElementById('ketLuanQuyetDinh');
-                if (oDuThao) {
-                    oDuThao.value = duLieuJSON.NoiDungQuyetDinh || "";
-                    oDuThao.style.transition = "background-color 0.4s";
-                    oDuThao.style.backgroundColor = "#dcfce7"; 
-                    setTimeout(() => { oDuThao.style.backgroundColor = "#fbfbfb"; }, 1500);
-                }
-                alert("✨ Trợ lý AI đã dự thảo xong nội dung Quyết định.");
+                alert("✨ Trợ lý AI đã tổng hợp xong biên bản.");
             }
-            // NÂNG CẤP: Chỉnh lại đích đến cho Kế hoạch kiểm tra Đảng
-            else if (kieuVanBan === '12') {
-                let oKeHoach = document.getElementById('noiDungKiemTraDang_KH');
-                if (oKeHoach) {
-                    oKeHoach.value = duLieuJSON.NoiDungKiemTra || "";
-                    oKeHoach.style.transition = "background-color 0.4s";
-                    oKeHoach.style.backgroundColor = "#fce7f3"; 
-                    setTimeout(() => { oKeHoach.style.backgroundColor = "#fbfbfb"; }, 1500);
-                }
-                alert("✨ Trợ lý AI đã soạn thảo xong Nội dung kiểm tra, giám sát.");
-            }
-            else {
-                if(document.getElementById('bcUuDiem')) document.getElementById('bcUuDiem').value = duLieuJSON.UuDiem || "";
-                if(document.getElementById('bcKhuyetDiem')) document.getElementById('bcKhuyetDiem').value = (duLieuJSON.HanChe || "") + "\n* Cải tiến: " + (duLieuJSON.CaiTien || "");
+            else if (kieuVanBan === '8') {
+                let oUu = document.getElementById('ketQuaUuDiem_8');
+                let oKhuyet = document.getElementById('ketQuaKhuyetDiem_8');
+                if (oUu) { oUu.value = duLieuJSON.UuDiem || ""; oUu.style.backgroundColor = "#dcfce7"; setTimeout(() => oUu.style.backgroundColor = "#fbfbfb", 1500); }
+                if (oKhuyet) { oKhuyet.value = duLieuJSON.HanChe || ""; oKhuyet.style.backgroundColor = "#fecaca"; setTimeout(() => oKhuyet.style.backgroundColor = "#fbfbfb", 1500); }
+                alert("✨ Trợ lý AI đã bóc tách xong ý kiến chi bộ.");
             }
         } catch(e) { alert("Trợ lý AI trả về sai định dạng. Chi tiết: " + e.message + "\n\nChuỗi nhận được:\n" + ketQuaTraVe); }
     }
@@ -516,29 +589,16 @@
             let noiDung = ""; let chuoiPhanLoai = "";
             
             if (kieuVanBan === '1') {
-                noiDung = document.getElementById('noiDungQuanSat') ? document.getElementById('noiDungQuanSat').value : "";
+                noiDung = document.getElementById('noiDungTruyenAI_1') ? document.getElementById('noiDungTruyenAI_1').value : "";
                 chuoiPhanLoai = "Phiếu đánh giá tiết dạy sư phạm";
             } 
             else if (kieuVanBan === '2') {
-                noiDung = document.getElementById('noiDungChiTietSVK') ? document.getElementById('noiDungChiTietSVK').value : "";
+                noiDung = document.getElementById('noiDungTruyenAI_2') ? document.getElementById('noiDungTruyenAI_2').value : "";
                 chuoiPhanLoai = "Biên bản hành chính sự việc";
             } 
-            else if (kieuVanBan === '11') {
-                noiDung = document.getElementById('tomTatQuyetDinh') ? document.getElementById('tomTatQuyetDinh').value : "";
-                chuoiPhanLoai = "Quyết định hành chính";
-            }
-            // NÂNG CẤP: Chỉnh lại dữ liệu đầu vào cho Kế hoạch kiểm tra Đảng
-            else if (kieuVanBan === '12') {
-                noiDung = document.getElementById('tomTatKeHoachDang') ? document.getElementById('tomTatKeHoachDang').value : "";
-                chuoiPhanLoai = "Kế hoạch kiểm tra Đảng";
-            }
-            else if (["3", "5", "6", "9", "10"].includes(kieuVanBan)) {
-                noiDung = document.getElementById('noiDungKiemTraDang') ? document.getElementById('noiDungKiemTraDang').value : "";
-                chuoiPhanLoai = "Nội dung kiểm tra Đảng viên";
-            } else if (["4", "7", "8"].includes(kieuVanBan)) {
-                let gt = document.getElementById('giaiTrinhChiTiet') ? document.getElementById('giaiTrinhChiTiet').value : "";
-                let tt = document.getElementById('ketQuaThamTra') ? document.getElementById('ketQuaThamTra').value : "";
-                noiDung = gt + "\n\n" + tt; chuoiPhanLoai = "Báo cáo giải trình/thẩm tra Đảng viên";
+            else if (kieuVanBan === '8') {
+                noiDung = document.getElementById('noiDungTruyenAI_8') ? document.getElementById('noiDungTruyenAI_8').value : "";
+                chuoiPhanLoai = "Biên bản họp chi bộ";
             }
 
             if (!noiDung.trim()) return alert("Khung nhập liệu đang trống, AI không có dữ liệu để đọc!");
@@ -549,17 +609,14 @@
             if (laMoiTruongGoogle) {
                 google.script.run
                     .withSuccessHandler(function(ketQuaTraVe) { clearTimeout(boDemThoiGian); hienThiTai("", false); dieuPhoiKetQuaAI(ketQuaTraVe, kieuVanBan); })
-                    .withFailureHandler(function(loiMang) { clearTimeout(boDemThoiGian); hienThiTai("", false); alert("Lỗi kết nối nội bộ GAS: " + loiMang.message); })
+                    .withFailureHandler(function(loiMang) { clearTimeout(boDemThoiGian); hienThiTai("", false); alert("Lỗi kết nối: " + loiMang.message); })
                     .phanTichUuKhuyetDiem(noiDung, chuoiPhanLoai);
             } 
             else if (typeof KET_NOI !== 'undefined' && KET_NOI.URL_API_BACKEND) {
                 const dongGoi = { hanhDong: 'PhanTichAI', noiDung: noiDung, chuoiPhanLoai: chuoiPhanLoai };
-                fetch(KET_NOI.URL_API_BACKEND, {
-                    method: 'POST', body: JSON.stringify(dongGoi), headers: { 'Content-Type': 'text/plain;charset=utf-8' }
-                })
-                .then(res => res.text())
-                .then(ketQuaTraVe => { clearTimeout(boDemThoiGian); hienThiTai("", false); dieuPhoiKetQuaAI(ketQuaTraVe, kieuVanBan); })
-                .catch(loiMang => { clearTimeout(boDemThoiGian); hienThiTai("", false); alert("Lỗi đường truyền API: " + loiMang.message); });
+                fetch(KET_NOI.URL_API_BACKEND, { method: 'POST', body: JSON.stringify(dongGoi), headers: { 'Content-Type': 'text/plain;charset=utf-8' } })
+                .then(res => res.text()).then(ketQuaTraVe => { clearTimeout(boDemThoiGian); hienThiTai("", false); dieuPhoiKetQuaAI(ketQuaTraVe, kieuVanBan); })
+                .catch(loiMang => { clearTimeout(boDemThoiGian); hienThiTai("", false); alert("Lỗi mạng: " + loiMang.message); });
             }
         }
 
@@ -570,50 +627,39 @@
             boDemThoiGian = setTimeout(function() { hienThiTai("", false); alert("Mất quá nhiều thời gian kết xuất File!"); }, 60000);
 
             const duLieu = layToanBoDuLieuGiaoDien().data;
-            const dongGoi = { 
-                hanhDong: loaiHanhDong, 
-                dongGoiTruyenLen: { idMau: idMauVanBan, duLieuForm: duLieu } 
-            };
+            const dongGoi = { hanhDong: loaiHanhDong, dongGoiTruyenLen: { idMau: idMauVanBan, duLieuForm: duLieu } };
             
             if (laMoiTruongGoogle) {
                 google.script.run
                     .withSuccessHandler(function(phanHoi) {
                         clearTimeout(boDemThoiGian); hienThiTai("", false);
-                        if (phanHoi.trangThai === "ThanhCong") {
-                            if(confirm(phanHoi.thongBao + "\n\nBấm OK để mở File Word.")) window.open(phanHoi.lienKet, '_blank');
-                        } else alert(phanHoi.thongBao);
+                        if (phanHoi.trangThai === "ThanhCong") { if(confirm(phanHoi.thongBao + "\n\nBấm OK để mở File Word.")) window.open(phanHoi.lienKet, '_blank'); } 
+                        else alert(phanHoi.thongBao);
                     })
                     .withFailureHandler(function(loiMang) { clearTimeout(boDemThoiGian); hienThiTai("", false); alert("Lỗi lưu trữ: " + loiMang.message); })
                     .xuLyLuuHoSo(dongGoi.dongGoiTruyenLen);
             } else if (typeof KET_NOI !== 'undefined' && KET_NOI.URL_API_BACKEND) {
-                fetch(KET_NOI.URL_API_BACKEND, {
-                    method: 'POST', body: JSON.stringify(dongGoi), headers: { 'Content-Type': 'text/plain;charset=utf-8' }
-                })
+                fetch(KET_NOI.URL_API_BACKEND, { method: 'POST', body: JSON.stringify(dongGoi), headers: { 'Content-Type': 'text/plain;charset=utf-8' } })
                 .then(res => res.text()) 
                 .then(textPhanHoi => {
                     clearTimeout(boDemThoiGian); hienThiTai("", false);
                     try {
                         const phanHoi = JSON.parse(textPhanHoi); 
-                        if (phanHoi.trangThai === "ThanhCong") {
-                            if(confirm(phanHoi.thongBao + "\n\nBấm OK để mở File Word.")) window.open(phanHoi.lienKet, '_blank');
-                        } else alert("Lỗi từ Máy chủ GAS: " + phanHoi.thongBao);
-                    } catch(e) {
-                        alert("Hệ thống trả về lỗi. F12 để xem chi tiết.");
-                        console.error("LỖI GHI HỒ SƠ TỪ GOOGLE:", textPhanHoi);
-                    }
+                        if (phanHoi.trangThai === "ThanhCong") { if(confirm(phanHoi.thongBao + "\n\nBấm OK để mở File Word.")) window.open(phanHoi.lienKet, '_blank'); } 
+                        else alert("Lỗi từ Máy chủ GAS: " + phanHoi.thongBao);
+                    } catch(e) { alert("Hệ thống trả về lỗi. F12 để xem chi tiết."); console.error(textPhanHoi); }
                 })
-                .catch(loiMang => { 
-                    clearTimeout(boDemThoiGian); hienThiTai("", false); alert("Lỗi kết nối mạng: " + loiMang.message); 
-                });
+                .catch(loiMang => { clearTimeout(boDemThoiGian); hienThiTai("", false); alert("Lỗi kết nối mạng: " + loiMang.message); });
             }
         }
     }
 
     function lamMoiForm() {
         if(confirm("Xóa toàn bộ dữ liệu hiện tại?")) {
-            document.querySelectorAll('input:not([type="datetime-local"]), textarea').forEach(o => o.value = '');
-            document.getElementById('loaiVanBan').value = "0";
-            chuyenDoiBieuMau();
+            const loai = document.getElementById('loaiVanBan').value;
+            if(loai !== "0") {
+                document.getElementById('khoi_' + loai).querySelectorAll('input:not([type="datetime-local"]), textarea').forEach(o => o.value = '');
+            }
         }
     }
 </script>

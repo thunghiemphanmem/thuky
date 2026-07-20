@@ -201,7 +201,7 @@
 
 <script>
     // =========================================================================
-    // KHỐI 5: JAVASCRIPT - TỰ ĐỘNG NHẬN DIỆN & TƯƠNG THÍCH ĐA MÔI TRƯỜNG
+    // KHỐI 5: JAVASCRIPT - TỰ ĐỘNG NHẬN DIỆN & ĐÓNG GÓI ID ĐỘNG TỪ ketnoi.js
     // =========================================================================
 
     function khoiTaoOChonVanBan() {
@@ -285,11 +285,10 @@
     function xacNhanXuatWord() { dongXemTruoc(); chayNghiepVu('XuatWord'); }
 
     // ==========================================
-    // KHỐI QUẢN LÝ TÁC VỤ & NHẬN DIỆN ĐƯỜNG TRUYỀN
+    // KHỐI QUẢN LÝ TÁC VỤ & ĐIỀU HƯỚNG MÁY CHỦ
     // ==========================================
     let boDemThoiGian; 
 
-    // Hàm phụ trợ: Bóc tách JSON sau khi máy chủ phản hồi
     function dieuPhoiKetQuaAI(ketQuaTraVe, kieuVanBan) {
         if (ketQuaTraVe.indexOf("LỖI") === 0) return alert(ketQuaTraVe);
         try {
@@ -315,7 +314,6 @@
             if (mauTonTai) idMauVanBan = mauTonTai.idMau;
         }
 
-        // Tự động kiểm tra xem giao diện đang chạy trên GAS hay Github Pages
         const laMoiTruongGoogle = (typeof google !== 'undefined' && google.script && google.script.run);
 
         // --- TÁC VỤ 1: TRỢ LÝ AI ---
@@ -337,57 +335,44 @@
             if (!noiDung.trim()) return alert("Khung nhập liệu đang trống, AI không có dữ liệu để đọc!");
 
             hienThiTai("Trợ lý AI đang phân tích dữ liệu...", true);
-            
-            boDemThoiGian = setTimeout(function() {
-                hienThiTai("", false);
-                alert("Lỗi 408: Hệ thống phản hồi quá chậm (vượt quá 60 giây).");
-            }, 60000); // Đã nâng cấp thời gian chờ lên 60 giây
+            boDemThoiGian = setTimeout(function() { hienThiTai("", false); alert("Lỗi 408: Hệ thống phản hồi quá chậm (vượt quá 60 giây)."); }, 60000);
 
             if (laMoiTruongGoogle) {
-                // Đang chạy trên nền tảng Google Apps Script
                 google.script.run
-                    .withSuccessHandler(function(ketQuaTraVe) {
-                        clearTimeout(boDemThoiGian); hienThiTai("", false);
-                        dieuPhoiKetQuaAI(ketQuaTraVe, kieuVanBan);
-                    })
-                    .withFailureHandler(function(loiMang) {
-                        clearTimeout(boDemThoiGian); hienThiTai("", false);
-                        alert("Lỗi kết nối nội bộ GAS: " + loiMang.message);
-                    })
+                    .withSuccessHandler(function(ketQuaTraVe) { clearTimeout(boDemThoiGian); hienThiTai("", false); dieuPhoiKetQuaAI(ketQuaTraVe, kieuVanBan); })
+                    .withFailureHandler(function(loiMang) { clearTimeout(boDemThoiGian); hienThiTai("", false); alert("Lỗi kết nối nội bộ GAS: " + loiMang.message); })
                     .phanTichUuKhuyetDiem(noiDung, chuoiPhanLoai);
             } 
             else if (typeof KET_NOI !== 'undefined' && KET_NOI.URL_API_BACKEND) {
-                // Đang chạy độc lập trên Github Pages
                 const dongGoi = { hanhDong: 'PhanTichAI', noiDung: noiDung, chuoiPhanLoai: chuoiPhanLoai };
                 fetch(KET_NOI.URL_API_BACKEND, {
-                    method: 'POST',
-                    body: JSON.stringify(dongGoi),
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+                    method: 'POST', body: JSON.stringify(dongGoi), headers: { 'Content-Type': 'text/plain;charset=utf-8' }
                 })
                 .then(res => res.text())
-                .then(ketQuaTraVe => {
-                    clearTimeout(boDemThoiGian); hienThiTai("", false);
-                    dieuPhoiKetQuaAI(ketQuaTraVe, kieuVanBan);
-                })
-                .catch(loiMang => {
-                    clearTimeout(boDemThoiGian); hienThiTai("", false);
-                    alert("Lỗi đường truyền API Github Pages: Bạn đã Triển khai (Deploy) bản mới ở file Code.gs chưa?\nChi tiết: " + loiMang.message);
-                });
-            } else {
-                clearTimeout(boDemThoiGian); hienThiTai("", false);
-                alert("Lỗi Cấu Hình: Chưa khai báo URL_API_BACKEND trong tệp ketnoi.js.");
+                .then(ketQuaTraVe => { clearTimeout(boDemThoiGian); hienThiTai("", false); dieuPhoiKetQuaAI(ketQuaTraVe, kieuVanBan); })
+                .catch(loiMang => { clearTimeout(boDemThoiGian); hienThiTai("", false); alert("Lỗi đường truyền API: " + loiMang.message); });
             }
         }
 
-        // --- TÁC VỤ 2: TẠO VĂN BẢN ---
+        // --- TÁC VỤ 2: TẠO VĂN BẢN (CHÚ Ý NÂNG CẤP LẤY ID ĐỘNG) ---
         if (loaiHanhDong === 'LuuHoSo' || loaiHanhDong === 'XuatWord') {
             if(!idMauVanBan) return alert("Hệ thống chưa tìm thấy ID Mẫu!");
             
+            // Lấy ID_THU_MUC_LUU trực tiếp từ tệp ketnoi.js của bạn 
+            // (*Chú ý: Nếu trong ketnoi.js bạn đặt tên biến khác như ID_THU_MUC_LUU_TRU, hãy sửa chữ ở dòng bên dưới cho khớp*)
+            const idThuMucLuu = (typeof KET_NOI !== 'undefined' && KET_NOI.ID_THU_MUC_LUU_TRU) ? KET_NOI.ID_THU_MUC_LUU_TRU : (KET_NOI.ID_THU_MUC_LUU || "");
+            
+            if(!idThuMucLuu) return alert("Lỗi rỗng ID: Không tìm thấy ID Thư mục lưu trữ trong file ketnoi.js. Hãy kiểm tra lại ma trận phân quyền!");
+
             hienThiTai(`Hệ thống đang tiến hành điền dữ liệu...`, true);
             boDemThoiGian = setTimeout(function() { hienThiTai("", false); alert("Mất quá nhiều thời gian kết xuất File!"); }, 60000);
 
             const duLieu = layToanBoDuLieuGiaoDien().data;
-            const dongGoi = { hanhDong: loaiHanhDong, formId: kieuVanBan, idMau: idMauVanBan, dongGoiTruyenLen: { idMau: idMauVanBan, duLieuForm: duLieu } };
+            // Đóng gói truyền lên máy chủ cả ID Mẫu và ID Thư Mục Lưu
+            const dongGoi = { 
+                hanhDong: loaiHanhDong, 
+                dongGoiTruyenLen: { idMau: idMauVanBan, idThuMucLuu: idThuMucLuu, duLieuForm: duLieu } 
+            };
             
             if (laMoiTruongGoogle) {
                 google.script.run
@@ -403,14 +388,22 @@
                 fetch(KET_NOI.URL_API_BACKEND, {
                     method: 'POST', body: JSON.stringify(dongGoi), headers: { 'Content-Type': 'text/plain;charset=utf-8' }
                 })
-                .then(res => res.json())
-                .then(phanHoi => {
+                .then(res => res.text()) 
+                .then(textPhanHoi => {
                     clearTimeout(boDemThoiGian); hienThiTai("", false);
-                    if (phanHoi.trangThai === "ThanhCong") {
-                        if(confirm(phanHoi.thongBao + "\n\nBấm OK để mở File Word.")) window.open(phanHoi.lienKet, '_blank');
-                    } else alert(phanHoi.thongBao);
+                    try {
+                        const phanHoi = JSON.parse(textPhanHoi); 
+                        if (phanHoi.trangThai === "ThanhCong") {
+                            if(confirm(phanHoi.thongBao + "\n\nBấm OK để mở File Word.")) window.open(phanHoi.lienKet, '_blank');
+                        } else alert("Lỗi từ Máy chủ GAS: " + phanHoi.thongBao);
+                    } catch(e) {
+                        alert("Hệ thống trả về lỗi sập nguồn. F12 để xem chi tiết.");
+                        console.error("LỖI GHI HỒ SƠ TỪ GOOGLE:", textPhanHoi);
+                    }
                 })
-                .catch(loiMang => { clearTimeout(boDemThoiGian); hienThiTai("", false); alert("Lỗi kết nối API lưu trữ: " + loiMang.message); });
+                .catch(loiMang => { 
+                    clearTimeout(boDemThoiGian); hienThiTai("", false); alert("Lỗi kết nối mạng: " + loiMang.message); 
+                });
             }
         }
     }

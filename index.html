@@ -201,7 +201,7 @@
 
 <script>
     // =========================================================================
-    // KHỐI 5: JAVASCRIPT - TỰ ĐỘNG NHẬN DIỆN & ĐÓNG GÓI ID ĐỘNG TỪ ketnoi.js
+    // KHỐI 5: JAVASCRIPT - QUẢN LÝ TÁC VỤ & ĐIỀU HƯỚNG MÁY CHỦ
     // =========================================================================
 
     function khoiTaoOChonVanBan() {
@@ -285,7 +285,7 @@
     function xacNhanXuatWord() { dongXemTruoc(); chayNghiepVu('XuatWord'); }
 
     // ==========================================
-    // KHỐI QUẢN LÝ TÁC VỤ & ĐIỀU HƯỚNG MÁY CHỦ
+    // KHỐI GIAO TIẾP MÁY CHỦ
     // ==========================================
     let boDemThoiGian; 
 
@@ -354,24 +354,20 @@
             }
         }
 
-        // --- TÁC VỤ 2: TẠO VĂN BẢN (CHÚ Ý NÂNG CẤP LẤY ID ĐỘNG) ---
+        // --- TÁC VỤ 2: TẠO VĂN BẢN (ĐÃ FIX SẠCH) ---
         if (loaiHanhDong === 'LuuHoSo' || loaiHanhDong === 'XuatWord') {
             if(!idMauVanBan) return alert("Hệ thống chưa tìm thấy ID Mẫu!");
-            
-            // Lấy ID_THU_MUC_LUU trực tiếp từ tệp ketnoi.js của bạn 
-            // (*Chú ý: Nếu trong ketnoi.js bạn đặt tên biến khác như ID_THU_MUC_LUU_TRU, hãy sửa chữ ở dòng bên dưới cho khớp*)
-            const idThuMucLuu = (typeof KET_NOI !== 'undefined' && KET_NOI.ID_THU_MUC_LUU_TRU) ? KET_NOI.ID_THU_MUC_LUU_TRU : (KET_NOI.ID_THU_MUC_LUU || "");
-            
-            if(!idThuMucLuu) return alert("Lỗi rỗng ID: Không tìm thấy ID Thư mục lưu trữ trong file ketnoi.js. Hãy kiểm tra lại ma trận phân quyền!");
 
             hienThiTai(`Hệ thống đang tiến hành điền dữ liệu...`, true);
             boDemThoiGian = setTimeout(function() { hienThiTai("", false); alert("Mất quá nhiều thời gian kết xuất File!"); }, 60000);
 
             const duLieu = layToanBoDuLieuGiaoDien().data;
-            // Đóng gói truyền lên máy chủ cả ID Mẫu và ID Thư Mục Lưu
+            
+            // LỖI ĐÃ SỬA: Chấm dứt việc giao diện phải đi tìm ID Thư mục lưu trữ. 
+            // Giao diện giờ chỉ làm đúng chức năng của nó là gửi idMau và dữ liệu nhập.
             const dongGoi = { 
                 hanhDong: loaiHanhDong, 
-                dongGoiTruyenLen: { idMau: idMauVanBan, idThuMucLuu: idThuMucLuu, duLieuForm: duLieu } 
+                dongGoiTruyenLen: { idMau: idMauVanBan, duLieuForm: duLieu } 
             };
             
             if (laMoiTruongGoogle) {

@@ -103,7 +103,7 @@
         </div>
         <div class="form-group">
             <label>Nội dung quan sát / Ghi chép diễn biến:</label>
-            <textarea id="noiDungQuanSat" placeholder="Ghi chép các hoạt động để AI hỗ trợ phân tích..."></textarea>
+            <textarea id="noiDungQuanSat" placeholder="Ghi chép các hoạt động của Giáo viên & Học sinh để AI hỗ trợ bóc tách Nhận xét..."></textarea>
         </div>
         <div class="grid-3" style="background: #f0fdf4; padding: 15px; border-radius: 6px; border: 1px solid #bbf7d0; margin-top: 10px;">
             <div class="form-group"><label style="color:#166534;">Nhận xét Ưu điểm:</label><textarea id="nhanXetUuDiem"></textarea></div>
@@ -119,7 +119,8 @@
     <!-- MẪU 2: BIÊN BẢN SỰ VIỆC CHUNG (Loại 2) -->
     <div id="khoiHienThi_2" class="dynamic-block">
         <div class="section-title">II. NỘI DUNG SỰ VIỆC</div>
-        <div class="grid-2">
+        <div class="grid-3">
+            <div class="form-group"><label>Số Văn bản / Biên bản:</label><input type="text" id="soVanBan" placeholder="VD: 12/BB-CB"></div>
             <div class="form-group"><label>Tên sự việc:</label><input type="text" id="tenSuViec"></div>
             <div class="form-group"><label>Số lượng bản in (Lưu):</label><input type="number" id="soLuongBanIn" placeholder="VD: 02"></div>
         </div>
@@ -176,7 +177,7 @@
             <div class="form-group"><label>Khen thưởng:</label><textarea id="khenThuong" style="min-height: 60px;"></textarea></div>
             <div class="form-group"><label>Kỷ luật:</label><textarea id="kyLuat" style="min-height: 60px;"></textarea></div>
         </div>
-        <div class="form-group"><label>Nội dung Báo cáo / Giải trình chi tiết:</label><textarea id="giaiTrinhChiTiet" style="min-height: 120px;"></textarea></div>
+        <div class="form-group"><label>Nội dung Báo cáo / Giải trình chi tiết:</label><textarea id="giaiTrinhChiTiet" style="min-height: 120px;" placeholder="Ghi nhận lại toàn bộ diễn biến giải trình..."></textarea></div>
         <div class="form-group"><label>Kết quả thẩm tra, xác minh (Dành cho Tổ):</label><textarea id="ketQuaThamTra" style="min-height: 100px;"></textarea></div>
         <div class="form-group"><label>Kiến nghị / Đề xuất:</label><textarea id="kienNghi" style="min-height: 60px;"></textarea></div>
         
@@ -191,11 +192,9 @@
     <!-- ========================================================= -->
     <div class="action-bar" id="thanhCongCu" style="display: none;">
         <button class="btn btn-blue" onclick="chayNghiepVu('DanhGia')" id="btnDanhGia">Tính Điểm ĐG</button>
-        <button class="btn btn-sky" onclick="chayNghiepVu('PhanTichAI')" id="btnAI">Phân Tích AI</button>
-        <button class="btn btn-orange" onclick="chayNghiepVu('DuThao')" id="btnDuThao">Lưu Dự Thảo</button>
-        <button class="btn btn-green" onclick="chayNghiepVu('LuuHoSo')" id="btnHoSo">Chốt Hồ Sơ</button>
-        <button class="btn btn-purple" onclick="chayNghiepVu('XuatWord')" id="btnWord">Xuất File Word</button>
-        <button class="btn btn-red" onclick="lamMoiForm()">Tạo Mới</button>
+        <button class="btn btn-sky" onclick="chayNghiepVu('PhanTichAI')" id="btnAI">Trợ Lý AI Phân Tích</button>
+        <button class="btn btn-green" onclick="chayNghiepVu('LuuHoSo')" id="btnHoSo">Tạo Văn Bản Đích</button>
+        <button class="btn btn-red" onclick="lamMoiForm()">Làm Mới Biểu Mẫu</button>
     </div>
 
     <!-- CHỮ KÝ BẢN QUYỀN TRANG -->
@@ -207,7 +206,7 @@
 
 <script>
     // =========================================================
-    // KHỐI 5: LOGIC HOẠT ĐỘNG JAVASCRIPT
+    // KHỐI 5: LOGIC HOẠT ĐỘNG JAVASCRIPT ĐÃ CẬP NHẬT 10 BIỂU MẪU
     // =========================================================
 
     function khoiTaoOChonVanBan() {
@@ -227,15 +226,6 @@
         khoiTaoOChonVanBan();
     });
 
-    function layChuoiNgayThangVietNam(ngayGioISO) {
-        if (!ngayGioISO) return "";
-        const dateObj = new Date(ngayGioISO);
-        const ngay = dateObj.getDate().toString().padStart(2, '0');
-        const thang = (dateObj.getMonth() + 1).toString().padStart(2, '0');
-        const nam = dateObj.getFullYear();
-        return `${ngay} tháng ${thang} năm ${nam}`;
-    }
-
     function chuyenDoiBieuMau() {
         const loai = document.getElementById('loaiVanBan').value;
         const cacKhoi = document.querySelectorAll('.dynamic-block');
@@ -245,7 +235,6 @@
         if (loai !== "0") {
             document.getElementById('khoiChung').classList.add('active');
             
-            // XỬ LÝ NHÓM KHỐI HIỂN THỊ THÔNG MINH CHO 10 BIỂU MẪU
             let idKhoiKichHoat = "";
             if (loai === "1") { idKhoiKichHoat = "khoiHienThi_1"; }
             else if (loai === "2") { idKhoiKichHoat = "khoiHienThi_2"; }
@@ -283,6 +272,19 @@
         boDem.style.display = trangThai ? 'flex' : 'none';
     }
 
+    /**
+     * Hàm quét lấy toàn bộ dữ liệu có trên giao diện để gửi đi
+     */
+    function layToanBoDuLieuForm() {
+        const duLieu = {};
+        document.querySelectorAll('input, textarea, select').forEach(truong => {
+            if (truong.id) { 
+                duLieu[truong.id] = truong.value; 
+            }
+        });
+        return duLieu;
+    }
+
     function chayNghiepVu(loaiHanhDong) {
         const kieuVanBan = document.getElementById('loaiVanBan').value;
         let idMauVanBan = "";
@@ -292,6 +294,9 @@
             if(mauTonTai) idMauVanBan = mauTonTai.idMau;
         }
 
+        // ==========================================
+        // TÁC VỤ 1: TRỢ LÝ AI TRÍCH XUẤT
+        // ==========================================
         if (loaiHanhDong === 'PhanTichAI') {
             let noiDung = "";
             let chuoiPhanLoai = "";
@@ -303,56 +308,92 @@
                 noiDung = document.getElementById('noiDungKiemTraDang').value;
                 chuoiPhanLoai = "Nội dung kiểm tra/giám sát Đảng viên";
             } else if (["4", "7", "8"].includes(kieuVanBan)) {
-                noiDung = document.getElementById('giaiTrinhChiTiet').value + "\n" + document.getElementById('ketQuaThamTra').value;
+                noiDung = document.getElementById('giaiTrinhChiTiet').value + "\n\n" + document.getElementById('ketQuaThamTra').value;
                 chuoiPhanLoai = "Báo cáo giải trình/thẩm tra Đảng viên";
             }
 
             if (!noiDung.trim()) {
-                alert("Vui lòng nhập nội dung diễn biến/giải trình trước khi AI phân tích!");
+                alert("Vui lòng nhập nội dung (diễn biến/báo cáo) vào khung trước khi kích hoạt Trợ lý AI!");
                 return;
             }
 
-            hienThiTai("Trợ lý AI đang bóc tách Ưu/Khuyết điểm...", true);
+            hienThiTai("Trợ lý AI đang đọc nội dung và tự động gán kết quả...", true);
             
-            google.script.run.withSuccessHandler(function(ketQuaTraVe) {
-                hienThiTai("", false);
-                try {
-                    const duLieuJSON = JSON.parse(ketQuaTraVe.replace(/```json/g, '').replace(/```/g, '').trim());
-                    
-                    if (kieuVanBan === '1') {
-                        document.getElementById('nhanXetUuDiem').value = duLieuJSON.UuDiem || "";
-                        document.getElementById('nhanXetHanChe').value = duLieuJSON.HanChe || "";
-                        document.getElementById('nhanXetCaiTien').value = duLieuJSON.CaiTien || "";
-                    } else {
-                        document.getElementById('bcUuDiem').value = duLieuJSON.UuDiem || "";
-                        document.getElementById('bcKhuyetDiem').value = (duLieuJSON.HanChe || "") + "\n* Cải tiến: " + (duLieuJSON.CaiTien || "");
+            google.script.run
+                .withSuccessHandler(function(ketQuaTraVe) {
+                    hienThiTai("", false);
+                    if (ketQuaTraVe.indexOf("LỖI") === 0) {
+                        alert(ketQuaTraVe);
+                        return;
                     }
-                } catch(e) {
-                    alert("Có lỗi khi phân giải kết quả AI.");
-                }
-            }).phanTichUuKhuyetDiem(noiDung, chuoiPhanLoai);
+                    try {
+                        let chuoiGoc = ketQuaTraVe.replace(/```json/gi, '').replace(/```/g, '').trim();
+                        const duLieuJSON = JSON.parse(chuoiGoc);
+                        
+                        if (kieuVanBan === '1') {
+                            document.getElementById('nhanXetUuDiem').value = duLieuJSON.UuDiem || "";
+                            document.getElementById('nhanXetHanChe').value = duLieuJSON.HanChe || "";
+                            document.getElementById('nhanXetCaiTien').value = duLieuJSON.CaiTien || "";
+                        } else {
+                            document.getElementById('bcUuDiem').value = duLieuJSON.UuDiem || "";
+                            document.getElementById('bcKhuyetDiem').value = (duLieuJSON.HanChe || "") + "\n\n* Cải tiến đề xuất: " + (duLieuJSON.CaiTien || "");
+                        }
+                    } catch(e) {
+                        alert("Quá trình ép kiểu dữ liệu AI gặp sự cố. Trợ lý AI phản hồi sai định dạng.\n\nChi tiết lỗi: " + e.message);
+                    }
+                })
+                .withFailureHandler(function(loiMang) {
+                    hienThiTai("", false);
+                    alert("Kết nối máy chủ thất bại hoặc thời gian chờ quá lâu. Vui lòng thử lại!\nLỗi: " + loiMang.message);
+                })
+                .phanTichUuKhuyetDiem(noiDung, chuoiPhanLoai);
+                
             return;
         }
 
-        if (loaiHanhDong === 'XuatWord') {
+        // ==========================================
+        // TÁC VỤ 2: TẠO VĂN BẢN VÀ LƯU VÀO FOLDER CHỈ ĐỊNH
+        // ==========================================
+        if (loaiHanhDong === 'LuuHoSo' || loaiHanhDong === 'XuatWord') {
             if(!idMauVanBan) {
-                alert("Chưa cấu hình ID mẫu chuẩn cho văn bản này!");
+                alert("Chưa cấu hình ID mẫu chuẩn cho loại văn bản này!");
                 return;
             }
-            const ngayGioISO = document.getElementById('ngayGioThucHien').value;
-            const chuoiNgayThang = layChuoiNgayThangVietNam(ngayGioISO); 
-            
-            alert(`Đang khởi tạo File Word với ngày tháng chuẩn: ${chuoiNgayThang}. Lệnh sẽ gọi đến máy chủ kèm ID mẫu: ${idMauVanBan}`);
-            return;
-        }
 
-        hienThiTai(`Đang ghi dữ liệu (${loaiHanhDong})...`, true);
-        const dongGoiTruyenLen = { hanhDong: loaiHanhDong, formId: kieuVanBan, idMau: idMauVanBan };
-        
-        google.script.run.withSuccessHandler(function(phanHoi) {
-            hienThiTai("", false);
-            alert(phanHoi.thongBao);
-        }).xuLyLuuHoSo(dongGoiTruyenLen);
+            hienThiTai(`Hệ thống đang tiến hành kết xuất Dữ liệu và Lưu File...`, true);
+            
+            // Lệnh thu gom toàn bộ dữ liệu đang có trên màn hình
+            const duLieu = layToanBoDuLieuForm();
+            
+            // Đóng gói gửi máy chủ
+            const dongGoiTruyenLen = { 
+                hanhDong: loaiHanhDong, 
+                formId: kieuVanBan, 
+                idMau: idMauVanBan,
+                duLieuForm: duLieu
+            };
+            
+            google.script.run
+                .withSuccessHandler(function(phanHoi) {
+                    hienThiTai("", false);
+                    if (phanHoi.trangThai === "ThanhCong") {
+                        let textAlert = phanHoi.thongBao;
+                        if(phanHoi.lienKet) {
+                            textAlert += "\n\nBấm OK để mở trực tiếp văn bản vừa được hệ thống tạo.";
+                        }
+                        if(confirm(textAlert) && phanHoi.lienKet) {
+                            window.open(phanHoi.lienKet, '_blank');
+                        }
+                    } else {
+                        alert(phanHoi.thongBao);
+                    }
+                })
+                .withFailureHandler(function(loiMang) {
+                    hienThiTai("", false);
+                    alert("Lỗi lưu trữ: " + loiMang.message);
+                })
+                .xuLyLuuHoSo(dongGoiTruyenLen);
+        }
     }
 
     function lamMoiForm() {

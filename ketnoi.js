@@ -25,12 +25,12 @@ const KET_NOI = {
   // 5. MA TRẬN PHÂN QUYỀN TRUY CẬP HỆ THỐNG
   PHAN_QUYEN_TRUY_CAP: {
       'hoangngoclamlc@gmail.com': {
-          ID_SO_HOP: '1BIw2RIzpj79WDycb7DpyEyqN9lCswM4WYS3jDZtlXiA',
+          ID_SO_HOP: '1YikxnUKwmBg7Yf92bgsDCGk14xqSToBWdFTXcGXR0D4',
           ID_THU_MUC_LUU: '1imdsuJvIM1u2hyItdnxoUkJPCpvFaRdG',
           QUYEN_HAN: 'QuanTriToanQuyen'
       },
       'tulieuhopthanh@gmail.com': {
-          ID_SO_HOP: '14FPOA5brR6gUyz5gkvovE87fZkpWkQSrrtC-dJs_EqY', 
+          ID_SO_HOP: '1YikxnUKwmBg7Yf92bgsDCGk14xqSToBWdFTXcGXR0D4', 
           ID_THU_MUC_LUU: '1imdsuJvIM1u2hyItdnxoUkJPCpvFaRdG',
           QUYEN_HAN: 'ThanhVienSoanThao'
       }

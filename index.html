@@ -87,8 +87,8 @@
            ========================================================================= */
         .form-group input, .form-group select, .form-group textarea { 
             flex-grow: 1; width: 100%; padding: 4px 6px; 
-            border: none; /* XÓA BỎ KHUNG VIỀN BAO QUANH */
-            border-bottom: 1px solid #cbd5e1; /* CHỈ GIỮ LẠI ĐƯỜNG KẺ DƯỚI */
+            border: none; 
+            border-bottom: 1px solid #cbd5e1; 
             border-radius: 0; font-family: inherit; font-size: 11pt; background: transparent; 
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); box-sizing: border-box;
         }
@@ -216,33 +216,33 @@
                 <tbody>
                     <tr><td rowspan="4" style="font-weight: bold; text-align: center; background: #f8fafc;">1. Kế hoạch bài dạy</td>
                         <td>1. Mức độ phù hợp của các hoạt động học với mục tiêu...</td><td style="text-align: center;">1</td>
-                        <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC1" min="0" max="1" step="0.25" value="1" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
+                        <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC1" min="0" max="1" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
                     <tr><td>2. Mức độ rõ ràng, chính xác của mục tiêu, nội dung...</td><td style="text-align: center;">2</td>
-                        <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC2" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
+                        <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC2" min="0" max="2" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
                     <tr><td>3. Mức độ phù hợp của thiết bị dạy học và học liệu...</td><td style="text-align: center;">1</td>
-                        <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC3" min="0" max="1" step="0.25" value="1" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
+                        <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC3" min="0" max="1" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
                     <tr><td>4. Mức độ phù hợp của phương án kiểm tra, đánh giá...</td><td style="text-align: center;">2</td>
-                        <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC4" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
+                        <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC4" min="0" max="2" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
                     
                     <tr><td rowspan="4" style="font-weight: bold; text-align: center; background: #f8fafc;">2. Hoạt động của giáo viên</td>
                         <td>5. Mức độ chính xác, phù hợp, sinh động, hấp dẫn...</td><td style="text-align: center;">2</td>
-                        <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC5" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
+                        <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC5" min="0" max="2" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
                     <tr><td>6. Khả năng theo dõi, quan sát, phát hiện kịp thời...</td><td style="text-align: center;">1</td>
-                        <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC6" min="0" max="1" step="0.25" value="1" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
+                        <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC6" min="0" max="1" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
                     <tr><td>7. Mức độ phù hợp, hiệu quả của các biện pháp hỗ trợ...</td><td style="text-align: center;">2</td>
-                        <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC7" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
+                        <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC7" min="0" max="2" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
                     <tr><td>8. Mức độ chính xác, hiệu quả trong tổng hợp, phân tích...</td><td style="text-align: center;">2</td>
-                        <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC8" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
+                        <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC8" min="0" max="2" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
                     
                     <tr><td rowspan="4" style="font-weight: bold; text-align: center; background: #f8fafc;">3. Hoạt động của học sinh</td>
                         <td>9. Khả năng tiếp nhận và sẵn sàng thực hiện nhiệm vụ...</td><td style="text-align: center;">2</td>
-                        <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC9" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
+                        <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC9" min="0" max="2" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
                     <tr><td>10. Mức độ tích cực, chủ động, sáng tạo, hợp tác...</td><td style="text-align: center;">2</td>
-                        <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC10" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
+                        <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC10" min="0" max="2" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
                     <tr><td>11. Mức độ tham gia tích cực của học sinh trong trình bày...</td><td style="text-align: center;">2</td>
-                        <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC11" min="0" max="2" step="0.25" value="2" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
+                        <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC11" min="0" max="2" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
                     <tr><td>12. Mức độ đúng đắn, chính xác, phù hợp của các kết quả...</td><td style="text-align: center;">1</td>
-                        <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC12" min="0" max="1" step="0.25" value="1" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
+                        <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC12" min="0" max="1" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
                 </tbody>
             </table>
             <div class="grid-2" style="background: #f0fdf4; padding: 10px 15px; border-radius: 6px; border: 1px solid #bbf7d0;">

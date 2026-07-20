@@ -108,8 +108,9 @@
            BẢNG ĐIỂM TIÊU CHÍ (KHÔNG CÓ KHUNG VIỀN Ô NHẬP)
            ========================================================================= */
         .table-tieu-chi { width: 100%; border-collapse: collapse; margin-top: 8px; margin-bottom: 12px; font-size: 10pt; background: #fff; border-radius: 6px; overflow: hidden; border: 1px solid #e2e8f0; }
-        .table-tieu-chi th, .table-tieu-chi td { border: 1px solid #e2e8f0; padding: 6px 10px; vertical-align: middle; }
-        .table-tieu-chi th { background: #f8fafc; color: #334155; text-align: center; font-weight: bold; font-size: 0.85rem; }
+        .table-tieu-chi th, .table-tieu-chi td { border: 1px solid #e2e8f0; padding: 8px 10px; vertical-align: middle; }
+        .table-tieu-chi th { background: #f8fafc; color: #334155; text-align: center; font-weight: bold; font-size: 0.9rem; }
+        .table-tieu-chi td { text-align: justify; }
         
         /* Ô nhập trong bảng hoàn toàn trong suốt hòa vào khung */
         .table-tieu-chi input[type="number"] { 
@@ -122,7 +123,7 @@
         .dynamic-block.active { display: block; opacity: 1; transform: translateY(0); }
         
         /* =========================================================================
-           THANH CÔNG CỤ (ACTION BAR) & NÚT BẤM (REACTBITS STYLE)
+           THANH CÔNG CỤ (ACTION BAR) & NÚT BẤM
            ========================================================================= */
         .action-bar { 
             display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; 
@@ -215,33 +216,33 @@
                 </thead>
                 <tbody>
                     <tr><td rowspan="4" style="font-weight: bold; text-align: center; background: #f8fafc;">1. Kế hoạch bài dạy</td>
-                        <td>1. Mức độ phù hợp của các hoạt động học với mục tiêu...</td><td style="text-align: center;">1</td>
+                        <td>1. Mức độ phù hợp của các hoạt động học với mục tiêu, nội dung và phương pháp dạy học được sử dụng.</td><td style="text-align: center;">1</td>
                         <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC1" min="0" max="1" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
-                    <tr><td>2. Mức độ rõ ràng, chính xác của mục tiêu, nội dung...</td><td style="text-align: center;">2</td>
+                    <tr><td>2. Mức độ rõ ràng, chính xác của mục tiêu, nội dung, sản phẩm, cách thức tổ chức thực hiện mỗi hoạt động học của học sinh.</td><td style="text-align: center;">2</td>
                         <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC2" min="0" max="2" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
-                    <tr><td>3. Mức độ phù hợp của thiết bị dạy học và học liệu...</td><td style="text-align: center;">1</td>
+                    <tr><td>3. Mức độ phù hợp của thiết bị dạy học và học liệu được sử dụng để tổ chức các hoạt động học của học sinh.</td><td style="text-align: center;">1</td>
                         <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC3" min="0" max="1" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
-                    <tr><td>4. Mức độ phù hợp của phương án kiểm tra, đánh giá...</td><td style="text-align: center;">2</td>
+                    <tr><td>4. Mức độ phù hợp của phương án kiểm tra, đánh giá trong quá trình tổ chức hoạt động học của học sinh.</td><td style="text-align: center;">2</td>
                         <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC4" min="0" max="2" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
                     
                     <tr><td rowspan="4" style="font-weight: bold; text-align: center; background: #f8fafc;">2. Hoạt động của giáo viên</td>
-                        <td>5. Mức độ chính xác, phù hợp, sinh động, hấp dẫn...</td><td style="text-align: center;">2</td>
+                        <td>5. Mức độ chính xác, phù hợp, sinh động, hấp dẫn của nội dung, phương pháp và hình thức giao nhiệm vụ học tập cho học sinh.</td><td style="text-align: center;">2</td>
                         <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC5" min="0" max="2" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
-                    <tr><td>6. Khả năng theo dõi, quan sát, phát hiện kịp thời...</td><td style="text-align: center;">1</td>
+                    <tr><td>6. Khả năng theo dõi, quan sát, phát hiện kịp thời những khó khăn của học sinh.</td><td style="text-align: center;">1</td>
                         <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC6" min="0" max="1" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
-                    <tr><td>7. Mức độ phù hợp, hiệu quả của các biện pháp hỗ trợ...</td><td style="text-align: center;">2</td>
+                    <tr><td>7. Mức độ phù hợp, hiệu quả của các biện pháp hỗ trợ và khuyến khích học sinh hợp tác, giúp đỡ nhau khi thực hiện nhiệm vụ học tập.</td><td style="text-align: center;">2</td>
                         <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC7" min="0" max="2" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
-                    <tr><td>8. Mức độ chính xác, hiệu quả trong tổng hợp, phân tích...</td><td style="text-align: center;">2</td>
+                    <tr><td>8. Mức độ chính xác, hiệu quả trong việc tổng hợp, phân tích, đánh giá quá trình và kết quả học tập của học sinh (làm rõ những nội dung/yêu cầu về kiến thức, kĩ năng học sinh cần ghi nhận, thực hiện).</td><td style="text-align: center;">2</td>
                         <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC8" min="0" max="2" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
                     
                     <tr><td rowspan="4" style="font-weight: bold; text-align: center; background: #f8fafc;">3. Hoạt động của học sinh</td>
-                        <td>9. Khả năng tiếp nhận và sẵn sàng thực hiện nhiệm vụ...</td><td style="text-align: center;">2</td>
+                        <td>9. Khả năng tiếp nhận và sẵn sàng thực hiện nhiệm vụ học tập của học sinh trong lớp.</td><td style="text-align: center;">2</td>
                         <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC9" min="0" max="2" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
-                    <tr><td>10. Mức độ tích cực, chủ động, sáng tạo, hợp tác...</td><td style="text-align: center;">2</td>
+                    <tr><td>10. Mức độ tích cực, chủ động, sáng tạo, hợp tác của học sinh trong việc thực hiện các nhiệm vụ học tập.</td><td style="text-align: center;">2</td>
                         <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC10" min="0" max="2" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
-                    <tr><td>11. Mức độ tham gia tích cực của học sinh trong trình bày...</td><td style="text-align: center;">2</td>
+                    <tr><td>11. Mức độ tham gia tích cực của học sinh trong trình bày, thảo luận về kết quả thực hiện nhiệm vụ học tập.</td><td style="text-align: center;">2</td>
                         <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC11" min="0" max="2" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
-                    <tr><td>12. Mức độ đúng đắn, chính xác, phù hợp của các kết quả...</td><td style="text-align: center;">1</td>
+                    <tr><td>12. Mức độ đúng đắn, chính xác, phù hợp của các kết quả thực hiện nhiệm vụ học tập của học sinh.</td><td style="text-align: center;">1</td>
                         <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC12" min="0" max="1" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
                 </tbody>
             </table>
@@ -885,6 +886,12 @@
                 document.getElementById('khoi_' + loai).querySelectorAll('input:not([type="datetime-local"]), textarea').forEach(truongNhap => truongNhap.value = '');
                 // Gập lại Textarea sau khi xóa
                 document.getElementById('khoi_' + loai).querySelectorAll('textarea').forEach(ta => tuDongGianCao(ta));
+                
+                // Đặt lại các nhãn xếp loại nếu xóa
+                const oTongDiem = document.getElementById('tongDiem_1');
+                const oXepLoai = document.getElementById('xepLoai_1');
+                if (oTongDiem) oTongDiem.value = '';
+                if (oXepLoai) oXepLoai.value = '';
             }
         }
     }

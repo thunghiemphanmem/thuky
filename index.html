@@ -226,7 +226,7 @@
         </div>
     </div>
 
-    <!-- MẪU 11 (MỚI): QUYẾT ĐỊNH HÀNH CHÍNH -->
+    <!-- MẪU 11: QUYẾT ĐỊNH HÀNH CHÍNH -->
     <div id="khoiHienThi_5" class="dynamic-block">
         <div class="section-title">II. NỘI DUNG QUYẾT ĐỊNH</div>
         <div class="grid-2">
@@ -255,25 +255,30 @@
         </div>
     </div>
 
-    <!-- MẪU 12 (MỚI): KẾ HOẠCH CÔNG TÁC -->
+    <!-- NÂNG CẤP MỚI: MẪU 12 - KẾ HOẠCH KIỂM TRA/GIÁM SÁT ĐẢNG -->
     <div id="khoiHienThi_6" class="dynamic-block">
-        <div class="section-title">II. NỘI DUNG KẾ HOẠCH</div>
-        <div class="form-group"><label>Tên Kế hoạch:</label><input type="text" id="tenKeHoach"></div>
-        <div class="form-group">
-            <label>Mục đích, Yêu cầu:</label>
-            <textarea id="mucDichYeuCau" style="min-height: 80px;"></textarea>
+        <div class="section-title">II. NỘI DUNG KẾ HOẠCH KIỂM TRA, GIÁM SÁT</div>
+        <div class="grid-3">
+            <div class="form-group"><label>Số Quyết định căn cứ:</label><input type="text" id="soQuyetDinh_KH"></div>
+            <div class="form-group"><label>Ngày ra Quyết định:</label><input type="date" id="ngayQuyetDinh_KH"></div>
+            <div class="form-group"><label>Loại hình (Kiểm tra/Giám sát):</label><input type="text" id="loaiHinh_KH"></div>
+        </div>
+        <div class="form-group"><label>Đảng viên được KT/GS:</label><input type="text" id="dangVienKiemTra_KH"></div>
+        <div class="grid-2">
+            <div class="form-group" style="background:#f8fafc; padding:10px; border:1px solid #cbd5e1;"><label>Thời hiệu KT/GS:</label>
+                <div style="display:flex; gap:10px;"><input type="date" id="tuNgayHieuLuc_KH" style="width:50%;" title="Từ ngày"><input type="date" id="denNgayHieuLuc_KH" style="width:50%;" title="Đến ngày"></div>
+            </div>
+            <div class="form-group" style="background:#f8fafc; padding:10px; border:1px solid #cbd5e1;"><label>Thời gian tiến hành:</label>
+                <div style="display:flex; gap:10px;"><input type="date" id="tuNgayTienHanh_KH" style="width:50%;" title="Từ ngày"><input type="date" id="denNgayTienHanh_KH" style="width:50%;" title="Đến ngày"></div>
+            </div>
         </div>
         <div class="form-group">
-            <label>Ý tưởng trọng tâm (Nhập tóm tắt để AI lên danh sách công việc chi tiết):</label>
-            <textarea id="yTuongKeHoach" style="min-height: 80px;" placeholder="Ví dụ: Tổ chức hội thao chào mừng 20/11 gồm bóng chuyền và cắm hoa..."></textarea>
+            <label>Tóm tắt sự việc (Để AI dự thảo nội dung):</label>
+            <textarea id="tomTatKeHoachDang" style="min-height: 60px;" placeholder="Nhập tóm tắt để AI viết chi tiết nội dung..."></textarea>
         </div>
         <div class="form-group" style="background: #fdf4ff; padding: 10px; border-radius: 6px; border: 1px solid #fbcfe8;">
-            <label style="color:#c026d3;">Chi tiết các bước thực hiện (Trợ lý AI tự động triển khai):</label>
-            <textarea id="chiTietKeHoach" style="min-height: 120px; font-weight: bold;"></textarea>
-        </div>
-        <div class="form-group">
-            <label>Tổ chức thực hiện (Phân công nhiệm vụ):</label>
-            <textarea id="toChucThucHien" style="min-height: 80px;"></textarea>
+            <label style="color:#c026d3;">Nội dung KT/GS (AI tự động biên soạn):</label>
+            <textarea id="noiDungKiemTraDang_KH" style="min-height: 100px; font-weight: bold;"></textarea>
         </div>
     </div>
 
@@ -364,7 +369,6 @@
             else if (loai === "2") { idKhoiKichHoat = "khoiHienThi_2"; }
             else if (["3", "5", "6", "9", "10"].includes(loai)) { idKhoiKichHoat = "khoiHienThi_3"; }
             else if (["4", "7", "8"].includes(loai)) { idKhoiKichHoat = "khoiHienThi_4"; }
-            // Mở khóa giao diện mới cho Quyết định và Kế hoạch
             else if (["11"].includes(loai)) { idKhoiKichHoat = "khoiHienThi_5"; }
             else if (["12"].includes(loai)) { idKhoiKichHoat = "khoiHienThi_6"; }
             
@@ -469,7 +473,6 @@
                 }
                 alert("✨ Trợ lý AI đã hoàn tất việc đúc kết biên bản sự việc.");
             } 
-            // Luồng điều phối mới cho Quyết định
             else if (kieuVanBan === '11') {
                 let oDuThao = document.getElementById('ketLuanQuyetDinh');
                 if (oDuThao) {
@@ -480,16 +483,16 @@
                 }
                 alert("✨ Trợ lý AI đã dự thảo xong nội dung Quyết định.");
             }
-            // Luồng điều phối mới cho Kế hoạch
+            // NÂNG CẤP: Chỉnh lại đích đến cho Kế hoạch kiểm tra Đảng
             else if (kieuVanBan === '12') {
-                let oKeHoach = document.getElementById('chiTietKeHoach');
+                let oKeHoach = document.getElementById('noiDungKiemTraDang_KH');
                 if (oKeHoach) {
-                    oKeHoach.value = duLieuJSON.ChiTietKeHoach || "";
+                    oKeHoach.value = duLieuJSON.NoiDungKiemTra || "";
                     oKeHoach.style.transition = "background-color 0.4s";
                     oKeHoach.style.backgroundColor = "#fce7f3"; 
                     setTimeout(() => { oKeHoach.style.backgroundColor = "#fbfbfb"; }, 1500);
                 }
-                alert("✨ Trợ lý AI đã triển khai xong các bước Kế hoạch.");
+                alert("✨ Trợ lý AI đã soạn thảo xong Nội dung kiểm tra, giám sát.");
             }
             else {
                 if(document.getElementById('bcUuDiem')) document.getElementById('bcUuDiem').value = duLieuJSON.UuDiem || "";
@@ -520,15 +523,14 @@
                 noiDung = document.getElementById('noiDungChiTietSVK') ? document.getElementById('noiDungChiTietSVK').value : "";
                 chuoiPhanLoai = "Biên bản hành chính sự việc";
             } 
-            // Luồng lấy dữ liệu để gửi lên AI cho Quyết định
             else if (kieuVanBan === '11') {
                 noiDung = document.getElementById('tomTatQuyetDinh') ? document.getElementById('tomTatQuyetDinh').value : "";
                 chuoiPhanLoai = "Quyết định hành chính";
             }
-            // Luồng lấy dữ liệu để gửi lên AI cho Kế hoạch
+            // NÂNG CẤP: Chỉnh lại dữ liệu đầu vào cho Kế hoạch kiểm tra Đảng
             else if (kieuVanBan === '12') {
-                noiDung = document.getElementById('yTuongKeHoach') ? document.getElementById('yTuongKeHoach').value : "";
-                chuoiPhanLoai = "Kế hoạch công tác";
+                noiDung = document.getElementById('tomTatKeHoachDang') ? document.getElementById('tomTatKeHoachDang').value : "";
+                chuoiPhanLoai = "Kế hoạch kiểm tra Đảng";
             }
             else if (["3", "5", "6", "9", "10"].includes(kieuVanBan)) {
                 noiDung = document.getElementById('noiDungKiemTraDang') ? document.getElementById('noiDungKiemTraDang').value : "";

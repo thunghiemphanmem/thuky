@@ -129,6 +129,24 @@
 
         .btn-logout { background: #ef4444; padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; border: none; color: white; cursor: pointer; font-weight: bold; transition: opacity 0.2s; }
         .btn-logout:hover { opacity: 0.8; }
+
+        /* =========================================================================
+           TUỲ CHỈNH FONT CHỮ CHO KHU VỰC KHO LƯU TRỮ VÀ NÚT BẤM
+           ========================================================================= */
+        /* Áp dụng cho: Ô tìm kiếm, Nút bấm, Tên văn bản trong danh sách, Tên văn bản đang xem */
+        #khuVucTraCuu input, 
+        #khuVucTraCuu button, 
+        #danhSachLuuTru li div,
+        #tenHienThiVanBan {
+            /* Thầy thay đổi tên font chữ ở dòng dưới đây */
+            font-family: 'Times New Roman', Times, serif !important; 
+        }
+        
+        /* Tùy chỉnh thêm: Phóng to chữ ở các nút trên thanh công cụ một chút để cân đối với font mới (nếu cần) */
+        #thanhCongCuTaiLieu button {
+            font-size: 9.5pt !important;
+            letter-spacing: 0.5px;
+        }
     </style>
 </head>
 <body>

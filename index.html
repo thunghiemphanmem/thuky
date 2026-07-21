@@ -687,10 +687,27 @@
         }
     }
 
-  function tuDongGianCao(el) {
-        el.style.height = '32px'; // Thu nhỏ về đúng 1 dòng trước để lấy mốc đo lường
+// =====================================================================
+    // NÂNG CẤP HÀM CO GIÃN Ô NHẬP LIỆU (Khắc phục lỗi không tự thu hẹp)
+    // =====================================================================
+    function tuDongGianCao(el) {
+        // Tạm ngắt hiệu ứng CSS (transition) để tránh tình trạng trình duyệt đo nhầm chiều cao
+        // do độ trễ của hoạt ảnh (animation) khi thu nhỏ.
+        let hieuUngMacDinh = el.style.transition;
+        el.style.transition = 'none';
+        
+        // Thu nhỏ về trạng thái tự động để lấy mốc đo lường chuẩn xác nhất
+        el.style.height = 'auto'; 
+        
+        // Đo đạc lại chiều cao thực tế của khối văn bản sau khi xóa
         let chieuCaoMoi = el.scrollHeight;
-        el.style.height = chieuCaoMoi + 'px'; // Có chữ đến đâu, tự động giãn nở cao đến đó
+        
+        // Cập nhật chiều cao mới (đảm bảo tối thiểu 32px tức là 1 dòng chuẩn)
+        el.style.height = (chieuCaoMoi < 32 ? 32 : chieuCaoMoi) + 'px';
+        
+        // Khôi phục lại hiệu ứng giao diện sau khi đã gán xong kích thước
+        void el.offsetHeight; // Lệnh ép trình duyệt reflow (tính toán lại giao diện) ngay lập tức
+        el.style.transition = hieuUngMacDinh;
     }
 
     function khoiTaoOChonVanBan() {

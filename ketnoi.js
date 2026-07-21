@@ -16,7 +16,7 @@ const KET_NOI = {
   
   // 3. CẤU HÌNH GIAO DIỆN HIỂN THỊ
   TIEU_DE_PHAN_MEM: 'SỔ SOẠN THẢO HÀNH CHÍNH & SƯ PHẠM',
-  LOGO_TRUONG: 'https://i.ibb.co/d0JNW94Z/logo-l-a-ch-n6.png', 
+  LOGO_TRUONG: 'https://i.postimg.cc/Hn7bdGg5/Logo-truong-Photoroom.png', 
   CAN_BO_THAO_TAC: 'Cán bộ Hành chính',
 
   // 4. MÃ ĐỊNH DANH BẢO MẬT GOOGLE IDENTITY

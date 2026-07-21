@@ -8,7 +8,6 @@
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="ketnoi.js"></script>
     <style>
-        /* GIỮ NGUYÊN TOÀN BỘ CSS THIẾT KẾ CỦA THẦY */
         :root { 
             --primary: #0284c7; --secondary: #334155; --text: #0f172a; 
             --border: #cbd5e1; --accent: #38bdf8;
@@ -108,7 +107,7 @@
         .btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); filter: brightness(1.05); }
         .btn:disabled { background: #cbd5e1 !important; color: #94a3b8; cursor: not-allowed; }
         
-        .btn-blue { background: #3b82f6; } .btn-sky { background: #0ea5e9; } .btn-green { background: #10b981; } .btn-purple { background: #8b5cf6; } .btn-red { background: #ef4444; }
+        .btn-blue { background: #3b82f6; } .btn-sky { background: #0ea5e9; } .btn-green { background: #10b981; } .btn-purple { background: #8b5cf6; } .btn-red { background: #ef4444; } .btn-orange { background: #f97316; }
         
         .loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.85); z-index: 2000; justify-content: center; align-items: center; flex-direction: column; font-weight: bold; color: var(--primary); font-size: 1.1rem; backdrop-filter: blur(4px); }
         .spinner { width: 40px; height: 40px; border: 3px solid #e2e8f0; border-top: 3px solid var(--primary); border-radius: 50%; animation: spin 0.8s infinite linear; margin-bottom: 12px; }
@@ -128,7 +127,6 @@
         .signature-footer { text-align: center; margin-top: 20px; color: #64748b; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; transition: 0.3s; }
         .signature-footer:hover { opacity: 1; color: var(--primary); }
 
-        /* NÚT ĐĂNG XUẤT (Thêm mới) */
         .btn-logout { background: #ef4444; padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; border: none; color: white; cursor: pointer; font-weight: bold; transition: opacity 0.2s; }
         .btn-logout:hover { opacity: 0.8; }
     </style>
@@ -153,7 +151,6 @@
 <!-- CỐ ĐỊNH ĐẦU TRANG -->
 <div class="top-header">
     <div class="top-header-content">
-        <!-- VÙNG HIỂN THỊ TÀI KHOẢN (Thêm mới) -->
         <div id="userBadgeArea" style="position: absolute; right: 0; top: 0; display: flex; align-items: center; gap: 8px;"></div>
         
         <div class="header-title">HỆ THỐNG SOẠN THẢO VĂN BẢN CHUYÊN NGHIỆP</div>
@@ -166,6 +163,8 @@
 </div>
 
 <div class="container">
+    <!-- KHỐI 1 ĐẾN 9 GIỮ NGUYÊN HOÀN TOÀN NHƯ CŨ (KHÔNG ĐỤNG CHẠM GIAO DIỆN FORM ĐỂ TRÁNH LỖI) -->
+    
     <!-- KHỐI 1: PHIẾU ĐÁNH GIÁ BÀI DẠY -->
     <div id="khoi_1" class="dynamic-block">
         <div class="form-panel">
@@ -351,8 +350,7 @@
         </div>
     </div>
 
-    <!-- KHỐI 5 TỚI KHỐI 9 GIỮ NGUYÊN (Để rút gọn độ dài text trả về nhưng vẫn đầy đủ cấu trúc cũ của thầy) -->
-    <!-- (Bạn hãy copy các Khối 5, 6, 7, 8, 9 ở bản Gốc của bạn dán vào đây để đảm bảo giao diện không sứt mẻ 1 dòng nào) -->
+    <!-- KHỐI 5 ĐẾN 9 -->
     <div id="khoi_5" class="dynamic-block">
         <div class="form-panel">
             <div class="section-title">THÔNG TIN BIÊN BẢN TRIỂN KHAI <span class="badge-no-ai">🔒 Khóa AI</span></div>
@@ -377,7 +375,6 @@
     </div>
     
     <div id="khoi_6" class="dynamic-block">
-        <!-- Khối 6 Giữ Nguyên Của Thầy -->
         <div class="form-panel">
             <div class="section-title">THÔNG TIN BÁO CÁO <span class="badge-no-ai">🔒 Khóa AI</span></div>
             <div class="grid-3">
@@ -418,7 +415,6 @@
     </div>
     
     <div id="khoi_7" class="dynamic-block">
-        <!-- Khối 7 Giữ Nguyên Của Thầy -->
         <div class="form-panel">
             <div class="section-title">THÔNG TIN BÁO CÁO THẨM TRA <span class="badge-no-ai">🔒 Khóa AI</span></div>
             <div class="grid-3">
@@ -481,7 +477,6 @@
                 <div class="form-group"><label>Đảng viên được KT:</label><input type="text" data-key="Dang_Vien_Duoc_Kiem_Tra"></div>
             </div>
         </div>
-        
         <div class="form-panel">
             <div class="section-title">Ý KIẾN CHI BỘ (AI TỔNG HỢP)</div>
             <div class="form-group col-layout">
@@ -532,7 +527,7 @@
         </div>
     </div>
 
-    <!-- KHU VỰC TRA CỨU VÀ XEM TRƯỚC VĂN BẢN (NÂNG CẤP) -->
+    <!-- KHU VỰC TRA CỨU VÀ XEM TRƯỚC VĂN BẢN -->
     <div id="khuVucTraCuu" style="display: none; margin-top: 30px; margin-bottom: 20px; padding: 20px; background: rgba(255, 255, 255, 0.9); border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; backdrop-filter: blur(10px);">
         <h3 style="color: #0369a1; border-bottom: 2px solid #38bdf8; padding-bottom: 10px; margin-bottom: 20px;">Kho Lưu Trữ & Tra Cứu Văn Bản</h3>
         
@@ -563,18 +558,14 @@
         <button class="btn btn-green" onclick="chayNghiepVu('LuuHoSo')" id="btnHoSo">Tạo Văn Bản</button>
         <button class="btn btn-purple" onclick="hienThiXemTruoc()">Xem Trước Dữ Liệu</button>
         <button class="btn" style="background: #f59e0b;" onclick="moGiaoDienTraCuu()" id="btnTraCuu">Kho Lưu Trữ</button>
-        <button class="btn btn-red" onclick="lamMoiForm()">Làm Mới Biểu Mẫu</button>
+        <button class="btn btn-red" onclick="lamMoiForm(false)">Làm Mới Biểu Mẫu</button>
     </div>
 
     <!-- PHẦN CHỮ KÝ BẢN QUYỀN -->
-    <div class="signature-footer">
-        Thiết kế và phát triển<br>Hoàng Ngọc Lâm
-    </div>
+    <div class="signature-footer">Thiết kế và phát triển<br>Hoàng Ngọc Lâm</div>
 </div>
 
-<!-- =========================================================================
-     MODAL XEM TRƯỚC VĂN BẢN (PREVIEW)
-     ========================================================================= -->
+<!-- MODAL XEM TRƯỚC VĂN BẢN (PREVIEW) -->
 <div class="modal-overlay" id="previewModal">
     <div class="modal-content">
         <div class="modal-header">
@@ -590,8 +581,11 @@
 </div>
 
 <script>
+    // BỔ SUNG: BIẾN TOÀN CỤC LƯU TRẠNG THÁI GHI ĐÈ VĂN BẢN
+    window.idFileDangSua = null;
+
     // =========================================================================
-    // KHỐI XÁC THỰC BẢO MẬT GIAO DIỆN CHUẨN GOOGLE (Đã Nâng Cấp)
+    // KHỐI XÁC THỰC BẢO MẬT GIAO DIỆN CHUẨN GOOGLE
     // =========================================================================
     function updateHeaderUI(chuoiDinhDanh) {
         let theHienThi = chuoiDinhDanh ? `<div style="font-size: 0.75rem; color: #047857; font-weight: bold; background: #d1fae5; padding: 4px 8px; border-radius: 4px; border: 1px solid #34d399; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px;" title="${chuoiDinhDanh}">👤 ${chuoiDinhDanh}</div>` : '';
@@ -614,9 +608,7 @@
                 document.getElementById("googleButtonDiv"),
                 { theme: "outline", size: "large", type: "standard", shape: "rectangular", text: "signin_with", logo_alignment: "left" }
             );
-        } else {
-            setTimeout(initGoogleLogin, 100);
-        }
+        } else { setTimeout(initGoogleLogin, 100); }
     }
 
     function parseJwt(token) {
@@ -637,7 +629,6 @@
 
         const hopCanhBao = document.getElementById('loginWarning');
         
-        // Kiểm duyệt bề mặt giao diện, quyền thật sự do Backend quyết định
         if (KET_NOI.DANH_SACH_TAI_KHOAN && KET_NOI.DANH_SACH_TAI_KHOAN.includes(dinhDanh)) {
             sessionStorage.setItem('SessionAccountActive', dinhDanh); 
             updateHeaderUI(dinhDanh); 
@@ -692,7 +683,6 @@
         const loginLogo = document.getElementById('loginLogo');
         if (KET_NOI.LOGO_TRUONG) { loginLogo.src = KET_NOI.LOGO_TRUONG; loginLogo.style.display = 'inline-block'; }
 
-        // KIỂM TRA PHIÊN LÀM VIỆC LƯU TRỮ
         const phienHoatDong = sessionStorage.getItem('SessionAccountActive');
         if (phienHoatDong && KET_NOI.DANH_SACH_TAI_KHOAN && KET_NOI.DANH_SACH_TAI_KHOAN.includes(phienHoatDong)) {
             updateHeaderUI(phienHoatDong);
@@ -831,7 +821,7 @@
     function xacNhanXuatWord() { dongXemTruoc(); chayNghiepVu('XuatWord'); }
 
     // =========================================================================
-    // KHỐI GIAO TIẾP MÁY CHỦ (BỔ SUNG TOKEN BẢO MẬT)
+    // KHỐI GIAO TIẾP MÁY CHỦ
     // =========================================================================
     let boDemThoiGian; 
 
@@ -924,18 +914,20 @@
         }
 
         if (loaiHanhDong === 'LuuHoSo' || loaiHanhDong === 'XuatWord') {
-            hienThiTai(`Đang tiến hành xuất tài liệu Word và bảo vệ thư mục...`, true);
+            hienThiTai(window.idFileDangSua ? "Hệ thống đang Ghi đè vào tài liệu gốc..." : "Đang tiến hành kết xuất tài liệu Word...", true);
             boDemThoiGian = setTimeout(function() { hienThiTai("", false); alert("Mất quá nhiều thời gian kết xuất File. Vui lòng kiểm tra lại mạng!"); }, 60000);
 
             const duLieuForm = layToanBoDuLieuGiaoDien().data;
-            // Đóng gói kèm cờ định danh phiên làm việc gửi xuống Backend
+            
+            // Đóng gói ID_FILE để báo hiệu máy chủ tiến hành Ghi Đè (Cập nhật)
             const dongGoiTruyen = { 
                 hanhDong: loaiHanhDong, 
                 taiKhoanYeuCau: phienLamViec,
                 dongGoiTruyenLen: { 
                     loaiVanBan: kieuVanBan, 
                     duLieuForm: duLieuForm,
-                    taiKhoanYeuCau: phienLamViec
+                    taiKhoanYeuCau: phienLamViec,
+                    idFileDangCapNhat: window.idFileDangSua 
                 } 
             };
             
@@ -943,8 +935,10 @@
                 google.script.run
                     .withSuccessHandler(function(phanHoi) {
                         clearTimeout(boDemThoiGian); hienThiTai("", false);
-                        if (phanHoi.trangThai === "ThanhCong") { if(confirm(phanHoi.thongBao + "\n\nNhấn OK để mở tài liệu Word vừa tạo.")) window.open(phanHoi.lienKet, '_blank'); } 
-                        else alert(phanHoi.thongBao);
+                        if (phanHoi.trangThai === "ThanhCong") { 
+                            if(confirm(phanHoi.thongBao + "\n\nNhấn OK để mở tài liệu Word vừa tạo.")) window.open(phanHoi.lienKet, '_blank'); 
+                            lamMoiForm(true); // Thành công thì làm mới form tự động
+                        } else alert(phanHoi.thongBao);
                     })
                     .withFailureHandler(function(loiMang) { clearTimeout(boDemThoiGian); hienThiTai("", false); alert("Lỗi lưu trữ: " + loiMang.message); })
                     .xuLyLuuHoSo(dongGoiTruyen.dongGoiTruyenLen);
@@ -955,8 +949,10 @@
                     clearTimeout(boDemThoiGian); hienThiTai("", false);
                     try {
                         const phanHoi = JSON.parse(textPhanHoi); 
-                        if (phanHoi.trangThai === "ThanhCong") { if(confirm(phanHoi.thongBao + "\n\nNhấn OK để mở tài liệu Word.")) window.open(phanHoi.lienKet, '_blank'); } 
-                        else alert("Máy chủ cảnh báo: " + phanHoi.thongBao);
+                        if (phanHoi.trangThai === "ThanhCong") { 
+                            if(confirm(phanHoi.thongBao + "\n\nNhấn OK để mở tài liệu Word.")) window.open(phanHoi.lienKet, '_blank'); 
+                            lamMoiForm(true); 
+                        } else alert("Máy chủ cảnh báo: " + phanHoi.thongBao);
                     } catch(loiPhanGiai) { alert("Lỗi không xác định. Nhấn F12 xem log."); console.error(textPhanHoi); }
                 })
                 .catch(loiMang => { clearTimeout(boDemThoiGian); hienThiTai("", false); alert("Đứt gãy đường truyền: " + loiMang.message); });
@@ -964,8 +960,8 @@
         }
     }
 
-    function lamMoiForm() {
-        if(confirm("Xóa toàn bộ dữ liệu đang nhập để làm mới biểu mẫu?")) {
+    function lamMoiForm(boQuaXacNhan = false) {
+        if(boQuaXacNhan || confirm("Xóa toàn bộ dữ liệu đang nhập để làm mới biểu mẫu?")) {
             const loai = document.getElementById('loaiVanBan').value;
             if(loai !== "0") {
                 document.getElementById('khoi_' + loai).querySelectorAll('input:not([type="datetime-local"]), textarea').forEach(truongNhap => truongNhap.value = '');
@@ -976,11 +972,19 @@
                 if (oTongDiem) oTongDiem.value = '';
                 if (oXepLoai) oXepLoai.value = '';
             }
+            
+            // XÓA TRẠNG THÁI GHI ĐÈ & TRẢ LẠI GIAO DIỆN
+            window.idFileDangSua = null;
+            const btnHoSo = document.getElementById('btnHoSo');
+            if(btnHoSo) {
+                btnHoSo.innerText = "Tạo Văn Bản";
+                btnHoSo.className = "btn btn-green";
+            }
         }
     }
 
     // =========================================================================
-    // KHỐI LỆNH: TRA CỨU VÀ XEM TRƯỚC (NÂNG CẤP TRUY VẤN MÁY CHỦ BẢO MẬT)
+    // KHỐI LỆNH: TRA CỨU, CHỈNH SỬA VÀ XÓA VĂN BẢN (NÂNG CẤP)
     // =========================================================================
     function thucHienTimKiem() {
         const tuKhoa = document.getElementById('oTimKiemTaiLieu').value;
@@ -1011,16 +1015,11 @@
                         return;
                     }
                     veDanhSachRaManHinh(mangDuLieu);
-                } catch(loiPhanGiai) {
-                    loiTaiDuLieu({ message: "Máy chủ trả về dữ liệu không hợp lệ." });
-                    console.error("Dữ liệu lỗi:", textPhanHoi);
-                }
+                } catch(loiPhanGiai) { loiTaiDuLieu({ message: "Máy chủ trả về dữ liệu không hợp lệ." }); }
             })
-            .catch(loiMang => {
-                loiTaiDuLieu({ message: "Mất kết nối với API Backend." });
-            });
+            .catch(loiMang => { loiTaiDuLieu({ message: "Mất kết nối với API Backend." }); });
         } else {
-            vungHienThi.innerHTML = '<li style="padding: 15px; text-align: center; color: #ef4444;">Vui lòng chạy trên môi trường Google Apps Script hoặc thiết lập URL API Backend.</li>';
+            vungHienThi.innerHTML = '<li style="padding: 15px; text-align: center; color: #ef4444;">Vui lòng thiết lập kết nối Backend API.</li>';
         }
     }
 
@@ -1108,16 +1107,33 @@
                 nutSua.style.boxShadow = 'none';
                 nutSua.onclick = function(e) {
                     e.stopPropagation(); 
+                    // CHỐT ID FILE ĐỂ CHUẨN BỊ GHI ĐÈ
+                    window.idFileDangSua = banGhi.idFile;
                     napDuLieuSua(banGhi.duLieuGoc);
                 };
                 khoiNut.appendChild(nutSua);
+                
+                // NÚT XÓA CHUYÊN DỤNG BỔ SUNG THÊM
+                const nutXoa = document.createElement('button');
+                nutXoa.innerText = '🗑️ Xóa';
+                nutXoa.className = 'btn btn-red';
+                nutXoa.style.padding = '4px 10px';
+                nutXoa.style.fontSize = '8.5pt';
+                nutXoa.style.boxShadow = 'none';
+                nutXoa.onclick = function(e) {
+                    e.stopPropagation(); 
+                    if(confirm("Đồng chí có chắc chắn muốn XÓA VĨNH VIỄN văn bản này khỏi Sổ lưu trữ không?")) {
+                        thucHienXoaFile(banGhi.idFile);
+                    }
+                };
+                khoiNut.appendChild(nutXoa);
+
             } else {
                 const huyHieu = document.createElement('span');
                 huyHieu.innerText = banGhi.duLieuGoc === undefined ? '⚠️ Lỗi API' : '🔒 Bản cũ';
                 huyHieu.style.fontSize = '7.5pt';
                 huyHieu.style.color = '#94a3b8';
                 huyHieu.style.fontStyle = 'italic';
-                huyHieu.title = 'Chi tiết trạng thái dữ liệu của văn bản này.';
                 khoiNut.appendChild(huyHieu);
             }
 
@@ -1146,15 +1162,57 @@
                         }
                     }
                     if (kieuVanBan === "1") tinhTongDiemThanhPhan(1);
+                    
                     document.getElementById('khuVucTraCuu').style.display = 'none';
                     window.scrollTo({ top: 0, behavior: 'smooth' });
-                    khoiActive.style.boxShadow = "0 0 15px #38bdf8";
+                    
+                    // NỔI BẬT NÚT CẬP NHẬT KHI ĐANG VÀO CHẾ ĐỘ SỬA
+                    const btnHoSo = document.getElementById('btnHoSo');
+                    if(btnHoSo) {
+                        btnHoSo.innerText = "Cập Nhật Văn Bản";
+                        btnHoSo.className = "btn btn-orange"; // Đổi màu để cán bộ nhận diện
+                    }
+
+                    khoiActive.style.boxShadow = "0 0 15px #f97316";
                     setTimeout(() => khoiActive.style.boxShadow = "none", 1500);
                 }
             }, 250);
         } catch (loi) { alert("Lỗi khôi phục: Dữ liệu của tệp này không tương thích hoặc bị hỏng."); console.error(loi); }
     }
     
+    function thucHienXoaFile(idXoa) {
+        const phienLamViec = sessionStorage.getItem('SessionAccountActive');
+        hienThiTai("Hệ thống đang đưa tệp vào thùng rác...", true);
+        
+        const dongGoi = { hanhDong: 'XoaFile', idFile: idXoa, taiKhoanYeuCau: phienLamViec };
+        const laMoiTruongGoogle = (typeof google !== 'undefined' && google.script && google.script.run);
+        
+        if (laMoiTruongGoogle) {
+            google.script.run
+                .withSuccessHandler(function(phanHoi) {
+                    hienThiTai("", false);
+                    if(phanHoi.trangThai === "ThanhCong") {
+                        alert(phanHoi.thongBao);
+                        if (window.idFileDangSua === idXoa) lamMoiForm(true); // Reset form nếu đang sửa đúng file vừa xóa
+                        thucHienTimKiem(); // Làm mới lại kho lưu trữ
+                    } else alert(phanHoi.thongBao);
+                })
+                .withFailureHandler(function(loi) { hienThiTai("", false); alert("Lỗi xóa tệp: " + loi.message); })
+                .xoaVanBanHanhChinh(idXoa, phienLamViec);
+        } else if (typeof KET_NOI !== 'undefined' && KET_NOI.URL_API_BACKEND) {
+            fetch(KET_NOI.URL_API_BACKEND, { method: 'POST', body: JSON.stringify(dongGoi), headers: { 'Content-Type': 'text/plain;charset=utf-8' } })
+            .then(res => res.json())
+            .then(phanHoi => {
+                hienThiTai("", false);
+                if(phanHoi.trangThai === "ThanhCong") {
+                    alert(phanHoi.thongBao);
+                    if (window.idFileDangSua === idXoa) lamMoiForm(true);
+                    thucHienTimKiem();
+                } else alert(phanHoi.thongBao);
+            }).catch(loi => { hienThiTai("", false); alert("Lỗi mạng: " + loi.message); });
+        }
+    }
+
     function loiTaiDuLieu(loi) {
         alert("Có lỗi xảy ra khi truy vấn máy chủ: " + loi.message);
         document.getElementById('danhSachLuuTru').innerHTML = '<li style="padding: 15px; text-align: center; color: #ef4444;">Tải dữ liệu thất bại.</li>';

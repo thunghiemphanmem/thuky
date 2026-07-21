@@ -527,7 +527,7 @@
         </div>
     </div>
 
-    <!-- KHU VỰC TRA CỨU VÀ XEM TRƯỚC VĂN BẢN -->
+<!-- KHU VỰC TRA CỨU VÀ XEM TRƯỚC VĂN BẢN (ĐÃ NÂNG CẤP UI) -->
     <div id="khuVucTraCuu" style="display: none; margin-top: 30px; margin-bottom: 20px; padding: 20px; background: rgba(255, 255, 255, 0.9); border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; backdrop-filter: blur(10px);">
         <h3 style="color: #0369a1; border-bottom: 2px solid #38bdf8; padding-bottom: 10px; margin-bottom: 20px;">Kho Lưu Trữ & Tra Cứu Văn Bản</h3>
         
@@ -540,13 +540,29 @@
         </div>
         
         <div style="display: flex; gap: 20px; height: 500px;">
+            <!-- Cột Danh Sách (Bên trái) - Đã làm sạch UI -->
             <div style="flex: 1; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; overflow-y: auto;">
                 <ul id="danhSachLuuTru" style="list-style: none; padding: 0; margin: 0;">
                     <li style="padding: 15px; text-align: center; color: #64748b;">Vui lòng ấn "Tìm kiếm" để tải dữ liệu...</li>
                 </ul>
             </div>
-            <div style="flex: 2; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; background: #ffffff;">
-                <iframe id="khungXemTruoc" style="width: 100%; height: 100%; border: none;" src="about:blank"></iframe>
+            
+            <!-- Cột Xem Trước (Bên phải) - Bổ sung Thanh công cụ động -->
+            <div style="flex: 2; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; background: #ffffff; display: flex; flex-direction: column;">
+                
+                <!-- Thanh Công Cụ Động -->
+                <div style="background: #f1f5f9; padding: 8px 15px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+                    <div id="tenHienThiVanBan" style="flex: 1; font-weight: 600; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 10.5pt;">Chưa chọn văn bản</div>
+                    
+                    <!-- Nhóm nút bấm ẩn/hiện tự động -->
+                    <div id="thanhCongCuTaiLieu" style="display: flex; gap: 6px; visibility: hidden; flex-shrink: 0;">
+                        <button id="nutTaiDocx" class="btn btn-green" style="padding: 4px 12px; font-size: 8.5pt; box-shadow: none;">⬇️ TẢI WORD</button>
+                        <button id="nutSuaDoc" class="btn btn-sky" style="padding: 4px 12px; font-size: 8.5pt; box-shadow: none;">✏️ SỬA</button>
+                        <button id="nutXoaDoc" class="btn btn-red" style="padding: 4px 12px; font-size: 8.5pt; box-shadow: none;">🗑️ XÓA</button>
+                    </div>
+                </div>
+                
+                <iframe id="khungXemTruoc" style="width: 100%; flex: 1; border: none;" src="about:blank"></iframe>
             </div>
         </div>
     </div>
@@ -1033,9 +1049,15 @@
         thucHienTimKiem();
     }
 
-    function veDanhSachRaManHinh(mangDuLieu) {
+function veDanhSachRaManHinh(mangDuLieu) {
         const vungHienThi = document.getElementById('danhSachLuuTru');
         vungHienThi.innerHTML = '';
+
+        // Reset thanh công cụ hiển thị mỗi khi tải lại danh sách
+        document.getElementById('tenHienThiVanBan').innerText = "Chưa chọn văn bản";
+        document.getElementById('tenHienThiVanBan').title = "";
+        document.getElementById('thanhCongCuTaiLieu').style.visibility = 'hidden';
+        document.getElementById('khungXemTruoc').src = "about:blank";
 
         if(!mangDuLieu || mangDuLieu.length === 0) {
             vungHienThi.innerHTML = '<li style="padding: 15px; text-align: center; color: #ef4444;">Không tìm thấy văn bản phù hợp.</li>';
@@ -1053,41 +1075,63 @@
             theLi.style.alignItems = 'center';
             theLi.style.gap = '10px'; 
             
-            theLi.onmouseover = function() { this.style.backgroundColor = '#e0f2fe'; };
-            theLi.onmouseout = function() { this.style.backgroundColor = 'transparent'; };
+            theLi.onmouseover = function() { if(this.dataset.selected !== 'true') this.style.backgroundColor = '#f8fafc'; };
+            theLi.onmouseout = function() { if(this.dataset.selected !== 'true') this.style.backgroundColor = 'transparent'; };
             
             const vungTen = document.createElement('div');
             vungTen.innerText = banGhi.tenBanGhi;
+            vungTen.title = banGhi.tenBanGhi; 
             vungTen.style.flex = '1';
             vungTen.style.color = '#0f172a';
             vungTen.style.fontWeight = '500';
-            vungTen.style.overflow = 'hidden';
-            vungTen.style.textOverflow = 'ellipsis'; 
-            vungTen.style.whiteSpace = 'nowrap';
+            // Không cắt chữ nữa, cho phép giãn dòng để dễ đọc trọn vẹn tên văn bản
+            vungTen.style.wordBreak = 'break-word';
+            vungTen.style.lineHeight = '1.4';
             
-            vungTen.onclick = function() {
-                document.getElementById('khungXemTruoc').src = banGhi.duongDanXem;
-                const cacVungTen = vungHienThi.querySelectorAll('div[style*="flex: 1"]');
-                cacVungTen.forEach(vt => { vt.style.fontWeight = '500'; vt.style.color = '#0f172a'; });
-                this.style.fontWeight = '800';
-                this.style.color = '#0284c7';
-            };
             theLi.appendChild(vungTen);
 
-            const khoiNut = document.createElement('div');
-            khoiNut.style.display = 'flex';
-            khoiNut.style.gap = '6px';
-            khoiNut.style.alignItems = 'center';
+            // Bổ sung huy hiệu nhỏ để nhận biết trạng thái dữ liệu (bản cũ hay lỗi)
+            if (!banGhi.duLieuGoc || !banGhi.duLieuGoc.includes("loaiVanBan")) {
+                const huyHieu = document.createElement('span');
+                huyHieu.innerText = banGhi.duLieuGoc === undefined ? '⚠️' : '🔒';
+                huyHieu.style.fontSize = '8pt';
+                huyHieu.title = banGhi.duLieuGoc === undefined ? 'Lỗi API' : 'Bản cũ';
+                theLi.appendChild(huyHieu);
+            }
 
-            if (banGhi.duongDanTai) {
-                const nutTai = document.createElement('button');
-                nutTai.innerHTML = '⬇️ Tải Word';
-                nutTai.className = 'btn btn-green'; 
-                nutTai.style.padding = '4px 10px';
-                nutTai.style.fontSize = '8.5pt';
-                nutTai.style.boxShadow = 'none';
-                nutTai.onclick = function(e) {
-                    e.stopPropagation(); 
+            // Gắn sự kiện CLICK VÀO VĂN BẢN
+            theLi.onclick = function() {
+                // 1. Highlight văn bản đang chọn
+                const cacDanhSach = vungHienThi.querySelectorAll('li');
+                cacDanhSach.forEach(li => { 
+                    li.dataset.selected = 'false'; 
+                    li.style.backgroundColor = 'transparent';
+                    li.style.borderLeft = 'none';
+                    li.querySelector('div').style.fontWeight = '500';
+                    li.querySelector('div').style.color = '#0f172a';
+                });
+                
+                this.dataset.selected = 'true';
+                this.style.backgroundColor = '#e0f2fe';
+                this.style.borderLeft = '4px solid #0284c7';
+                vungTen.style.fontWeight = '800';
+                vungTen.style.color = '#0284c7';
+
+                // 2. Nạp tài liệu vào khung xem trước
+                document.getElementById('khungXemTruoc').src = banGhi.duongDanXem;
+                
+                // 3. Cập nhật tên và Mở khóa Thanh công cụ
+                document.getElementById('tenHienThiVanBan').innerText = banGhi.tenBanGhi;
+                document.getElementById('tenHienThiVanBan').title = banGhi.tenBanGhi;
+                document.getElementById('thanhCongCuTaiLieu').style.visibility = 'visible';
+
+                // 4. Trỏ luồng dữ liệu vào các Nút trên thanh công cụ động
+                const nutTai = document.getElementById('nutTaiDocx');
+                const nutSua = document.getElementById('nutSuaDoc');
+                const nutXoa = document.getElementById('nutXoaDoc');
+
+                // Lệnh Tải
+                nutTai.onclick = function() {
                     const theTaiNgam = document.createElement('a');
                     theTaiNgam.href = banGhi.duongDanTai;
                     theTaiNgam.style.display = 'none';
@@ -1095,49 +1139,28 @@
                     theTaiNgam.click();
                     setTimeout(() => document.body.removeChild(theTaiNgam), 500); 
                 };
-                khoiNut.appendChild(nutTai);
-            }
 
-            if (banGhi.duLieuGoc && banGhi.duLieuGoc.includes("loaiVanBan")) {
-                const nutSua = document.createElement('button');
-                nutSua.innerText = '✏️ Sửa';
-                nutSua.className = 'btn btn-sky';
-                nutSua.style.padding = '4px 10px';
-                nutSua.style.fontSize = '8.5pt';
-                nutSua.style.boxShadow = 'none';
-                nutSua.onclick = function(e) {
-                    e.stopPropagation(); 
-                    // CHỐT ID FILE ĐỂ CHUẨN BỊ GHI ĐÈ
-                    window.idFileDangSua = banGhi.idFile;
-                    napDuLieuSua(banGhi.duLieuGoc);
-                };
-                khoiNut.appendChild(nutSua);
-                
-                // NÚT XÓA CHUYÊN DỤNG BỔ SUNG THÊM
-                const nutXoa = document.createElement('button');
-                nutXoa.innerText = '🗑️ Xóa';
-                nutXoa.className = 'btn btn-red';
-                nutXoa.style.padding = '4px 10px';
-                nutXoa.style.fontSize = '8.5pt';
-                nutXoa.style.boxShadow = 'none';
-                nutXoa.onclick = function(e) {
-                    e.stopPropagation(); 
-                    if(confirm("Đồng chí có chắc chắn muốn XÓA VĨNH VIỄN văn bản này khỏi Sổ lưu trữ không?")) {
-                        thucHienXoaFile(banGhi.idFile);
-                    }
-                };
-                khoiNut.appendChild(nutXoa);
-
-            } else {
-                const huyHieu = document.createElement('span');
-                huyHieu.innerText = banGhi.duLieuGoc === undefined ? '⚠️ Lỗi API' : '🔒 Bản cũ';
-                huyHieu.style.fontSize = '7.5pt';
-                huyHieu.style.color = '#94a3b8';
-                huyHieu.style.fontStyle = 'italic';
-                khoiNut.appendChild(huyHieu);
-            }
-
-            theLi.appendChild(khoiNut);
+                // Lệnh Sửa & Xóa (Chỉ hiện khi dữ liệu hợp lệ)
+                if (banGhi.duLieuGoc && banGhi.duLieuGoc.includes("loaiVanBan")) {
+                    nutSua.style.display = 'inline-block';
+                    nutXoa.style.display = 'inline-block';
+                    
+                    nutSua.onclick = function() {
+                        window.idFileDangSua = banGhi.idFile;
+                        napDuLieuSua(banGhi.duLieuGoc);
+                    };
+                    
+                    nutXoa.onclick = function() {
+                        if(confirm("Đồng chí có chắc chắn muốn XÓA VĨNH VIỄN văn bản này khỏi Sổ lưu trữ không?")) {
+                            thucHienXoaFile(banGhi.idFile);
+                        }
+                    };
+                } else {
+                    nutSua.style.display = 'none';
+                    nutXoa.style.display = 'none';
+                }
+            };
+            
             vungHienThi.appendChild(theLi);
         });
     }

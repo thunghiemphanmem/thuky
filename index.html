@@ -75,7 +75,6 @@
         .form-group { display: flex; flex-direction: row; align-items: center; margin-bottom: 8px; }
         .form-group label { flex: 0 0 auto; margin-right: 8px; font-size: 0.95rem; font-weight: 600; color: #475569; white-space: nowrap; }
         
-        /* Chuyên biệt cho các ô nội dung dài: Nhãn nằm trên, ô tự giãn cao */
         .form-group.col-layout { flex-direction: column; align-items: stretch; }
         .form-group.col-layout label { margin-right: 0; margin-bottom: 4px; white-space: normal; }
         
@@ -96,12 +95,10 @@
             outline: none; border-bottom: 2px solid var(--primary); background: #f8fafc; 
         }
         
-        /* Ép kích thước thu hẹp cho ô ít dữ liệu */
         .tiny-input { flex-grow: 0 !important; width: 60px !important; text-align: center; }
         .short-input { flex-grow: 0 !important; width: 100px !important; text-align: center; }
         .med-input { flex-grow: 0 !important; width: 150px !important; }
 
-        /* Textarea tự động giãn cao */
         textarea { resize: none; overflow: hidden; min-height: 38px; line-height: 1.5; }
         
         /* =========================================================================
@@ -112,7 +109,6 @@
         .table-tieu-chi th { background: #f8fafc; color: #334155; text-align: center; font-weight: bold; font-size: 0.9rem; }
         .table-tieu-chi td { text-align: justify; }
         
-        /* Ô nhập trong bảng hoàn toàn trong suốt hòa vào khung */
         .table-tieu-chi input[type="number"] { 
             width: 100%; border: none !important; background: transparent; 
             text-align: center; padding: 4px 0; font-size: 11pt; font-weight: bold; color: #0284c7; outline: none;
@@ -565,12 +561,19 @@
     <div id="khuVucTraCuu" style="display: none; margin-top: 30px; margin-bottom: 20px; padding: 20px; background: rgba(255, 255, 255, 0.9); border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; backdrop-filter: blur(10px);">
         <h3 style="color: #0369a1; border-bottom: 2px solid #38bdf8; padding-bottom: 10px; margin-bottom: 20px;">Kho Lưu Trữ & Tra Cứu Văn Bản</h3>
         
-        <input type="text" id="oTimKiemTaiLieu" onkeyup="locDanhSachTaiLieu()" placeholder="Nhập tên văn bản hoặc từ khóa để lọc..." style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; font-size: 11pt; transition: all 0.2s;">
+        <!-- Nâng cấp khu vực nhập liệu có kèm nút bấm riêng -->
+        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <input type="text" id="oTimKiemTaiLieu" 
+       placeholder="Nhập tên văn bản cần tìm và ấn Enter..." 
+       onkeypress="if(event.keyCode == 13) thucHienTimKiem()" 
+       style="flex: 1; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; font-size: 11pt; transition: all 0.2s;">
+            <button class="btn btn-blue" style="padding: 0 20px; border-radius: 8px;" onclick="thucHienTimKiem()">Tìm Kiếm</button>
+        </div>
         
         <div style="display: flex; gap: 20px; height: 500px;">
             <div style="flex: 1; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; overflow-y: auto;">
                 <ul id="danhSachLuuTru" style="list-style: none; padding: 0; margin: 0;">
-                    <li style="padding: 15px; text-align: center; color: #64748b;">Đang tải dữ liệu...</li>
+                    <li style="padding: 15px; text-align: center; color: #64748b;">Vui lòng ấn "Tìm kiếm" để tải dữ liệu...</li>
                 </ul>
             </div>
             <div style="flex: 2; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; background: #ffffff;">
@@ -910,9 +913,25 @@
     }
 
     // =========================================================================
-    // KHỐI LỆNH: TRA CỨU VÀ XEM TRƯỚC (NÂNG CẤP)
+    // KHỐI LỆNH: TRA CỨU VÀ XEM TRƯỚC (NÂNG CẤP TRUY VẤN MÁY CHỦ)
     // =========================================================================
-    let duLieuTaiLieuHeThong = [];
+    
+    function thucHienTimKiem() {
+        const tuKhoa = document.getElementById('oTimKiemTaiLieu').value;
+        const vungHienThi = document.getElementById('danhSachLuuTru');
+        
+        // Hiển thị trạng thái đang tải
+        vungHienThi.innerHTML = '<li style="padding: 15px; text-align: center; color: #0284c7; font-weight: bold;">Đang truy vấn dữ liệu từ hệ thống...</li>';
+        
+        if(typeof google !== 'undefined' && google.script && google.script.run) {
+            google.script.run
+                .withSuccessHandler(veDanhSachRaManHinh)
+                .withFailureHandler(loiTaiDuLieu)
+                .timKiemVanBanHanhChinh(tuKhoa);
+        } else {
+            vungHienThi.innerHTML = '<li style="padding: 15px; text-align: center; color: #ef4444;">Vui lòng chạy trên môi trường Google Apps Script.</li>';
+        }
+    }
 
     function moGiaoDienTraCuu() {
         const khuVuc = document.getElementById('khuVucTraCuu');
@@ -924,19 +943,9 @@
         khuVuc.style.display = 'block';
         khuVuc.scrollIntoView({ behavior: 'smooth' });
         
-        if(typeof google !== 'undefined' && google.script && google.script.run) {
-            google.script.run
-                .withSuccessHandler(xuLyDuLieuTaiLieu)
-                .withFailureHandler(loiTaiDuLieu)
-                .layDanhSachVanBanHanhChinh();
-        } else {
-            document.getElementById('danhSachLuuTru').innerHTML = '<li style="padding: 15px; text-align: center; color: #ef4444;">Vui lòng chạy trên môi trường Google Apps Script để tra cứu.</li>';
-        }
-    }
-
-    function xuLyDuLieuTaiLieu(danhSachTraVe) {
-        duLieuTaiLieuHeThong = danhSachTraVe;
-        veDanhSachRaManHinh(duLieuTaiLieuHeThong);
+        // Mặc định gọi hàm tìm kiếm rỗng để lấy ra 50 văn bản mới nhất khi vừa mở
+        document.getElementById('oTimKiemTaiLieu').value = '';
+        thucHienTimKiem();
     }
 
     function veDanhSachRaManHinh(mangDuLieu) {
@@ -944,7 +953,7 @@
         vungHienThi.innerHTML = '';
 
         if(!mangDuLieu || mangDuLieu.length === 0) {
-            vungHienThi.innerHTML = '<li style="padding: 15px; text-align: center; color: #ef4444;">Không tìm thấy văn bản nào.</li>';
+            vungHienThi.innerHTML = '<li style="padding: 15px; text-align: center; color: #ef4444;">Không tìm thấy văn bản phù hợp.</li>';
             return;
         }
 
@@ -974,16 +983,8 @@
         });
     }
 
-    function locDanhSachTaiLieu() {
-        const tuKhoa = document.getElementById('oTimKiemTaiLieu').value.toLowerCase().trim();
-        const ketQuaLoc = duLieuTaiLieuHeThong.filter(function(banGhi) {
-            return banGhi.tenBanGhi.toLowerCase().includes(tuKhoa);
-        });
-        veDanhSachRaManHinh(ketQuaLoc);
-    }
-
     function loiTaiDuLieu(loi) {
-        alert("Có lỗi xảy ra khi tải danh sách: " + loi.message);
+        alert("Có lỗi xảy ra khi truy vấn máy chủ: " + loi.message);
         document.getElementById('danhSachLuuTru').innerHTML = '<li style="padding: 15px; text-align: center; color: #ef4444;">Tải dữ liệu thất bại.</li>';
     }
 </script>

@@ -869,8 +869,9 @@
             hienThiTai(`Đang tiến hành xuất tài liệu Word...`, true);
             boDemThoiGian = setTimeout(function() { hienThiTai("", false); alert("Mất quá nhiều thời gian kết xuất File. Vui lòng kiểm tra lại mạng!"); }, 60000);
 
+            // Bổ sung truyền biến loaiVanBan: kieuVanBan vào lõi API
             const duLieuForm = layToanBoDuLieuGiaoDien().data;
-            const dongGoiTruyen = { hanhDong: loaiHanhDong, dongGoiTruyenLen: { idMau: idMauHienTai, duLieuForm: duLieuForm } };
+            const dongGoiTruyen = { hanhDong: loaiHanhDong, dongGoiTruyenLen: { idMau: idMauHienTai, loaiVanBan: kieuVanBan, duLieuForm: duLieuForm } };
             
             if (laMoiTruongGoogle) {
                 google.script.run
@@ -972,7 +973,7 @@ function thucHienTimKiem() {
         thucHienTimKiem();
     }
 
-    function veDanhSachRaManHinh(mangDuLieu) {
+function veDanhSachRaManHinh(mangDuLieu) {
         const vungHienThi = document.getElementById('danhSachLuuTru');
         vungHienThi.innerHTML = '';
 
@@ -986,27 +987,91 @@ function thucHienTimKiem() {
             theLi.style.padding = '12px 15px';
             theLi.style.borderBottom = '1px solid #e2e8f0';
             theLi.style.cursor = 'pointer';
-            theLi.style.color = '#0f172a';
-            theLi.style.fontWeight = '500';
             theLi.style.transition = 'background 0.2s';
-            
-            theLi.innerText = banGhi.tenBanGhi;
+            theLi.style.display = 'flex';
+            theLi.style.justifyContent = 'space-between';
+            theLi.style.alignItems = 'center';
             
             theLi.onmouseover = function() { this.style.backgroundColor = '#e0f2fe'; };
             theLi.onmouseout = function() { this.style.backgroundColor = 'transparent'; };
             
-            theLi.onclick = function() {
+            const vungTen = document.createElement('div');
+            vungTen.innerText = banGhi.tenBanGhi;
+            vungTen.style.flex = '1';
+            vungTen.style.color = '#0f172a';
+            vungTen.style.fontWeight = '500';
+            vungTen.style.paddingRight = '10px';
+            
+            // Xử lý sự kiện ấn vào tên để Xem trước
+            vungTen.onclick = function() {
                 document.getElementById('khungXemTruoc').src = banGhi.duongDanXem;
-                const cacTheLi = vungHienThi.getElementsByTagName('li');
-                for(let i=0; i<cacTheLi.length; i++) { cacTheLi[i].style.fontWeight = '500'; cacTheLi[i].style.color = '#0f172a'; }
+                const cacVungTen = vungHienThi.querySelectorAll('div[style*="flex: 1"]');
+                cacVungTen.forEach(vt => { vt.style.fontWeight = '500'; vt.style.color = '#0f172a'; });
                 this.style.fontWeight = '800';
                 this.style.color = '#0284c7';
             };
             
+            theLi.appendChild(vungTen);
+
+            // Thuật toán: Nếu văn bản có chứa Metadata thì mới hiển thị Nút Sửa
+            if (banGhi.duLieuGoc && banGhi.duLieuGoc.includes("loaiVanBan")) {
+                const nutSua = document.createElement('button');
+                nutSua.innerText = '✏️ Sửa';
+                nutSua.className = 'btn btn-sky';
+                nutSua.style.padding = '4px 10px';
+                nutSua.style.fontSize = '8.5pt';
+                nutSua.style.boxShadow = 'none';
+                nutSua.onclick = function(e) {
+                    e.stopPropagation(); // Ngăn sự kiện click đè lên vùng xem trước
+                    napDuLieuSua(banGhi.duLieuGoc);
+                };
+                theLi.appendChild(nutSua);
+            }
+
             vungHienThi.appendChild(theLi);
         });
     }
+function napDuLieuSua(chuoiDuLieu) {
+        try {
+            const duLieuPhucHoi = JSON.parse(chuoiDuLieu);
+            const kieuVanBan = duLieuPhucHoi.loaiVanBan;
+            const cacTruongDuLieu = duLieuPhucHoi.duLieu;
 
+            // 1. Kích hoạt chuyển đổi giao diện về đúng mẫu văn bản
+            document.getElementById('loaiVanBan').value = kieuVanBan;
+            chuyenDoiBieuMau();
+
+            // 2. Đợi giao diện chuyển đổi xong (250ms) rồi mới nạp dữ liệu tránh lỗi render
+            setTimeout(() => {
+                const khoiActive = document.getElementById('khoi_' + kieuVanBan);
+                if(khoiActive) {
+                    // Quét và đổ dữ liệu vào các thẻ input/textarea có data-key tương ứng
+                    for (let khoa in cacTruongDuLieu) {
+                        const theInput = khoiActive.querySelector(`[data-key="${khoa}"]`);
+                        if (theInput) {
+                            theInput.value = cacTruongDuLieu[khoa];
+                            // Tự động giãn cao các khung Textarea cho vừa chữ
+                            if(theInput.tagName === 'TEXTAREA') tuDongGianCao(theInput);
+                        }
+                    }
+                    
+                    // 3. Tính toán lại tổng điểm nếu là phiếu đánh giá
+                    if (kieuVanBan === "1") tinhTongDiemThanhPhan(1);
+
+                    // 4. Đóng kho lưu trữ và cuộn trang lên trên cùng để bắt đầu sửa
+                    document.getElementById('khuVucTraCuu').style.display = 'none';
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    
+                    // Nhấp nháy viền để báo hiệu hoàn tất
+                    khoiActive.style.boxShadow = "0 0 15px #38bdf8";
+                    setTimeout(() => khoiActive.style.boxShadow = "none", 1500);
+                }
+            }, 250);
+        } catch (loi) {
+            alert("Lỗi khôi phục: Dữ liệu của tệp này không tương thích hoặc bị hỏng.");
+            console.error(loi);
+        }
+    }
     function loiTaiDuLieu(loi) {
         alert("Có lỗi xảy ra khi truy vấn máy chủ: " + loi.message);
         document.getElementById('danhSachLuuTru').innerHTML = '<li style="padding: 15px; text-align: center; color: #ef4444;">Tải dữ liệu thất bại.</li>';

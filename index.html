@@ -1002,7 +1002,6 @@ function veDanhSachRaManHinh(mangDuLieu) {
             vungTen.style.fontWeight = '500';
             vungTen.style.paddingRight = '10px';
             
-            // Xử lý sự kiện ấn vào tên để Xem trước
             vungTen.onclick = function() {
                 document.getElementById('khungXemTruoc').src = banGhi.duongDanXem;
                 const cacVungTen = vungHienThi.querySelectorAll('div[style*="flex: 1"]');
@@ -1013,7 +1012,7 @@ function veDanhSachRaManHinh(mangDuLieu) {
             
             theLi.appendChild(vungTen);
 
-            // Thuật toán: Nếu văn bản có chứa Metadata thì mới hiển thị Nút Sửa
+            // THUẬT TOÁN KIỂM TRA ĐIỀU KIỆN & CHẨN ĐOÁN LỖI
             if (banGhi.duLieuGoc && banGhi.duLieuGoc.includes("loaiVanBan")) {
                 const nutSua = document.createElement('button');
                 nutSua.innerText = '✏️ Sửa';
@@ -1022,15 +1021,25 @@ function veDanhSachRaManHinh(mangDuLieu) {
                 nutSua.style.fontSize = '8.5pt';
                 nutSua.style.boxShadow = 'none';
                 nutSua.onclick = function(e) {
-                    e.stopPropagation(); // Ngăn sự kiện click đè lên vùng xem trước
+                    e.stopPropagation(); 
                     napDuLieuSua(banGhi.duLieuGoc);
                 };
                 theLi.appendChild(nutSua);
+            } else {
+                // Hiển thị huy hiệu báo lỗi cụ thể để biết vì sao nút Sửa không hiện
+                const huyHieu = document.createElement('span');
+                huyHieu.innerText = banGhi.duLieuGoc === undefined ? '⚠️ Lỗi phiên bản API' : '🔒 Bản cũ (Không có Data)';
+                huyHieu.style.fontSize = '7.5pt';
+                huyHieu.style.color = '#94a3b8';
+                huyHieu.style.fontStyle = 'italic';
+                huyHieu.title = 'Chi tiết trạng thái dữ liệu của văn bản này.';
+                theLi.appendChild(huyHieu);
             }
 
             vungHienThi.appendChild(theLi);
         });
     }
+    
 function napDuLieuSua(chuoiDuLieu) {
         try {
             const duLieuPhucHoi = JSON.parse(chuoiDuLieu);

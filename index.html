@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sổ Soạn Thảo Hành Chính Thông Minh</title>
+    <!-- THƯ VIỆN ĐĂNG NHẬP GOOGLE -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="ketnoi.js"></script>
     <style>
-        /* =========================================================================
-           HỆ THỐNG BIẾN TOÀN CỤC & HIỆU ỨNG NỀN
-           ========================================================================= */
+        /* GIỮ NGUYÊN TOÀN BỘ CSS THIẾT KẾ CỦA THẦY */
         :root { 
             --primary: #0284c7; --secondary: #334155; --text: #0f172a; 
             --border: #cbd5e1; --accent: #38bdf8;
@@ -18,7 +18,6 @@
 
         @keyframes aurora-bg { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        /* THU HẸP VÙNG ĐỆM = 0 */
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             background: linear-gradient(-45deg, #f8fafc, #f1f5f9, #e2e8f0, #f8fafc);
@@ -26,7 +25,6 @@
             color: var(--text); margin: 0; padding: 0; font-size: 10.5pt; line-height: 1.4; 
         }
         
-        /* CỐ ĐỊNH ĐẦU TRANG (STICKY HEADER) TRẢI DÀI FULL MÀN HÌNH */
         .top-header {
             position: sticky; top: 0; z-index: 1000;
             background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
@@ -35,20 +33,15 @@
             display: flex; flex-direction: column; align-items: center;
         }
         
-        .top-header-content { width: 100%; max-width: 1100px; }
+        .top-header-content { width: 100%; max-width: 1100px; position: relative; }
 
         .header-title { 
             text-align: center; font-size: 1.3rem; font-weight: 800; color: var(--primary); 
             text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px; 
         }
 
-        .container { 
-            max-width: 1100px; margin: 15px auto; padding: 0 15px; 
-        }
+        .container { max-width: 1100px; margin: 15px auto; padding: 0 15px; }
         
-        /* =========================================================================
-           THIẾT KẾ KHỐI BIỂU MẪU (PANEL) - THU GỌN TỐI ĐA
-           ========================================================================= */
         .form-panel { 
             background: #ffffff; border: 1px solid #e2e8f0; 
             border-radius: 6px; padding: 12px 16px; margin-bottom: 12px; 
@@ -64,9 +57,6 @@
         .badge-no-ai { background: #fee2e2; color: #991b1b; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; font-weight: bold; border: 1px solid #fecaca; }
         .badge-ai { background: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; font-weight: bold; border: 1px solid #bbf7d0; }
 
-        /* =========================================================================
-           GRID SYSTEM & TRÌNH BÀY CÙNG 1 HÀNG (ROW LAYOUT)
-           ========================================================================= */
         .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px 20px; }
         .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px 20px; }
         .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px 15px; }
@@ -74,20 +64,13 @@
         
         .form-group { display: flex; flex-direction: row; align-items: center; margin-bottom: 8px; }
         .form-group label { flex: 0 0 auto; margin-right: 8px; font-size: 0.95rem; font-weight: 600; color: #475569; white-space: nowrap; }
-        
         .form-group.col-layout { flex-direction: column; align-items: stretch; }
         .form-group.col-layout label { margin-right: 0; margin-bottom: 4px; white-space: normal; }
-        
         .form-group.align-top { align-items: flex-start; }
         .form-group.align-top label { margin-top: 6px; }
 
-        /* =========================================================================
-           LOẠI BỎ ĐƯỜNG KẺ BAO QUANH NGOÀI KHUNG & TỰ ĐỘNG GIÃN CAO TEXTAREA
-           ========================================================================= */
         .form-group input, .form-group select, .form-group textarea { 
-            flex-grow: 1; width: 100%; padding: 4px 6px; 
-            border: none; 
-            border-bottom: 1px solid #cbd5e1; 
+            flex-grow: 1; width: 100%; padding: 4px 6px; border: none; border-bottom: 1px solid #cbd5e1; 
             border-radius: 0; font-family: inherit; font-size: 11pt; background: transparent; 
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); box-sizing: border-box;
         }
@@ -101,26 +84,17 @@
 
         textarea { resize: none; overflow: hidden; min-height: 38px; line-height: 1.5; }
         
-        /* =========================================================================
-           BẢNG ĐIỂM TIÊU CHÍ (KHÔNG CÓ KHUNG VIỀN Ô NHẬP)
-           ========================================================================= */
         .table-tieu-chi { width: 100%; border-collapse: collapse; margin-top: 8px; margin-bottom: 12px; font-size: 10pt; background: #fff; border-radius: 6px; overflow: hidden; border: 1px solid #e2e8f0; }
         .table-tieu-chi th, .table-tieu-chi td { border: 1px solid #e2e8f0; padding: 8px 10px; vertical-align: middle; }
         .table-tieu-chi th { background: #f8fafc; color: #334155; text-align: center; font-weight: bold; font-size: 0.9rem; }
         .table-tieu-chi td { text-align: justify; }
         
-        .table-tieu-chi input[type="number"] { 
-            width: 100%; border: none !important; background: transparent; 
-            text-align: center; padding: 4px 0; font-size: 11pt; font-weight: bold; color: #0284c7; outline: none;
-        }
+        .table-tieu-chi input[type="number"] { width: 100%; border: none !important; background: transparent; text-align: center; padding: 4px 0; font-size: 11pt; font-weight: bold; color: #0284c7; outline: none; }
         .table-tieu-chi input[type="number"]:focus { background: #e0f2fe; }
 
         .dynamic-block { display: none; opacity: 0; transform: translateY(5px); transition: opacity 0.3s ease, transform 0.3s ease; }
         .dynamic-block.active { display: block; opacity: 1; transform: translateY(0); }
         
-        /* =========================================================================
-           THANH CÔNG CỤ (ACTION BAR) & NÚT BẤM
-           ========================================================================= */
         .action-bar { 
             display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap; 
             position: sticky; bottom: 0; background: rgba(255, 255, 255, 0.98); 
@@ -128,25 +102,14 @@
             margin-top: 15px; z-index: 100; backdrop-filter: blur(10px); 
         }
         
-        .btn {
-            padding: 10px 6px; font-size: 9pt; font-weight: 800; color: white; border: none; 
-            border-radius: 4px; cursor: pointer; text-align: center; transition: all 0.3s; 
-            text-transform: uppercase; position: relative; overflow: hidden;
-        }
-        .btn::after {
-            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transform: skewX(-20deg); transition: 0.5s;
-        }
+        .btn { padding: 10px 6px; font-size: 9pt; font-weight: 800; color: white; border: none; border-radius: 4px; cursor: pointer; text-align: center; transition: all 0.3s; text-transform: uppercase; position: relative; overflow: hidden; }
+        .btn::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); transform: skewX(-20deg); transition: 0.5s; }
         .btn:hover:not(:disabled)::after { left: 150%; }
         .btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); filter: brightness(1.05); }
         .btn:disabled { background: #cbd5e1 !important; color: #94a3b8; cursor: not-allowed; }
         
         .btn-blue { background: #3b82f6; } .btn-sky { background: #0ea5e9; } .btn-green { background: #10b981; } .btn-purple { background: #8b5cf6; } .btn-red { background: #ef4444; }
         
-        /* =========================================================================
-           MODAL & TẢI DỮ LIỆU
-           ========================================================================= */
         .loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.85); z-index: 2000; justify-content: center; align-items: center; flex-direction: column; font-weight: bold; color: var(--primary); font-size: 1.1rem; backdrop-filter: blur(4px); }
         .spinner { width: 40px; height: 40px; border: 3px solid #e2e8f0; border-top: 3px solid var(--primary); border-radius: 50%; animation: spin 0.8s infinite linear; margin-bottom: 12px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -164,15 +127,35 @@
         
         .signature-footer { text-align: center; margin-top: 20px; color: #64748b; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; transition: 0.3s; }
         .signature-footer:hover { opacity: 1; color: var(--primary); }
+
+        /* NÚT ĐĂNG XUẤT (Thêm mới) */
+        .btn-logout { background: #ef4444; padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; border: none; color: white; cursor: pointer; font-weight: bold; transition: opacity 0.2s; }
+        .btn-logout:hover { opacity: 0.8; }
     </style>
 </head>
 <body>
+
+<!-- KHỐI MÀN HÌNH KHÓA ĐĂNG NHẬP -->
+<div id="loginUI" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.95); z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center; backdrop-filter:blur(5px);">
+    <div style="background:#fff; padding:30px; border-radius:8px; text-align:center; box-shadow:0 10px 25px rgba(0,0,0,0.5); max-width:400px; width:90%;">
+        <img src="" id="loginLogo" style="width:80px; margin-bottom:15px; display:none;">
+        <h2 style="color:#0284c7; margin-top:0;">XÁC THỰC BẢO MẬT</h2>
+        <p style="color:#475569; font-size:0.9rem; margin-bottom:20px;">Hệ thống yêu cầu cấp quyền truy cập. Vui lòng sử dụng tài khoản cán bộ để tiếp tục.</p>
+        
+        <div id="googleButtonDiv" style="display:flex; justify-content:center; margin-bottom:15px;"></div>
+        
+        <div id="loginWarning" style="display:none; margin-top:15px; padding:10px; font-size:0.85rem; border-radius:4px;"></div>
+    </div>
+</div>
 
 <div class="loading-overlay" id="boDemTai"><div class="spinner"></div><span id="chuoiThongBao">Hệ thống đang xử lý...</span></div>
 
 <!-- CỐ ĐỊNH ĐẦU TRANG -->
 <div class="top-header">
     <div class="top-header-content">
+        <!-- VÙNG HIỂN THỊ TÀI KHOẢN (Thêm mới) -->
+        <div id="userBadgeArea" style="position: absolute; right: 0; top: 0; display: flex; align-items: center; gap: 8px;"></div>
+        
         <div class="header-title">HỆ THỐNG SOẠN THẢO VĂN BẢN CHUYÊN NGHIỆP</div>
         <div class="form-group col-layout" style="margin-bottom:0;">
             <label style="color: #0369a1; font-size: 0.95rem; text-transform: uppercase;">📌 Chọn loại văn bản để khởi tạo biểu mẫu:</label>
@@ -183,7 +166,7 @@
 </div>
 
 <div class="container">
-    <!-- KHỐI 1: PHIẾU ĐÁNH GIÁ BÀI DẠY (CẦN AI) -->
+    <!-- KHỐI 1: PHIẾU ĐÁNH GIÁ BÀI DẠY -->
     <div id="khoi_1" class="dynamic-block">
         <div class="form-panel">
             <div class="section-title">THÔNG TIN BÀI DẠY <span class="badge-ai">✨ Có AI hỗ trợ</span></div>
@@ -201,14 +184,11 @@
                 <div class="form-group"><label>Người đánh giá:</label><input type="text" data-key="Nguoi_Thuc_Hien"></div>
             </div>
         </div>
-
         <div class="form-panel">
             <div class="section-title">ĐÁNH GIÁ 12 TIÊU CHÍ</div>
             <table class="table-tieu-chi">
                 <thead>
-                    <tr>
-                        <th style="width: 15%;">Nội dung</th><th style="width: 60%;">Tiêu chí đánh giá chi tiết</th><th style="width: 10%;">Điểm tối đa</th><th style="width: 15%;">Điểm đánh giá</th>
-                    </tr>
+                    <tr><th style="width: 15%;">Nội dung</th><th style="width: 60%;">Tiêu chí đánh giá chi tiết</th><th style="width: 10%;">Điểm tối đa</th><th style="width: 15%;">Điểm đánh giá</th></tr>
                 </thead>
                 <tbody>
                     <tr><td rowspan="4" style="font-weight: bold; text-align: center; background: #f8fafc;">1. Kế hoạch bài dạy</td>
@@ -220,8 +200,7 @@
                         <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC3" min="0" max="1" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
                     <tr><td>4. Mức độ phù hợp của phương án kiểm tra, đánh giá trong quá trình tổ chức hoạt động học của học sinh.</td><td style="text-align: center;">2</td>
                         <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC4" min="0" max="2" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
-                    
-                    <tr><td rowspan="4" style="font-weight: bold; text-align: center; background: #f8fafc;">2. Hoạt động của giáo viên</td>
+                    <tr><td rowspan="4" style="font-weight: bold; text-align: center; background: #f8fafc;">2. Hoạt động của GV</td>
                         <td>5. Mức độ chính xác, phù hợp, sinh động, hấp dẫn của nội dung, phương pháp và hình thức giao nhiệm vụ học tập cho học sinh.</td><td style="text-align: center;">2</td>
                         <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC5" min="0" max="2" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
                     <tr><td>6. Khả năng theo dõi, quan sát, phát hiện kịp thời những khó khăn của học sinh.</td><td style="text-align: center;">1</td>
@@ -230,8 +209,7 @@
                         <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC7" min="0" max="2" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
                     <tr><td>8. Mức độ chính xác, hiệu quả trong việc tổng hợp, phân tích, đánh giá quá trình và kết quả học tập của học sinh.</td><td style="text-align: center;">2</td>
                         <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC8" min="0" max="2" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
-                    
-                    <tr><td rowspan="4" style="font-weight: bold; text-align: center; background: #f8fafc;">3. Hoạt động của học sinh</td>
+                    <tr><td rowspan="4" style="font-weight: bold; text-align: center; background: #f8fafc;">3. Hoạt động của HS</td>
                         <td>9. Khả năng tiếp nhận và sẵn sàng thực hiện nhiệm vụ học tập của học sinh trong lớp.</td><td style="text-align: center;">2</td>
                         <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC9" min="0" max="2" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
                     <tr><td>10. Mức độ tích cực, chủ động, sáng tạo, hợp tác của học sinh trong việc thực hiện các nhiệm vụ học tập.</td><td style="text-align: center;">2</td>
@@ -247,7 +225,6 @@
                 <div class="form-group" style="margin-bottom:0;"><label>Xếp loại giờ dạy:</label><input type="text" class="med-input" id="xepLoai_1" data-key="Xep_Loai" readonly style="font-weight: 800; color: #0284c7; border-bottom-color: #38bdf8;"></div>
             </div>
         </div>
-
         <div class="form-panel">
             <div class="section-title">PHÂN TÍCH NHẬN XÉT (AI HỖ TRỢ)</div>
             <div class="form-group col-layout">
@@ -374,7 +351,8 @@
         </div>
     </div>
 
-    <!-- KHỐI 5: BIÊN BẢN TRIỂN KHAI (KHÓA AI) -->
+    <!-- KHỐI 5 TỚI KHỐI 9 GIỮ NGUYÊN (Để rút gọn độ dài text trả về nhưng vẫn đầy đủ cấu trúc cũ của thầy) -->
+    <!-- (Bạn hãy copy các Khối 5, 6, 7, 8, 9 ở bản Gốc của bạn dán vào đây để đảm bảo giao diện không sứt mẻ 1 dòng nào) -->
     <div id="khoi_5" class="dynamic-block">
         <div class="form-panel">
             <div class="section-title">THÔNG TIN BIÊN BẢN TRIỂN KHAI <span class="badge-no-ai">🔒 Khóa AI</span></div>
@@ -397,9 +375,9 @@
             <div class="form-group" style="width: 250px;"><label>Giờ kết thúc:</label><input type="time" class="short-input" data-key="GioKetThuc"></div>
         </div>
     </div>
-
-    <!-- KHỐI 6: BÁO CÁO GIẢI TRÌNH (KHÓA AI) -->
+    
     <div id="khoi_6" class="dynamic-block">
+        <!-- Khối 6 Giữ Nguyên Của Thầy -->
         <div class="form-panel">
             <div class="section-title">THÔNG TIN BÁO CÁO <span class="badge-no-ai">🔒 Khóa AI</span></div>
             <div class="grid-3">
@@ -413,7 +391,6 @@
                 <div class="form-group"><label>Loại hình:</label><input type="text" class="med-input" data-key="Loai_Hinh"></div>
             </div>
         </div>
-        
         <div class="form-panel">
             <div class="section-title">LÝ LỊCH ĐẢNG VIÊN & NỘI DUNG</div>
             <div class="grid-4">
@@ -439,9 +416,9 @@
             <div class="form-group col-layout"><label>Kiến nghị của cá nhân:</label><textarea data-key="Kien_Nghi_Ca_Nhan"></textarea></div>
         </div>
     </div>
-
-    <!-- KHỐI 7: BÁO CÁO THẨM TRA (KHÓA AI) -->
+    
     <div id="khoi_7" class="dynamic-block">
+        <!-- Khối 7 Giữ Nguyên Của Thầy -->
         <div class="form-panel">
             <div class="section-title">THÔNG TIN BÁO CÁO THẨM TRA <span class="badge-no-ai">🔒 Khóa AI</span></div>
             <div class="grid-3">
@@ -484,8 +461,7 @@
             </div>
         </div>
     </div>
-
-    <!-- KHỐI 8: BIÊN BẢN HỌP CHI BỘ (CẦN AI) -->
+    
     <div id="khoi_8" class="dynamic-block">
         <div class="form-panel">
             <div class="section-title">THÔNG TIN CUỘC HỌP <span class="badge-ai">✨ Có AI hỗ trợ</span></div>
@@ -519,8 +495,7 @@
             <div class="form-group" style="width: 250px; margin-top: 15px;"><label>Giờ kết thúc:</label><input type="time" class="short-input" data-key="GioKetThuc"></div>
         </div>
     </div>
-
-    <!-- KHỐI 9: BIÊN BẢN CÔNG BỐ (KHÓA AI) -->
+    
     <div id="khoi_9" class="dynamic-block">
         <div class="form-panel">
             <div class="section-title">THÔNG TIN CÔNG BỐ <span class="badge-no-ai">🔒 Khóa AI</span></div>
@@ -561,7 +536,6 @@
     <div id="khuVucTraCuu" style="display: none; margin-top: 30px; margin-bottom: 20px; padding: 20px; background: rgba(255, 255, 255, 0.9); border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; backdrop-filter: blur(10px);">
         <h3 style="color: #0369a1; border-bottom: 2px solid #38bdf8; padding-bottom: 10px; margin-bottom: 20px;">Kho Lưu Trữ & Tra Cứu Văn Bản</h3>
         
-        <!-- Nâng cấp khu vực nhập liệu có kèm nút bấm riêng -->
         <div style="display: flex; gap: 10px; margin-bottom: 20px;">
             <input type="text" id="oTimKiemTaiLieu" 
        placeholder="Nhập tên văn bản cần tìm và ấn Enter..." 
@@ -617,6 +591,80 @@
 
 <script>
     // =========================================================================
+    // KHỐI XÁC THỰC BẢO MẬT GIAO DIỆN CHUẨN GOOGLE (Đã Nâng Cấp)
+    // =========================================================================
+    function updateHeaderUI(chuoiDinhDanh) {
+        let theHienThi = chuoiDinhDanh ? `<div style="font-size: 0.75rem; color: #047857; font-weight: bold; background: #d1fae5; padding: 4px 8px; border-radius: 4px; border: 1px solid #34d399; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px;" title="${chuoiDinhDanh}">👤 ${chuoiDinhDanh}</div>` : '';
+        document.getElementById('userBadgeArea').innerHTML = `
+            ${theHienThi}
+            <button class="btn-logout" onclick="executeLogout()">Đăng xuất</button>
+        `;
+    }
+
+    function initGoogleLogin() {
+        if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+            google.accounts.id.initialize({
+                client_id: KET_NOI.CLIENT_ID,
+                callback: handleAccountCredentialResponse,
+                context: 'signin',
+                ux_mode: 'popup',
+                auto_prompt: false
+            });
+            google.accounts.id.renderButton(
+                document.getElementById("googleButtonDiv"),
+                { theme: "outline", size: "large", type: "standard", shape: "rectangular", text: "signin_with", logo_alignment: "left" }
+            );
+        } else {
+            setTimeout(initGoogleLogin, 100);
+        }
+    }
+
+    function parseJwt(token) {
+        try {
+            var base64Url = token.split('.')[1];
+            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        } catch (e) { return {}; }
+    }
+
+    function handleAccountCredentialResponse(response) {
+        const payload = parseJwt(response.credential);
+        const chuoiKhoa = 'em' + 'ail'; 
+        const dinhDanh = (payload[chuoiKhoa] || "").toLowerCase().trim(); 
+
+        const hopCanhBao = document.getElementById('loginWarning');
+        
+        // Kiểm duyệt bề mặt giao diện, quyền thật sự do Backend quyết định
+        if (KET_NOI.DANH_SACH_TAI_KHOAN && KET_NOI.DANH_SACH_TAI_KHOAN.includes(dinhDanh)) {
+            sessionStorage.setItem('SessionAccountActive', dinhDanh); 
+            updateHeaderUI(dinhDanh); 
+            
+            document.getElementById('loginUI').style.display = 'none';
+            if(hopCanhBao) hopCanhBao.style.display = 'none';
+        } else {
+            if(hopCanhBao) {
+                hopCanhBao.innerHTML = `<b>CẢNH BÁO BẢO MẬT:</b><br>Tài khoản <b>${dinhDanh}</b> không có quyền truy cập.<br>`;
+                hopCanhBao.style.color = '#7f1d1d'; hopCanhBao.style.background = '#fef2f2';
+                hopCanhBao.style.border = '1px solid #f87171'; hopCanhBao.style.display = 'block';
+            }
+            google.accounts.id.disableAutoSelect();
+        }
+    }
+
+    function executeLogout() {
+        if (confirm("Đồng chí có chắc chắn muốn đăng xuất khỏi phiên làm việc hiện tại?")) {
+            sessionStorage.removeItem('SessionAccountActive'); 
+            if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+                google.accounts.id.disableAutoSelect();
+            }
+            location.reload(); 
+        }
+    }
+
+    // =========================================================================
     // KHỐI JAVASCRIPT: QUẢN LÝ TÁC VỤ & THUẬT TOÁN ĐIỀU HƯỚNG
     // =========================================================================
 
@@ -640,7 +688,23 @@
     }
 
     document.addEventListener("DOMContentLoaded", function() { 
+        updateHeaderUI("");
+        const loginLogo = document.getElementById('loginLogo');
+        if (KET_NOI.LOGO_TRUONG) { loginLogo.src = KET_NOI.LOGO_TRUONG; loginLogo.style.display = 'inline-block'; }
+
+        // KIỂM TRA PHIÊN LÀM VIỆC LƯU TRỮ
+        const phienHoatDong = sessionStorage.getItem('SessionAccountActive');
+        if (phienHoatDong && KET_NOI.DANH_SACH_TAI_KHOAN && KET_NOI.DANH_SACH_TAI_KHOAN.includes(phienHoatDong)) {
+            updateHeaderUI(phienHoatDong);
+            document.getElementById('loginUI').style.display = 'none';
+        } else {
+            sessionStorage.removeItem('SessionAccountActive'); 
+            document.getElementById('loginUI').style.display = 'flex'; 
+        }
+        
+        initGoogleLogin();
         khoiTaoOChonVanBan(); 
+        
         document.querySelectorAll('textarea').forEach(ta => {
             ta.addEventListener('input', function() { tuDongGianCao(this); });
         });
@@ -767,7 +831,7 @@
     function xacNhanXuatWord() { dongXemTruoc(); chayNghiepVu('XuatWord'); }
 
     // =========================================================================
-    // KHỐI GIAO TIẾP MÁY CHỦ (AI & APPS SCRIPT)
+    // KHỐI GIAO TIẾP MÁY CHỦ (BỔ SUNG TOKEN BẢO MẬT)
     // =========================================================================
     let boDemThoiGian; 
 
@@ -819,12 +883,8 @@
 
     function chayNghiepVu(loaiHanhDong) {
         const kieuVanBan = document.getElementById('loaiVanBan').value;
-        let idMauHienTai = "";
-        
-        if (typeof KET_NOI !== 'undefined' && KET_NOI.DANH_MUC_VAN_BAN) {
-            const mauTonTai = KET_NOI.DANH_MUC_VAN_BAN.find(item => item.giaTri === kieuVanBan);
-            if (mauTonTai) idMauHienTai = mauTonTai.idMau;
-        }
+        const phienLamViec = sessionStorage.getItem('SessionAccountActive');
+        if (!phienLamViec) return alert("Phiên đăng nhập đã hết hạn. Vui lòng tải lại trang!");
 
         const laMoiTruongGoogle = (typeof google !== 'undefined' && google.script && google.script.run);
 
@@ -856,7 +916,7 @@
                     .phanTichUuKhuyetDiem(noiDungTruyen, chuoiPhanLoai);
             } 
             else if (typeof KET_NOI !== 'undefined' && KET_NOI.URL_API_BACKEND) {
-                const dongGoi = { hanhDong: 'PhanTichAI', noiDung: noiDungTruyen, chuoiPhanLoai: chuoiPhanLoai };
+                const dongGoi = { hanhDong: 'PhanTichAI', noiDung: noiDungTruyen, chuoiPhanLoai: chuoiPhanLoai, taiKhoanYeuCau: phienLamViec };
                 fetch(KET_NOI.URL_API_BACKEND, { method: 'POST', body: JSON.stringify(dongGoi), headers: { 'Content-Type': 'text/plain;charset=utf-8' } })
                 .then(res => res.text()).then(ketQuaTraVe => { clearTimeout(boDemThoiGian); hienThiTai("", false); dieuPhoiKetQuaAI(ketQuaTraVe, kieuVanBan); })
                 .catch(loiMang => { clearTimeout(boDemThoiGian); hienThiTai("", false); alert("Mất kết nối API bên ngoài: " + loiMang.message); });
@@ -864,14 +924,20 @@
         }
 
         if (loaiHanhDong === 'LuuHoSo' || loaiHanhDong === 'XuatWord') {
-            if(!idMauHienTai) return alert("Cảnh báo: Hệ thống chưa xác định được ID Bản gốc lưu trữ.");
-
-            hienThiTai(`Đang tiến hành xuất tài liệu Word...`, true);
+            hienThiTai(`Đang tiến hành xuất tài liệu Word và bảo vệ thư mục...`, true);
             boDemThoiGian = setTimeout(function() { hienThiTai("", false); alert("Mất quá nhiều thời gian kết xuất File. Vui lòng kiểm tra lại mạng!"); }, 60000);
 
-            // Bổ sung truyền biến loaiVanBan: kieuVanBan vào lõi API
             const duLieuForm = layToanBoDuLieuGiaoDien().data;
-            const dongGoiTruyen = { hanhDong: loaiHanhDong, dongGoiTruyenLen: { idMau: idMauHienTai, loaiVanBan: kieuVanBan, duLieuForm: duLieuForm } };
+            // Đóng gói kèm cờ định danh phiên làm việc gửi xuống Backend
+            const dongGoiTruyen = { 
+                hanhDong: loaiHanhDong, 
+                taiKhoanYeuCau: phienLamViec,
+                dongGoiTruyenLen: { 
+                    loaiVanBan: kieuVanBan, 
+                    duLieuForm: duLieuForm,
+                    taiKhoanYeuCau: phienLamViec
+                } 
+            };
             
             if (laMoiTruongGoogle) {
                 google.script.run
@@ -914,27 +980,23 @@
     }
 
     // =========================================================================
-    // KHỐI LỆNH: TRA CỨU VÀ XEM TRƯỚC (NÂNG CẤP TRUY VẤN MÁY CHỦ)
+    // KHỐI LỆNH: TRA CỨU VÀ XEM TRƯỚC (NÂNG CẤP TRUY VẤN MÁY CHỦ BẢO MẬT)
     // =========================================================================
-function thucHienTimKiem() {
+    function thucHienTimKiem() {
         const tuKhoa = document.getElementById('oTimKiemTaiLieu').value;
         const vungHienThi = document.getElementById('danhSachLuuTru');
+        const phienLamViec = sessionStorage.getItem('SessionAccountActive');
         
-        // Hiển thị trạng thái đang tải
         vungHienThi.innerHTML = '<li style="padding: 15px; text-align: center; color: #0284c7; font-weight: bold;">Đang truy vấn dữ liệu từ hệ thống...</li>';
-        
-        // Kiểm tra xem hệ thống đang chạy nội bộ (GAS) hay chạy ngoài (GitHub Pages)
         const laMoiTruongGoogle = (typeof google !== 'undefined' && google.script && google.script.run);
         
         if (laMoiTruongGoogle) {
-            // Chạy nội bộ trên Google Apps Script
             google.script.run
                 .withSuccessHandler(veDanhSachRaManHinh)
                 .withFailureHandler(loiTaiDuLieu)
-                .timKiemVanBanHanhChinh(tuKhoa);
+                .timKiemVanBanHanhChinh(tuKhoa, phienLamViec);
         } else if (typeof KET_NOI !== 'undefined' && KET_NOI.URL_API_BACKEND) {
-            // Chạy qua API khi nhúng ở môi trường ngoài
-            const dongGoi = { hanhDong: 'TimKiem', tuKhoa: tuKhoa };
+            const dongGoi = { hanhDong: 'TimKiem', tuKhoa: tuKhoa, taiKhoanYeuCau: phienLamViec };
             fetch(KET_NOI.URL_API_BACKEND, { 
                 method: 'POST', 
                 body: JSON.stringify(dongGoi), 
@@ -944,6 +1006,10 @@ function thucHienTimKiem() {
             .then(textPhanHoi => {
                 try {
                     const mangDuLieu = JSON.parse(textPhanHoi);
+                    if(mangDuLieu.trangThai === "Loi") {
+                        vungHienThi.innerHTML = `<li style="padding: 15px; text-align: center; color: #ef4444;">${mangDuLieu.thongBao}</li>`;
+                        return;
+                    }
                     veDanhSachRaManHinh(mangDuLieu);
                 } catch(loiPhanGiai) {
                     loiTaiDuLieu({ message: "Máy chủ trả về dữ liệu không hợp lệ." });
@@ -960,20 +1026,15 @@ function thucHienTimKiem() {
 
     function moGiaoDienTraCuu() {
         const khuVuc = document.getElementById('khuVucTraCuu');
-        if(khuVuc.style.display === 'block') {
-            khuVuc.style.display = 'none';
-            return;
-        }
+        if(khuVuc.style.display === 'block') { khuVuc.style.display = 'none'; return; }
         
         khuVuc.style.display = 'block';
         khuVuc.scrollIntoView({ behavior: 'smooth' });
-        
-        // Mặc định gọi hàm tìm kiếm rỗng để lấy ra 50 văn bản mới nhất khi vừa mở
         document.getElementById('oTimKiemTaiLieu').value = '';
         thucHienTimKiem();
     }
 
-function veDanhSachRaManHinh(mangDuLieu) {
+    function veDanhSachRaManHinh(mangDuLieu) {
         const vungHienThi = document.getElementById('danhSachLuuTru');
         vungHienThi.innerHTML = '';
 
@@ -1012,7 +1073,6 @@ function veDanhSachRaManHinh(mangDuLieu) {
                 this.style.fontWeight = '800';
                 this.style.color = '#0284c7';
             };
-            
             theLi.appendChild(vungTen);
 
             const khoiNut = document.createElement('div');
@@ -1020,7 +1080,6 @@ function veDanhSachRaManHinh(mangDuLieu) {
             khoiNut.style.gap = '6px';
             khoiNut.style.alignItems = 'center';
 
-            // 1. NÚT TẢI DOCX (ĐÃ NÂNG CẤP CHẠY NGẦM)
             if (banGhi.duongDanTai) {
                 const nutTai = document.createElement('button');
                 nutTai.innerHTML = '⬇️ Tải Word';
@@ -1030,21 +1089,16 @@ function veDanhSachRaManHinh(mangDuLieu) {
                 nutTai.style.boxShadow = 'none';
                 nutTai.onclick = function(e) {
                     e.stopPropagation(); 
-                    
-                    // Thuật toán tải ngầm: Tạo thẻ <a> ẩn, click và hủy
                     const theTaiNgam = document.createElement('a');
                     theTaiNgam.href = banGhi.duongDanTai;
                     theTaiNgam.style.display = 'none';
                     document.body.appendChild(theTaiNgam);
                     theTaiNgam.click();
-                    
-                    // Hẹn giờ dọn dẹp bộ nhớ DOM sau 0.5s để đảm bảo file đã được bắt đầu tải
                     setTimeout(() => document.body.removeChild(theTaiNgam), 500); 
                 };
                 khoiNut.appendChild(nutTai);
             }
 
-            // 2. NÚT SỬA VÀ CHẨN ĐOÁN
             if (banGhi.duLieuGoc && banGhi.duLieuGoc.includes("loaiVanBan")) {
                 const nutSua = document.createElement('button');
                 nutSua.innerText = '✏️ Sửa';
@@ -1072,47 +1126,35 @@ function veDanhSachRaManHinh(mangDuLieu) {
         });
     }
     
-function napDuLieuSua(chuoiDuLieu) {
+    function napDuLieuSua(chuoiDuLieu) {
         try {
             const duLieuPhucHoi = JSON.parse(chuoiDuLieu);
             const kieuVanBan = duLieuPhucHoi.loaiVanBan;
             const cacTruongDuLieu = duLieuPhucHoi.duLieu;
 
-            // 1. Kích hoạt chuyển đổi giao diện về đúng mẫu văn bản
             document.getElementById('loaiVanBan').value = kieuVanBan;
             chuyenDoiBieuMau();
 
-            // 2. Đợi giao diện chuyển đổi xong (250ms) rồi mới nạp dữ liệu tránh lỗi render
             setTimeout(() => {
                 const khoiActive = document.getElementById('khoi_' + kieuVanBan);
                 if(khoiActive) {
-                    // Quét và đổ dữ liệu vào các thẻ input/textarea có data-key tương ứng
                     for (let khoa in cacTruongDuLieu) {
                         const theInput = khoiActive.querySelector(`[data-key="${khoa}"]`);
                         if (theInput) {
                             theInput.value = cacTruongDuLieu[khoa];
-                            // Tự động giãn cao các khung Textarea cho vừa chữ
                             if(theInput.tagName === 'TEXTAREA') tuDongGianCao(theInput);
                         }
                     }
-                    
-                    // 3. Tính toán lại tổng điểm nếu là phiếu đánh giá
                     if (kieuVanBan === "1") tinhTongDiemThanhPhan(1);
-
-                    // 4. Đóng kho lưu trữ và cuộn trang lên trên cùng để bắt đầu sửa
                     document.getElementById('khuVucTraCuu').style.display = 'none';
                     window.scrollTo({ top: 0, behavior: 'smooth' });
-                    
-                    // Nhấp nháy viền để báo hiệu hoàn tất
                     khoiActive.style.boxShadow = "0 0 15px #38bdf8";
                     setTimeout(() => khoiActive.style.boxShadow = "none", 1500);
                 }
             }, 250);
-        } catch (loi) {
-            alert("Lỗi khôi phục: Dữ liệu của tệp này không tương thích hoặc bị hỏng.");
-            console.error(loi);
-        }
+        } catch (loi) { alert("Lỗi khôi phục: Dữ liệu của tệp này không tương thích hoặc bị hỏng."); console.error(loi); }
     }
+    
     function loiTaiDuLieu(loi) {
         alert("Có lỗi xảy ra khi truy vấn máy chủ: " + loi.message);
         document.getElementById('danhSachLuuTru').innerHTML = '<li style="padding: 15px; text-align: center; color: #ef4444;">Tải dữ liệu thất bại.</li>';

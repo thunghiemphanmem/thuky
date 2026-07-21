@@ -778,8 +778,21 @@
         }
     }
 
-    function chuyenDoiBieuMau() {
+function chuyenDoiBieuMau(laLenhTuDong = false) {
         const loai = document.getElementById('loaiVanBan').value;
+        
+        // =====================================================================
+        // CHỐT CHẶN AN TOÀN: Hủy trạng thái "Cập nhật" nếu đổi biểu mẫu bằng tay
+        // =====================================================================
+        if (laLenhTuDong !== true) {
+            window.idFileDangSua = null; // Cắt đứt liên kết ID với file cũ
+            const btnHoSo = document.getElementById('btnHoSo');
+            if (btnHoSo) {
+                btnHoSo.innerText = "Tạo Văn Bản"; // Trả lại tên nút gốc
+                btnHoSo.className = "btn btn-green"; // Trả lại màu xanh mặc định
+            }
+        }
+        // =====================================================================
         
         document.querySelectorAll('.dynamic-block').forEach(khoi => {
             khoi.classList.remove('active');
@@ -1182,14 +1195,19 @@
         vungHienThi.appendChild(doanMaFragment);
     }
     
-    function napDuLieuSua(chuoiDuLieu) {
+function napDuLieuSua(chuoiDuLieu) {
         try {
             const duLieuPhucHoi = JSON.parse(chuoiDuLieu);
             const kieuVanBan = duLieuPhucHoi.loaiVanBan;
             const cacTruongDuLieu = duLieuPhucHoi.duLieu;
 
             document.getElementById('loaiVanBan').value = kieuVanBan;
-            chuyenDoiBieuMau();
+            
+            // =====================================================================
+            // NÂNG CẤP: Truyền cờ "true" để báo hệ thống đây là lệnh mở từ file Sửa
+            // không được kích hoạt chốt chặn xóa ID.
+            // =====================================================================
+            chuyenDoiBieuMau(true); 
 
             setTimeout(() => {
                 const khoiActive = document.getElementById('khoi_' + kieuVanBan);

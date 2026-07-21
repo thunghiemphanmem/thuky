@@ -873,7 +873,7 @@
     // =========================================================================
     let boDemThoiGian; 
 
-    function dieuPhoiKetQuaAI(ketQuaTraVe, kieuVanBan) {
+function dieuPhoiKetQuaAI(ketQuaTraVe, kieuVanBan) {
         if (ketQuaTraVe.indexOf("LỖI") === 0) return alert(ketQuaTraVe);
         try {
             let chuoiGoc = ketQuaTraVe.replace(/```json/gi, '').replace(/```/g, '').trim();
@@ -894,7 +894,6 @@
                     }
                 }
                 tinhTongDiemThanhPhan(1);
-                alert("✨ Trợ lý AI đã hoàn tất phân tích và chấm điểm thành công.");
             } 
             else if (kieuVanBan === '2') {
                 let oKetLuan = document.getElementById('ketQuaKetLuan_2');
@@ -904,14 +903,12 @@
                     oKetLuan.style.backgroundColor = "#dcfce7"; 
                     setTimeout(() => { oKetLuan.style.backgroundColor = "transparent"; }, 1500);
                 }
-                alert("✨ Trợ lý AI đã đúc kết xong nội dung biên bản.");
             }
             else if (kieuVanBan === '8') {
                 let oUu = document.getElementById('ketQuaUuDiem_8');
                 let oKhuyet = document.getElementById('ketQuaKhuyetDiem_8');
                 if (oUu) { oUu.value = duLieuJSON.UuDiem || ""; tuDongGianCao(oUu); oUu.style.backgroundColor = "#dcfce7"; setTimeout(() => oUu.style.backgroundColor = "transparent", 1500); }
                 if (oKhuyet) { oKhuyet.value = duLieuJSON.HanChe || ""; tuDongGianCao(oKhuyet); oKhuyet.style.backgroundColor = "#fecaca"; setTimeout(() => oKhuyet.style.backgroundColor = "transparent", 1500); }
-                alert("✨ Trợ lý AI đã bóc tách xong ý kiến đánh giá.");
             }
         } catch(loiPhanTich) { 
             alert("Tiến trình AI phản hồi không đồng nhất định dạng. Chi tiết: " + loiPhanTich.message); 
@@ -919,7 +916,7 @@
         }
     }
 
-    function chayNghiepVu(loaiHanhDong) {
+function chayNghiepVu(loaiHanhDong) {
         const kieuVanBan = document.getElementById('loaiVanBan').value;
         const phienLamViec = sessionStorage.getItem('SessionAccountActive');
         if (!phienLamViec) return alert("Phiên đăng nhập đã hết hạn. Vui lòng tải lại trang!");
@@ -966,8 +963,6 @@
             boDemThoiGian = setTimeout(function() { hienThiTai("", false); alert("Mất quá nhiều thời gian kết xuất File. Vui lòng kiểm tra lại mạng!"); }, 60000);
 
             const duLieuForm = layToanBoDuLieuGiaoDien().data;
-            
-            // Đóng gói ID_FILE để báo hiệu máy chủ tiến hành Ghi Đè (Cập nhật)
             const dongGoiTruyen = { 
                 hanhDong: loaiHanhDong, 
                 taiKhoanYeuCau: phienLamViec,
@@ -984,9 +979,10 @@
                     .withSuccessHandler(function(phanHoi) {
                         clearTimeout(boDemThoiGian); hienThiTai("", false);
                         if (phanHoi.trangThai === "ThanhCong") { 
-                            if(confirm(phanHoi.thongBao + "\n\nNhấn OK để mở tài liệu Word vừa tạo.")) window.open(phanHoi.lienKet, '_blank'); 
-                            lamMoiForm(true); // Thành công thì làm mới form tự động
-                        } else alert(phanHoi.thongBao);
+                            // Tự động mở Tab mới ngay lập tức
+                            window.open(phanHoi.lienKet, '_blank'); 
+                            lamMoiForm(true); 
+                        } else alert(phanHoi.thongBao); // Vẫn báo popup nếu có lỗi
                     })
                     .withFailureHandler(function(loiMang) { clearTimeout(boDemThoiGian); hienThiTai("", false); alert("Lỗi lưu trữ: " + loiMang.message); })
                     .xuLyLuuHoSo(dongGoiTruyen.dongGoiTruyenLen);
@@ -998,7 +994,8 @@
                     try {
                         const phanHoi = JSON.parse(textPhanHoi); 
                         if (phanHoi.trangThai === "ThanhCong") { 
-                            if(confirm(phanHoi.thongBao + "\n\nNhấn OK để mở tài liệu Word.")) window.open(phanHoi.lienKet, '_blank'); 
+                            // Tự động mở Tab mới ngay lập tức
+                            window.open(phanHoi.lienKet, '_blank'); 
                             lamMoiForm(true); 
                         } else alert("Máy chủ cảnh báo: " + phanHoi.thongBao);
                     } catch(loiPhanGiai) { alert("Lỗi không xác định. Nhấn F12 xem log."); console.error(textPhanHoi); }
@@ -1235,9 +1232,9 @@ function veDanhSachRaManHinh(mangDuLieu) {
         } catch (loi) { alert("Lỗi khôi phục: Dữ liệu của tệp này không tương thích hoặc bị hỏng."); console.error(loi); }
     }
     
-    function thucHienXoaFile(idXoa) {
+function thucHienXoaFile(idXoa) {
         const phienLamViec = sessionStorage.getItem('SessionAccountActive');
-        hienThiTai("Hệ thống đang đưa tệp vào thùng rác...", true);
+        hienThiTai("Hệ thống đang xóa tệp...", true);
         
         const dongGoi = { hanhDong: 'XoaFile', idFile: idXoa, taiKhoanYeuCau: phienLamViec };
         const laMoiTruongGoogle = (typeof google !== 'undefined' && google.script && google.script.run);
@@ -1247,10 +1244,9 @@ function veDanhSachRaManHinh(mangDuLieu) {
                 .withSuccessHandler(function(phanHoi) {
                     hienThiTai("", false);
                     if(phanHoi.trangThai === "ThanhCong") {
-                        alert(phanHoi.thongBao);
-                        if (window.idFileDangSua === idXoa) lamMoiForm(true); // Reset form nếu đang sửa đúng file vừa xóa
-                        thucHienTimKiem(); // Làm mới lại kho lưu trữ
-                    } else alert(phanHoi.thongBao);
+                        if (window.idFileDangSua === idXoa) lamMoiForm(true);
+                        thucHienTimKiem(); // Âm thầm cập nhật UI
+                    } else alert(phanHoi.thongBao); // Vẫn báo nếu lỗi
                 })
                 .withFailureHandler(function(loi) { hienThiTai("", false); alert("Lỗi xóa tệp: " + loi.message); })
                 .xoaVanBanHanhChinh(idXoa, phienLamViec);
@@ -1260,9 +1256,8 @@ function veDanhSachRaManHinh(mangDuLieu) {
             .then(phanHoi => {
                 hienThiTai("", false);
                 if(phanHoi.trangThai === "ThanhCong") {
-                    alert(phanHoi.thongBao);
                     if (window.idFileDangSua === idXoa) lamMoiForm(true);
-                    thucHienTimKiem();
+                    thucHienTimKiem(); // Âm thầm cập nhật UI
                 } else alert(phanHoi.thongBao);
             }).catch(loi => { hienThiTai("", false); alert("Lỗi mạng: " + loi.message); });
         }

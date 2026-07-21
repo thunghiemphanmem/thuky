@@ -1,7 +1,7 @@
 // =========================================================================
 // KHỐI 1: BẢNG CẤU HÌNH TRUNG TÂM HỆ THỐNG GIAO DIỆN (FRONTEND)
 // Tệp: ketnoi.js
-// NÂNG CẤP BẢO MẬT: Đã gỡ bỏ 100% ID nhạy cảm, chỉ giữ thông số hiển thị
+// BẢO MẬT MỨC CAO: Đã gỡ bỏ toàn bộ định danh cá nhân khỏi giao diện
 // =========================================================================
 
 const KET_NOI = {
@@ -22,14 +22,8 @@ const KET_NOI = {
   // 4. MÃ ĐỊNH DANH BẢO MẬT GOOGLE IDENTITY
   CLIENT_ID: '95180316485-a577mlt4a1ve3u52pd0t4rkm6bnljuns.apps.googleusercontent.com',
   
-  // 5. DANH SÁCH KIỂM DUYỆT BỀ MẶT (CHỈ ĐỂ MỞ KHÓA GIAO DIỆN)
-  DANH_SACH_TAI_KHOAN: [
-      'hoangngoclamlc@gmail.com',
-      'tulieuhopthanh@gmail.com'
-  ],
-
   // =======================================================================
-  // 6. DANH MỤC VĂN BẢN (CHỈ CÒN GIÁ TRỊ HIỂN THỊ, ID ĐÃ CẤT VÀO BACKEND)
+  // 5. DANH MỤC VĂN BẢN (CHỈ CÒN GIÁ TRỊ HIỂN THỊ, ID ĐÃ CẤT VÀO BACKEND)
   // =======================================================================
   DANH_MUC_VAN_BAN: [
       { giaTri: '1', tenHienThi: '1. Phiếu đánh giá bài dạy' },
@@ -38,7 +32,7 @@ const KET_NOI = {
       { giaTri: '4', tenHienThi: '4. Hồ sơ Đảng (Kế hoạch)' },
       { giaTri: '5', tenHienThi: '5. Hồ sơ Đảng (Biên bản triển khai cuộc kiểm tra)' },
       { giaTri: '6', tenHienThi: '6. Báo cáo (Giải trình)' },
- 	  { giaTri: '7', tenHienThi: '7. Hồ sơ Đảng (Báo cáo thẩm tra)' },
+      { giaTri: '7', tenHienThi: '7. Hồ sơ Đảng (Báo cáo thẩm tra)' },
       { giaTri: '8', tenHienThi: '8. Hồ sơ Đảng (Biên bản họp chi bộ)' },
       { giaTri: '9', tenHienThi: '9. Hồ sơ Đảng (Biên bản công bố kết quả kiểm tra)' }
   ]

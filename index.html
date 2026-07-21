@@ -991,7 +991,7 @@ function veDanhSachRaManHinh(mangDuLieu) {
             theLi.style.display = 'flex';
             theLi.style.justifyContent = 'space-between';
             theLi.style.alignItems = 'center';
-            theLi.style.gap = '10px'; // Duy trì khoảng cách an toàn giữa tên và các nút
+            theLi.style.gap = '10px'; 
             
             theLi.onmouseover = function() { this.style.backgroundColor = '#e0f2fe'; };
             theLi.onmouseout = function() { this.style.backgroundColor = 'transparent'; };
@@ -1002,7 +1002,7 @@ function veDanhSachRaManHinh(mangDuLieu) {
             vungTen.style.color = '#0f172a';
             vungTen.style.fontWeight = '500';
             vungTen.style.overflow = 'hidden';
-            vungTen.style.textOverflow = 'ellipsis'; // Thêm dấu ... nếu tên quá dài
+            vungTen.style.textOverflow = 'ellipsis'; 
             vungTen.style.whiteSpace = 'nowrap';
             
             vungTen.onclick = function() {
@@ -1015,13 +1015,12 @@ function veDanhSachRaManHinh(mangDuLieu) {
             
             theLi.appendChild(vungTen);
 
-            // TẠO KHỐI CHỨA CÁC NÚT THAO TÁC ĐỂ CĂN CHỈNH THẨM MỸ
             const khoiNut = document.createElement('div');
             khoiNut.style.display = 'flex';
             khoiNut.style.gap = '6px';
             khoiNut.style.alignItems = 'center';
 
-            // 1. NÚT TẢI DOCX (Hiển thị cho tất cả văn bản cũ và mới)
+            // 1. NÚT TẢI DOCX (ĐÃ NÂNG CẤP CHẠY NGẦM)
             if (banGhi.duongDanTai) {
                 const nutTai = document.createElement('button');
                 nutTai.innerHTML = '⬇️ Tải Word';
@@ -1030,13 +1029,22 @@ function veDanhSachRaManHinh(mangDuLieu) {
                 nutTai.style.fontSize = '8.5pt';
                 nutTai.style.boxShadow = 'none';
                 nutTai.onclick = function(e) {
-                    e.stopPropagation(); // Ngăn việc bấm tải làm đổi vùng xem trước
-                    window.open(banGhi.duongDanTai, '_blank'); // Mở link tải trong thẻ mới
+                    e.stopPropagation(); 
+                    
+                    // Thuật toán tải ngầm: Tạo thẻ <a> ẩn, click và hủy
+                    const theTaiNgam = document.createElement('a');
+                    theTaiNgam.href = banGhi.duongDanTai;
+                    theTaiNgam.style.display = 'none';
+                    document.body.appendChild(theTaiNgam);
+                    theTaiNgam.click();
+                    
+                    // Hẹn giờ dọn dẹp bộ nhớ DOM sau 0.5s để đảm bảo file đã được bắt đầu tải
+                    setTimeout(() => document.body.removeChild(theTaiNgam), 500); 
                 };
                 khoiNut.appendChild(nutTai);
             }
 
-            // 2. NÚT SỬA VÀ CHẨN ĐOÁN (Chỉ dành cho văn bản có siêu dữ liệu)
+            // 2. NÚT SỬA VÀ CHẨN ĐOÁN
             if (banGhi.duLieuGoc && banGhi.duLieuGoc.includes("loaiVanBan")) {
                 const nutSua = document.createElement('button');
                 nutSua.innerText = '✏️ Sửa';

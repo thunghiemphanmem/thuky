@@ -991,6 +991,7 @@ function veDanhSachRaManHinh(mangDuLieu) {
             theLi.style.display = 'flex';
             theLi.style.justifyContent = 'space-between';
             theLi.style.alignItems = 'center';
+            theLi.style.gap = '10px'; // Duy trì khoảng cách an toàn giữa tên và các nút
             
             theLi.onmouseover = function() { this.style.backgroundColor = '#e0f2fe'; };
             theLi.onmouseout = function() { this.style.backgroundColor = 'transparent'; };
@@ -1000,7 +1001,9 @@ function veDanhSachRaManHinh(mangDuLieu) {
             vungTen.style.flex = '1';
             vungTen.style.color = '#0f172a';
             vungTen.style.fontWeight = '500';
-            vungTen.style.paddingRight = '10px';
+            vungTen.style.overflow = 'hidden';
+            vungTen.style.textOverflow = 'ellipsis'; // Thêm dấu ... nếu tên quá dài
+            vungTen.style.whiteSpace = 'nowrap';
             
             vungTen.onclick = function() {
                 document.getElementById('khungXemTruoc').src = banGhi.duongDanXem;
@@ -1012,7 +1015,28 @@ function veDanhSachRaManHinh(mangDuLieu) {
             
             theLi.appendChild(vungTen);
 
-            // THUẬT TOÁN KIỂM TRA ĐIỀU KIỆN & CHẨN ĐOÁN LỖI
+            // TẠO KHỐI CHỨA CÁC NÚT THAO TÁC ĐỂ CĂN CHỈNH THẨM MỸ
+            const khoiNut = document.createElement('div');
+            khoiNut.style.display = 'flex';
+            khoiNut.style.gap = '6px';
+            khoiNut.style.alignItems = 'center';
+
+            // 1. NÚT TẢI DOCX (Hiển thị cho tất cả văn bản cũ và mới)
+            if (banGhi.duongDanTai) {
+                const nutTai = document.createElement('button');
+                nutTai.innerHTML = '⬇️ Tải Word';
+                nutTai.className = 'btn btn-green'; 
+                nutTai.style.padding = '4px 10px';
+                nutTai.style.fontSize = '8.5pt';
+                nutTai.style.boxShadow = 'none';
+                nutTai.onclick = function(e) {
+                    e.stopPropagation(); // Ngăn việc bấm tải làm đổi vùng xem trước
+                    window.open(banGhi.duongDanTai, '_blank'); // Mở link tải trong thẻ mới
+                };
+                khoiNut.appendChild(nutTai);
+            }
+
+            // 2. NÚT SỬA VÀ CHẨN ĐOÁN (Chỉ dành cho văn bản có siêu dữ liệu)
             if (banGhi.duLieuGoc && banGhi.duLieuGoc.includes("loaiVanBan")) {
                 const nutSua = document.createElement('button');
                 nutSua.innerText = '✏️ Sửa';
@@ -1024,18 +1048,18 @@ function veDanhSachRaManHinh(mangDuLieu) {
                     e.stopPropagation(); 
                     napDuLieuSua(banGhi.duLieuGoc);
                 };
-                theLi.appendChild(nutSua);
+                khoiNut.appendChild(nutSua);
             } else {
-                // Hiển thị huy hiệu báo lỗi cụ thể để biết vì sao nút Sửa không hiện
                 const huyHieu = document.createElement('span');
-                huyHieu.innerText = banGhi.duLieuGoc === undefined ? '⚠️ Lỗi phiên bản API' : '🔒 Bản cũ (Không có Data)';
+                huyHieu.innerText = banGhi.duLieuGoc === undefined ? '⚠️ Lỗi API' : '🔒 Bản cũ';
                 huyHieu.style.fontSize = '7.5pt';
                 huyHieu.style.color = '#94a3b8';
                 huyHieu.style.fontStyle = 'italic';
                 huyHieu.title = 'Chi tiết trạng thái dữ liệu của văn bản này.';
-                theLi.appendChild(huyHieu);
+                khoiNut.appendChild(huyHieu);
             }
 
+            theLi.appendChild(khoiNut);
             vungHienThi.appendChild(theLi);
         });
     }

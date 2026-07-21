@@ -922,7 +922,7 @@ function chuyenDoiBieuMau(laLenhTuDong = false) {
         }
     }
 
-    function chayNghiepVu(loaiHanhDong) {
+function chayNghiepVu(loaiHanhDong) {
         const kieuVanBan = document.getElementById('loaiVanBan').value;
         const phienLamViec = sessionStorage.getItem('SessionAccountActive');
         if (!phienLamViec) return alert("Phiên đăng nhập đã hết hạn. Vui lòng tải lại trang!");
@@ -979,14 +979,30 @@ function chuyenDoiBieuMau(laLenhTuDong = false) {
                     idFileDangCapNhat: window.idFileDangSua 
                 } 
             };
+
+            // =====================================================================
+            // NÂNG CẤP: Tắt hoàn toàn tính năng mở tab Google Docs
+            // =====================================================================
+            const xuLyLuuThanhCong = function(lienKet) {
+                if (!window.idFileDangSua) {
+                    // Nếu TẠO MỚI: Chỉ hiển thị thông báo thành công
+                    alert("Đã khởi tạo và lưu trữ văn bản mới thành công!");
+                } else {
+                    // Nếu CẬP NHẬT (SỬA): Báo thành công và tải lại bảng xem trước
+                    alert("Đã cập nhật dữ liệu vào văn bản gốc thành công!");
+                    if (document.getElementById('khuVucTraCuu').style.display === 'block') {
+                        thucHienTimKiem();
+                    }
+                }
+                lamMoiForm(true); // Xóa trắng biểu mẫu sau khi lưu
+            };
             
             if (laMoiTruongGoogle) {
                 google.script.run
                     .withSuccessHandler(function(phanHoi) {
                         clearTimeout(boDemThoiGian); hienThiTai("", false);
                         if (phanHoi.trangThai === "ThanhCong") { 
-                            window.open(phanHoi.lienKet, '_blank'); 
-                            lamMoiForm(true); 
+                            xuLyLuuThanhCong(phanHoi.lienKet);
                         } else alert(phanHoi.thongBao);
                     })
                     .withFailureHandler(function(loiMang) { clearTimeout(boDemThoiGian); hienThiTai("", false); alert("Lỗi lưu trữ: " + loiMang.message); })
@@ -999,8 +1015,7 @@ function chuyenDoiBieuMau(laLenhTuDong = false) {
                     try {
                         const phanHoi = JSON.parse(textPhanHoi); 
                         if (phanHoi.trangThai === "ThanhCong") { 
-                            window.open(phanHoi.lienKet, '_blank'); 
-                            lamMoiForm(true); 
+                            xuLyLuuThanhCong(phanHoi.lienKet);
                         } else alert("Máy chủ cảnh báo: " + phanHoi.thongBao);
                     } catch(loiPhanGiai) { alert("Lỗi không xác định. Nhấn F12 xem log."); console.error(textPhanHoi); }
                 })

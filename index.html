@@ -915,21 +915,45 @@
     // =========================================================================
     // KHỐI LỆNH: TRA CỨU VÀ XEM TRƯỚC (NÂNG CẤP TRUY VẤN MÁY CHỦ)
     // =========================================================================
-    
-    function thucHienTimKiem() {
+function thucHienTimKiem() {
         const tuKhoa = document.getElementById('oTimKiemTaiLieu').value;
         const vungHienThi = document.getElementById('danhSachLuuTru');
         
         // Hiển thị trạng thái đang tải
         vungHienThi.innerHTML = '<li style="padding: 15px; text-align: center; color: #0284c7; font-weight: bold;">Đang truy vấn dữ liệu từ hệ thống...</li>';
         
-        if(typeof google !== 'undefined' && google.script && google.script.run) {
+        // Kiểm tra xem hệ thống đang chạy nội bộ (GAS) hay chạy ngoài (GitHub Pages)
+        const laMoiTruongGoogle = (typeof google !== 'undefined' && google.script && google.script.run);
+        
+        if (laMoiTruongGoogle) {
+            // Chạy nội bộ trên Google Apps Script
             google.script.run
                 .withSuccessHandler(veDanhSachRaManHinh)
                 .withFailureHandler(loiTaiDuLieu)
                 .timKiemVanBanHanhChinh(tuKhoa);
+        } else if (typeof KET_NOI !== 'undefined' && KET_NOI.URL_API_BACKEND) {
+            // Chạy qua API khi nhúng ở môi trường ngoài
+            const dongGoi = { hanhDong: 'TimKiem', tuKhoa: tuKhoa };
+            fetch(KET_NOI.URL_API_BACKEND, { 
+                method: 'POST', 
+                body: JSON.stringify(dongGoi), 
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' } 
+            })
+            .then(res => res.text())
+            .then(textPhanHoi => {
+                try {
+                    const mangDuLieu = JSON.parse(textPhanHoi);
+                    veDanhSachRaManHinh(mangDuLieu);
+                } catch(loiPhanGiai) {
+                    loiTaiDuLieu({ message: "Máy chủ trả về dữ liệu không hợp lệ." });
+                    console.error("Dữ liệu lỗi:", textPhanHoi);
+                }
+            })
+            .catch(loiMang => {
+                loiTaiDuLieu({ message: "Mất kết nối với API Backend." });
+            });
         } else {
-            vungHienThi.innerHTML = '<li style="padding: 15px; text-align: center; color: #ef4444;">Vui lòng chạy trên môi trường Google Apps Script.</li>';
+            vungHienThi.innerHTML = '<li style="padding: 15px; text-align: center; color: #ef4444;">Vui lòng chạy trên môi trường Google Apps Script hoặc thiết lập URL API Backend.</li>';
         }
     }
 

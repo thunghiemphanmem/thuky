@@ -230,9 +230,9 @@
                         <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC5" min="0" max="2" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
                     <tr><td>6. Khả năng theo dõi, quan sát, phát hiện kịp thời những khó khăn của học sinh.</td><td style="text-align: center;">1</td>
                         <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC6" min="0" max="1" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
-                    <tr><td>7. Mức độ phù hợp, hiệu quả của các biện pháp hỗ trợ và khuyến khích học sinh hợp tác, giúp đỡ nhau khi thực hiện nhiệm vụ học tập.</td><td style="text-align: center;">2</td>
+                    <tr><td>7. Mức độ phù hợp, hiệu quả của các biện pháp hỗ trợ và khuyến cấp học sinh hợp tác, giúp đỡ nhau khi thực hiện nhiệm vụ học tập.</td><td style="text-align: center;">2</td>
                         <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC7" min="0" max="2" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
-                    <tr><td>8. Mức độ chính xác, hiệu quả trong việc tổng hợp, phân tích, đánh giá quá trình và kết quả học tập của học sinh (làm rõ những nội dung/yêu cầu về kiến thức, kĩ năng học sinh cần ghi nhận, thực hiện).</td><td style="text-align: center;">2</td>
+                    <tr><td>8. Mức độ chính xác, hiệu quả trong việc tổng hợp, phân tích, đánh giá quá trình và kết quả học tập của học sinh.</td><td style="text-align: center;">2</td>
                         <td style="text-align: center; padding:0;"><input type="number" data-key="Diem_TC8" min="0" max="2" step="0.25" oninput="tinhTongDiemThanhPhan(1)"></td></tr>
                     
                     <tr><td rowspan="4" style="font-weight: bold; text-align: center; background: #f8fafc;">3. Hoạt động của học sinh</td>
@@ -561,12 +561,31 @@
         </div>
     </div>
 
+    <!-- KHU VỰC TRA CỨU VÀ XEM TRƯỚC VĂN BẢN (NÂNG CẤP) -->
+    <div id="khuVucTraCuu" style="display: none; margin-top: 30px; margin-bottom: 20px; padding: 20px; background: rgba(255, 255, 255, 0.9); border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; backdrop-filter: blur(10px);">
+        <h3 style="color: #0369a1; border-bottom: 2px solid #38bdf8; padding-bottom: 10px; margin-bottom: 20px;">Kho Lưu Trữ & Tra Cứu Văn Bản</h3>
+        
+        <input type="text" id="oTimKiemTaiLieu" onkeyup="locDanhSachTaiLieu()" placeholder="Nhập tên văn bản hoặc từ khóa để lọc..." style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; font-size: 11pt; transition: all 0.2s;">
+        
+        <div style="display: flex; gap: 20px; height: 500px;">
+            <div style="flex: 1; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; overflow-y: auto;">
+                <ul id="danhSachLuuTru" style="list-style: none; padding: 0; margin: 0;">
+                    <li style="padding: 15px; text-align: center; color: #64748b;">Đang tải dữ liệu...</li>
+                </ul>
+            </div>
+            <div style="flex: 2; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; background: #ffffff;">
+                <iframe id="khungXemTruoc" style="width: 100%; height: 100%; border: none;" src="about:blank"></iframe>
+            </div>
+        </div>
+    </div>
+
     <!-- THANH CÔNG CỤ -->
     <div class="action-bar" id="thanhCongCu" style="display: none;">
         <button class="btn btn-blue" onclick="tinhTongDiemThanhPhan(1)" id="btnDanhGia">Tính Điểm ĐG</button>
         <button class="btn btn-sky" onclick="chayNghiepVu('PhanTichAI')" id="btnAI" title="Kích hoạt trợ lý AI">Trợ Lý AI Phân Tích</button>
         <button class="btn btn-green" onclick="chayNghiepVu('LuuHoSo')" id="btnHoSo">Tạo Văn Bản</button>
         <button class="btn btn-purple" onclick="hienThiXemTruoc()">Xem Trước Dữ Liệu</button>
+        <button class="btn" style="background: #f59e0b;" onclick="moGiaoDienTraCuu()" id="btnTraCuu">Kho Lưu Trữ</button>
         <button class="btn btn-red" onclick="lamMoiForm()">Làm Mới Biểu Mẫu</button>
     </div>
 
@@ -596,7 +615,6 @@
 <script>
     // =========================================================================
     // KHỐI JAVASCRIPT: QUẢN LÝ TÁC VỤ & THUẬT TOÁN ĐIỀU HƯỚNG
-    // Tự động giãn cao Textarea theo lượng chữ nhập vào
     // =========================================================================
 
     function tuDongGianCao(el) {
@@ -620,7 +638,6 @@
 
     document.addEventListener("DOMContentLoaded", function() { 
         khoiTaoOChonVanBan(); 
-        // Lắng nghe sự kiện gõ phím trên tất cả Textarea để giãn dòng real-time
         document.querySelectorAll('textarea').forEach(ta => {
             ta.addEventListener('input', function() { tuDongGianCao(this); });
         });
@@ -678,8 +695,6 @@
                     khoiActive.style.display = 'block';
                     void khoiActive.offsetWidth; 
                     khoiActive.classList.add('active');
-                    
-                    // Xóa mù Textarea: Khởi tạo lại chiều cao sau khi DOM hiển thị
                     khoiActive.querySelectorAll('textarea').forEach(ta => tuDongGianCao(ta));
                 }, 200);
             }
@@ -780,7 +795,7 @@
                 let oKetLuan = document.getElementById('ketQuaKetLuan_2');
                 if (oKetLuan) {
                     oKetLuan.value = duLieuJSON.KetLuan || "";
-                    tuDongGianCao(oKetLuan); // Ép Textarea phình to ngay lập tức
+                    tuDongGianCao(oKetLuan); 
                     oKetLuan.style.backgroundColor = "#dcfce7"; 
                     setTimeout(() => { oKetLuan.style.backgroundColor = "transparent"; }, 1500);
                 }
@@ -884,16 +899,92 @@
             const loai = document.getElementById('loaiVanBan').value;
             if(loai !== "0") {
                 document.getElementById('khoi_' + loai).querySelectorAll('input:not([type="datetime-local"]), textarea').forEach(truongNhap => truongNhap.value = '');
-                // Gập lại Textarea sau khi xóa
                 document.getElementById('khoi_' + loai).querySelectorAll('textarea').forEach(ta => tuDongGianCao(ta));
                 
-                // Đặt lại các nhãn xếp loại nếu xóa
                 const oTongDiem = document.getElementById('tongDiem_1');
                 const oXepLoai = document.getElementById('xepLoai_1');
                 if (oTongDiem) oTongDiem.value = '';
                 if (oXepLoai) oXepLoai.value = '';
             }
         }
+    }
+
+    // =========================================================================
+    // KHỐI LỆNH: TRA CỨU VÀ XEM TRƯỚC (NÂNG CẤP)
+    // =========================================================================
+    let duLieuTaiLieuHeThong = [];
+
+    function moGiaoDienTraCuu() {
+        const khuVuc = document.getElementById('khuVucTraCuu');
+        if(khuVuc.style.display === 'block') {
+            khuVuc.style.display = 'none';
+            return;
+        }
+        
+        khuVuc.style.display = 'block';
+        khuVuc.scrollIntoView({ behavior: 'smooth' });
+        
+        if(typeof google !== 'undefined' && google.script && google.script.run) {
+            google.script.run
+                .withSuccessHandler(xuLyDuLieuTaiLieu)
+                .withFailureHandler(loiTaiDuLieu)
+                .layDanhSachVanBanHanhChinh();
+        } else {
+            document.getElementById('danhSachLuuTru').innerHTML = '<li style="padding: 15px; text-align: center; color: #ef4444;">Vui lòng chạy trên môi trường Google Apps Script để tra cứu.</li>';
+        }
+    }
+
+    function xuLyDuLieuTaiLieu(danhSachTraVe) {
+        duLieuTaiLieuHeThong = danhSachTraVe;
+        veDanhSachRaManHinh(duLieuTaiLieuHeThong);
+    }
+
+    function veDanhSachRaManHinh(mangDuLieu) {
+        const vungHienThi = document.getElementById('danhSachLuuTru');
+        vungHienThi.innerHTML = '';
+
+        if(!mangDuLieu || mangDuLieu.length === 0) {
+            vungHienThi.innerHTML = '<li style="padding: 15px; text-align: center; color: #ef4444;">Không tìm thấy văn bản nào.</li>';
+            return;
+        }
+
+        mangDuLieu.forEach(function(banGhi) {
+            const theLi = document.createElement('li');
+            theLi.style.padding = '12px 15px';
+            theLi.style.borderBottom = '1px solid #e2e8f0';
+            theLi.style.cursor = 'pointer';
+            theLi.style.color = '#0f172a';
+            theLi.style.fontWeight = '500';
+            theLi.style.transition = 'background 0.2s';
+            
+            theLi.innerText = banGhi.tenBanGhi;
+            
+            theLi.onmouseover = function() { this.style.backgroundColor = '#e0f2fe'; };
+            theLi.onmouseout = function() { this.style.backgroundColor = 'transparent'; };
+            
+            theLi.onclick = function() {
+                document.getElementById('khungXemTruoc').src = banGhi.duongDanXem;
+                const cacTheLi = vungHienThi.getElementsByTagName('li');
+                for(let i=0; i<cacTheLi.length; i++) { cacTheLi[i].style.fontWeight = '500'; cacTheLi[i].style.color = '#0f172a'; }
+                this.style.fontWeight = '800';
+                this.style.color = '#0284c7';
+            };
+            
+            vungHienThi.appendChild(theLi);
+        });
+    }
+
+    function locDanhSachTaiLieu() {
+        const tuKhoa = document.getElementById('oTimKiemTaiLieu').value.toLowerCase().trim();
+        const ketQuaLoc = duLieuTaiLieuHeThong.filter(function(banGhi) {
+            return banGhi.tenBanGhi.toLowerCase().includes(tuKhoa);
+        });
+        veDanhSachRaManHinh(ketQuaLoc);
+    }
+
+    function loiTaiDuLieu(loi) {
+        alert("Có lỗi xảy ra khi tải danh sách: " + loi.message);
+        document.getElementById('danhSachLuuTru').innerHTML = '<li style="padding: 15px; text-align: center; color: #ef4444;">Tải dữ liệu thất bại.</li>';
     }
 </script>
 </body>

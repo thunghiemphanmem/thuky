@@ -687,11 +687,10 @@
         }
     }
 
-    function tuDongGianCao(el) {
-        el.style.height = 'auto'; 
+  function tuDongGianCao(el) {
+        el.style.height = '32px'; // Thu nhỏ về đúng 1 dòng trước để lấy mốc đo lường
         let chieuCaoMoi = el.scrollHeight;
-        if (chieuCaoMoi < 38) chieuCaoMoi = 38; 
-        el.style.height = chieuCaoMoi + 'px';
+        el.style.height = chieuCaoMoi + 'px'; // Có chữ đến đâu, tự động giãn nở cao đến đó
     }
 
     function khoiTaoOChonVanBan() {

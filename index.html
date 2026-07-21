@@ -82,7 +82,13 @@
         .short-input { flex-grow: 0 !important; width: 100px !important; text-align: center; }
         .med-input { flex-grow: 0 !important; width: 150px !important; }
 
-        textarea { resize: none; overflow: hidden; min-height: 38px; line-height: 1.5; }
+        textarea { 
+            resize: none; 
+            overflow: hidden; 
+            min-height: 32px; 
+            height: 32px; /* Ép cứng chiều cao mặc định đúng 1 dòng */
+            line-height: 1.5; 
+        }
         
         .table-tieu-chi { width: 100%; border-collapse: collapse; margin-top: 8px; margin-bottom: 12px; font-size: 10pt; background: #fff; border-radius: 6px; overflow: hidden; border: 1px solid #e2e8f0; }
         .table-tieu-chi th, .table-tieu-chi td { border: 1px solid #e2e8f0; padding: 8px 10px; vertical-align: middle; }

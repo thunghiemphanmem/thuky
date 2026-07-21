@@ -611,7 +611,6 @@
         <div class="modal-body" id="previewBody"></div>
         <div class="modal-footer">
             <button class="btn btn-red" onclick="dongXemTruoc()">Quay Lại Chỉnh Sửa</button>
-            <button class="btn btn-green" onclick="xacNhanXuatWord()">✓ Xác Nhận & Xuất Word</button>
         </div>
     </div>
 </div>
@@ -851,17 +850,31 @@ function chuyenDoiBieuMau(laLenhTuDong = false) {
         return { data: duLieuGoi, labels: nhanDien };
     }
 
-    function hienThiXemTruoc() {
+function hienThiXemTruoc() {
         const tapHopDuLieu = layToanBoDuLieuGiaoDien();
         const kieuVanBan = document.getElementById('loaiVanBan').value;
         if (kieuVanBan === "0") return alert("Vui lòng lựa chọn loại văn bản trước khi thực hiện!");
 
-        let chuoiHtml = "<div style='margin-bottom: 15px; color: #475569; font-style: italic; border-left: 3px solid #0284c7; padding-left: 10px;'>Hệ thống đã thu thập các trường dữ liệu dưới đây. Hãy kiểm tra tính chính xác trước khi khởi tạo tệp Word.</div><table class='preview-table'><tbody>";
+        let chuoiHtml = "<div style='margin-bottom: 15px; color: #475569; font-style: italic; border-left: 3px solid #0284c7; padding-left: 10px;'>Hệ thống đã thu thập các trường dữ liệu dưới đây. Hãy kiểm tra tính chính xác của thông tin.</div><table class='preview-table'><tbody>";
+        
+        // =====================================================================
+        // CHỐT CHẶN BẢO VỆ: Kiểm tra xem có trường dữ liệu nào được nhập chưa
+        // =====================================================================
+        let coDuLieu = false;
         
         for (let idTruong in tapHopDuLieu.data) {
             let giaTriDien = tapHopDuLieu.data[idTruong].trim();
-            if (giaTriDien !== "") chuoiHtml += `<tr><th>${tapHopDuLieu.labels[idTruong]}</th><td>${giaTriDien.replace(/\n/g, '<br>')}</td></tr>`;
+            if (giaTriDien !== "") {
+                chuoiHtml += `<tr><th>${tapHopDuLieu.labels[idTruong]}</th><td>${giaTriDien.replace(/\n/g, '<br>')}</td></tr>`;
+                coDuLieu = true; // Ghi nhận đã có ít nhất 1 trường có dữ liệu
+            }
         }
+        
+        // Nếu duyệt qua toàn bộ form mà không có dữ liệu, chặn ngay lập tức
+        if (!coDuLieu) {
+            return alert("Lỗi: Biểu mẫu hiện chưa có dữ liệu. Vui lòng nhập thông tin trước khi sử dụng tính năng Xem trước!");
+        }
+
         document.getElementById('previewBody').innerHTML = chuoiHtml + "</tbody></table>";
         
         const modal = document.getElementById('previewModal');

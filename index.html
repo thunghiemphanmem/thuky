@@ -862,10 +862,29 @@ goiMayChu: function(tenLenh, thamSo, hamThanhCong, hamThatBai = null) {
             });
         }
         else if (hanhDong === 'LuuHoSo' || hanhDong === 'XuatWord') {
-            HeThong.hienTai(true, HeThong.trangThai.idFileDangSua ? "Đang ghi đè tài liệu..." : "Đang tạo tài liệu mới...");
-            HeThong.goiMayChu(hanhDong, { dongGoiTruyenLen: { loaiVanBan: loai, duLieuForm: layToanBoDuLieuGiaoDien().data, idFileDangCapNhat: HeThong.trangThai.idFileDangSua } }, (kq) => {
+            const idSua = HeThong.trangThai.idFileDangSua;
+            HeThong.hienTai(true, idSua ? "Đang ghi đè tài liệu..." : "Đang tạo tài liệu mới...");
+            
+            // ĐIỂM SỬA LỖI: Phục hồi biến phân quyền taiKhoanYeuCau vào thẳng payload lõi 
+            // để máy chủ Google (Code.gs) xác thực được tư cách người cập nhật văn bản.
+            const payload = {
+                loaiVanBan: loai,
+                duLieuForm: layToanBoDuLieuGiaoDien().data,
+                taiKhoanYeuCau: HeThong.phienLamViec(),
+                idFileDangCapNhat: idSua
+            };
+
+            HeThong.goiMayChu(hanhDong, { dongGoiTruyenLen: payload }, (kq) => {
                 HeThong.hienTai(false);
-                if(kq.trangThai === "ThanhCong") { HeThong.thongBao(HeThong.trangThai.idFileDangSua ? "Cập nhật thành công!" : "Khởi tạo thành công!"); lamMoiForm(true); } 
+                if(kq.trangThai === "ThanhCong") { 
+                    HeThong.thongBao(idSua ? "Cập nhật văn bản thành công!" : "Khởi tạo văn bản thành công!"); 
+                    lamMoiForm(true); 
+                    
+                    // UX Tự động: Nếu đang mở Kho Lưu Trữ thì tự động tải lại danh sách để hiện bản mới nhất
+                    if (document.getElementById('panelKhoLuuTru').classList.contains('open')) {
+                        thucHienTimKiem();
+                    }
+                } 
                 else HeThong.thongBao(kq.thongBao, "loi");
             });
         }

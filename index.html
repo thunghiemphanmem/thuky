@@ -868,9 +868,23 @@ function lamMoiForm(boQua = false) {
                 // 1. Xóa sạch chữ trên giao diện
                 khoi.querySelectorAll('input:not([type="datetime-local"]), textarea').forEach(o => o.value = '');
                 
-                // 2. VÁ LỖI HIỂN THỊ: Đẩy lệnh thu nhỏ vào hàng đợi 50ms để trình duyệt kịp cập nhật khung rỗng
+                // 2. VÁ LỖI CSS GRID: Chia thuật toán thu nhỏ làm 2 nhịp để bẻ gãy liên kết chiều cao
                 setTimeout(() => {
-                    khoi.querySelectorAll('textarea').forEach(ta => tuDongGianCao(ta));
+                    const textareas = khoi.querySelectorAll('textarea');
+                    
+                    // Nhịp 1: Ép ĐỒNG LOẠT tất cả các ô về 1px cùng lúc để đánh sập khung Grid
+                    textareas.forEach(ta => { 
+                        ta.style.transition = 'none'; 
+                        ta.style.height = '1px'; 
+                    });
+                    
+                    // Nhịp 2: Sau khi khung lưới đã sập xuống, mới đo lại và gán độ cao chuẩn
+                    textareas.forEach(ta => {
+                        let h = ta.scrollHeight;
+                        ta.style.height = (h < 32 ? 32 : h) + 'px';
+                        void ta.offsetHeight; // Kích hoạt vẽ lại giao diện mượt mà
+                        ta.style.transition = ''; // Trả lại hiệu ứng
+                    });
                 }, 50);
                 
                 if(loai === "1") { 

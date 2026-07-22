@@ -710,9 +710,11 @@ goiMayChu: function(tenLenh, thamSo, hamThanhCong, hamThatBai = null) {
                     .withFailureHandler(xuLyLoi);
                     
                 if(tenLenh === 'PhanTichAI') runner.phanTichUuKhuyetDiem(thamSo.noiDung, thamSo.chuoiPhanLoai);
-                else if(tenLenh === 'LuuHoSo' || tenLenh === 'XuatWord') {
-                    // ĐIỂM SỬA LỖI: Nhúng trực tiếp tài khoản vào TRONG gói dữ liệu 
-                    // để khớp với cách lấy biến của hàm xuLyLuuHoSo(dongGoiTruyenLen) bên Code.gs
+                // SỬA LỖI ĐỐI SỐ: Chỉ truyền 1 gói tham số duy nhất để khớp với Code.gs
+                else if(tenLenh === 'LuuHoSo' || tenLenh === 'XuatWord') runner.xuLyLuuHoSo(thamSo.dongGoiTruyenLen);
+                else if(tenLenh === 'TimKiem') runner.timKiemVanBanHanhChinh(thamSo.tuKhoa, thamSo.taiKhoanYeuCau);
+                else if(tenLenh === 'XoaFile') runner.xoaVanBanHanhChinh(thamSo.idFile, thamSo.taiKhoanYeuCau);
+                else if(tenLenh === 'TruyVanCheoAI') runner.truyVanCheoAI(thamSo.cauHoi, thamSo.dieuKienLoc, thamSo.taiKhoanYeuCau);
                     if (thamSo.dongGoiTruyenLen) {
                         thamSo.dongGoiTruyenLen.taiKhoanYeuCau = thamSo.taiKhoanYeuCau;
                     }
@@ -870,12 +872,19 @@ goiMayChu: function(tenLenh, thamSo, hamThanhCong, hamThatBai = null) {
 else if (hanhDong === 'LuuHoSo' || hanhDong === 'XuatWord') {
             HeThong.hienTai(true, HeThong.trangThai.idFileDangSua ? "Đang ghi đè tài liệu..." : "Đang tạo tài liệu mới...");
             
-            HeThong.goiMayChu(hanhDong, { dongGoiTruyenLen: { loaiVanBan: loai, duLieuForm: layToanBoDuLieuGiaoDien().data, idFileDangCapNhat: HeThong.trangThai.idFileDangSua } }, (kq) => {
+            // ĐÓNG GÓI TRỰC TIẾP: Nhúng tài khoản vào thẳng payload lõi
+            const payloadLuu = { 
+                loaiVanBan: loai, 
+                duLieuForm: layToanBoDuLieuGiaoDien().data, 
+                idFileDangCapNhat: HeThong.trangThai.idFileDangSua,
+                taiKhoanYeuCau: HeThong.phienLamViec() 
+            };
+
+            HeThong.goiMayChu(hanhDong, { dongGoiTruyenLen: payloadLuu }, (kq) => {
                 HeThong.hienTai(false);
                 if(kq.trangThai === "ThanhCong") { 
                     HeThong.thongBao(HeThong.trangThai.idFileDangSua ? "Cập nhật thành công!" : "Khởi tạo thành công!"); 
                     lamMoiForm(true); 
-                    // Tự động tải lại danh sách nếu Kho lưu trữ đang mở
                     if (document.getElementById('panelKhoLuuTru').classList.contains('open')) {
                         thucHienTimKiem();
                     }

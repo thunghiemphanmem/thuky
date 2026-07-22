@@ -615,6 +615,7 @@
                 <div class="grid-2" style="margin-top: 12px;"><div class="form-group col-layout"><label style="color: #475569;">Từ ngày:</label><input type="date" id="aiTuNgay" style="border-radius: 6px; border: 1px solid #cbd5e1;"></div><div class="form-group col-layout"><label style="color: #475569;">Đến ngày:</label><input type="date" id="aiDenNgay" style="border-radius: 6px; border: 1px solid #cbd5e1;"></div></div>
                 <div class="form-group col-layout" style="margin-top: 12px;"><label style="color: #475569;">Giới hạn quét (Mới nhất):</label><select id="aiGioiHanQuet" style="border-radius: 6px; padding: 6px; border: 1px solid #cbd5e1;"><option value="5">5 hồ sơ</option><option value="10" selected>10 hồ sơ</option><option value="20">20 hồ sơ</option></select></div>
                 <button class="btn btn-purple" style="width: 100%; margin-top: 15px; padding: 12px 0;" onclick="kichHoatTruyVanCheo()">✨ YÊU CẦU AI PHÂN TÍCH</button>
+               <div id="aiThongBaoTrangThai" style="margin-top: 10px; font-size: 0.85rem; color: #64748b; text-align: center; font-style: italic;"></div>
             </div>
             <div class="ai-result-panel">
                 <div class="ai-table-container"><table class="preview-table" style="width: 100%; margin: 0; border: none;"><thead style="position: sticky; top: 0; z-index: 10;"><tr><th style="width: 35%; background: #f3f4f6;">Văn bản gốc</th><th style="width: 20%; background: #f3f4f6;">Thời gian</th><th style="background: #ede9fe; color: #6d28d9;">Kết luận từ Trợ lý AI</th></tr></thead><tbody id="vungHienThiKetQuaAI"><tr><td colspan="3" style="text-align: center; padding: 30px; color: #94a3b8; font-style: italic;">Vui lòng đặt câu hỏi để AI rà soát.</td></tr></tbody></table></div>
@@ -691,7 +692,7 @@
             this.trangThai.boDemTimKiem = setTimeout(thucHienTimKiem, 400);
         },
 
-        goiMayChu: function(tenLenh, thamSo, hamThanhCong, hamThatBai = null) {
+goiMayChu: function(tenLenh, thamSo, hamThanhCong, hamThatBai = null) {
             const phien = this.phienLamViec();
             if (!phien) { this.thongBao("Phiên đăng nhập hết hạn.", "loi"); return; }
             
@@ -700,7 +701,15 @@
             const xuLyLoi = hamThatBai || (l => { this.hienTai(false); this.thongBao(l.message, "loi"); });
 
             if (laGAS) {
-                const runner = google.script.run.withSuccessHandler(hamThanhCong).withFailureHandler(xuLyLoi);
+                const runner = google.script.run
+                    .withSuccessHandler(res => {
+                        let parsed = res;
+                        // Ép kiểu về Object/Array nếu Google trả về dạng chuỗi String
+                        if (typeof res === 'string') { try { parsed = JSON.parse(res); } catch(e) {} }
+                        hamThanhCong(parsed);
+                    })
+                    .withFailureHandler(xuLyLoi);
+                    
                 if(tenLenh === 'PhanTichAI') runner.phanTichUuKhuyetDiem(thamSo.noiDung, thamSo.chuoiPhanLoai);
                 else if(tenLenh === 'LuuHoSo' || tenLenh === 'XuatWord') runner.xuLyLuuHoSo(thamSo.dongGoiTruyenLen);
                 else if(tenLenh === 'TimKiem') runner.timKiemVanBanHanhChinh(thamSo.tuKhoa, thamSo.taiKhoanYeuCau);
@@ -708,8 +717,7 @@
                 else if(tenLenh === 'TruyVanCheoAI') runner.truyVanCheoAI(thamSo.cauHoi, thamSo.dieuKienLoc, thamSo.taiKhoanYeuCau);
             } else if (typeof KET_NOI !== 'undefined' && KET_NOI.URL_API_BACKEND) {
                 fetch(KET_NOI.URL_API_BACKEND, { method: 'POST', body: JSON.stringify({ hanhDong: tenLenh, ...thamSo }), headers: { 'Content-Type': 'text/plain;charset=utf-8' } })
-                .then(res => res.text()).then(txt => { try { hamThanhCong(JSON.parse(txt)); } catch(e) { hamThanhCong(txt); } })
-                .catch(xuLyLoi);
+                .then(res => res.text()).then(txt => { let p = txt; try { p = JSON.parse(txt); } catch(e) {} hamThanhCong(p); }).catch(xuLyLoi);
             }
         }
     };
@@ -867,17 +875,24 @@
     // KHỐI 5: KHO LƯU TRỮ VÀ TRUY VẤN AI TRONG PANEL
     // =========================================================================
 
-    function thucHienTimKiem() {
+function thucHienTimKiem() {
         const tuKhoa = document.getElementById('oTimKiemTaiLieu').value;
         const ul = document.getElementById('danhSachLuuTru');
         ul.innerHTML = `<div class="skeleton-wrapper"><div class="skeleton-item"></div><div class="skeleton-item"></div><div class="skeleton-item" style="width: 85%;"></div></div>`;
         
         HeThong.goiMayChu('TimKiem', { tuKhoa: tuKhoa }, (kq) => {
             document.getElementById('tenHienThiVanBan').innerText = "Chưa chọn văn bản"; document.getElementById('thanhCongCuTaiLieu').style.visibility = 'hidden'; document.getElementById('khungXemTruoc').src = "about:blank";
-            if(!kq || kq.length === 0 || kq.trangThai === "Loi") { ul.innerHTML = `<li style="padding: 15px; text-align: center; color: #ef4444;">${kq.thongBao || 'Không tìm thấy.'}</li>`; return; }
+            
+            // Tách mảng an toàn đề phòng bị bọc trong Object
+            const mangDuLieu = Array.isArray(kq) ? kq : (kq && kq.duLieu ? kq.duLieu : []);
+            
+            if(!kq || mangDuLieu.length === 0 || kq.trangThai === "Loi") { 
+                ul.innerHTML = `<li style="padding: 15px; text-align: center; color: #ef4444;">${kq?.thongBao || 'Không tìm thấy văn bản phù hợp.'}</li>`; 
+                return; 
+            }
             
             ul.innerHTML = ''; const frag = document.createDocumentFragment();
-            kq.forEach(bg => {
+            mangDuLieu.forEach(bg => {
                 let li = document.createElement('li'); li.style.cssText = "padding:12px 15px; border-bottom:1px solid #e2e8f0; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:0.2s;";
                 li.onmouseover = function() { if(this.dataset.sel!=='1') this.style.background = '#f8fafc'; }; li.onmouseout = function() { if(this.dataset.sel!=='1') this.style.background = 'transparent'; };
                 li.innerHTML = `<div style="flex:1; color:#0f172a; font-weight:500;">${bg.tenBanGhi}</div>${(!bg.duLieuGoc || !bg.duLieuGoc.includes("loaiVanBan")) ? '<span style="font-size:8pt;">🔒</span>' : ''}`;
@@ -922,23 +937,34 @@
         } catch(e) { HeThong.thongBao("Dữ liệu hỏng.", "loi"); }
     }
 
-    function kichHoatTruyVanCheo() {
+function kichHoatTruyVanCheo() {
         const cauHoi = document.getElementById('aiCauHoiTruyVan').value.trim();
         if(!cauHoi) return HeThong.thongBao("Vui lòng nhập câu hỏi.", "loi");
         document.getElementById('aiTieuDeKhungXem').innerText = 'Đang chờ dữ liệu...'; document.getElementById('aiKhungXemTruocTep').src = 'about:blank'; document.getElementById('aiNutTaiDocx').style.display='none';
         
         const dieuKien = { loaiVanBan: document.getElementById('aiLoaiVanBan').value, tuNgay: document.getElementById('aiTuNgay').value, denNgay: document.getElementById('aiDenNgay').value, soLuongQuet: parseInt(document.getElementById('aiGioiHanQuet').value) };
         const tbody = document.getElementById('vungHienThiKetQuaAI'), status = document.getElementById('aiThongBaoTrangThai');
+        
         tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding:30px;"><div class="reactbits-spinner" style="margin:0 auto 15px auto;"></div><br><span style="color:#8b5cf6; font-weight:bold;">Hệ thống đang quét kho dữ liệu...</span></td></tr>`;
-        status.innerText = "Đang kết nối...";
+        if (status) status.innerText = "Đang gửi tín hiệu...";
         
         HeThong.goiMayChu('TruyVanCheoAI', { cauHoi: cauHoi, dieuKienLoc: dieuKien }, (kq) => {
-            if(kq.trangThai === "Loi") { status.innerText = "Hoàn tất có lỗi."; tbody.innerHTML = `<tr><td colspan="3" style="color:red; text-align:center; padding:20px;">${kq.thongBao}</td></tr>`; return; }
-            status.innerText = `Hoàn tất rà soát ${kq.soLuongDaQuet} tài liệu.`; tbody.innerHTML = '';
-            if(!kq.duLieu || kq.duLieu.length === 0) { tbody.innerHTML = `<tr><td colspan="3" style="color:#0284c7; text-align:center; padding:30px;">Không tìm thấy kết quả phù hợp.</td></tr>`; return; }
+            if(!kq || kq.trangThai === "Loi") { 
+                if(status) status.innerText = "Hoàn tất có lỗi."; 
+                tbody.innerHTML = `<tr><td colspan="3" style="color:red; text-align:center; padding:20px;">${kq?.thongBao || 'Máy chủ phản hồi sai định dạng.'}</td></tr>`; return; 
+            }
+            
+            // Tách mảng kết quả an toàn
+            const mangKetQua = Array.isArray(kq) ? kq : (kq.duLieu || []);
+            if(status) status.innerText = `Hoàn tất rà soát ${kq.soLuongDaQuet || mangKetQua.length} tài liệu.`; 
+            tbody.innerHTML = '';
+            
+            if(mangKetQua.length === 0) { 
+                tbody.innerHTML = `<tr><td colspan="3" style="color:#0284c7; text-align:center; padding:30px;">Không tìm thấy kết quả phù hợp.</td></tr>`; return; 
+            }
             
             const frag = document.createDocumentFragment();
-            kq.duLieu.forEach(item => {
+            mangKetQua.forEach(item => {
                 let tr = document.createElement('tr'); tr.style.cursor = 'pointer';
                 tr.innerHTML = `<td style="font-weight:500; padding:10px;">${item.tenCuocHop||'---'}</td><td style="color:#64748b; padding:10px;">${item.thoiGian||'---'}</td><td style="color:#4c1d95; font-weight:600; padding:10px;">${item.tomTatAction||''}</td>`;
                 tr.onclick = function() {
@@ -954,7 +980,10 @@
                 frag.appendChild(tr);
             });
             tbody.appendChild(frag);
-        }, () => { status.innerText = "Lỗi mạng."; tbody.innerHTML = `<tr><td colspan="3" style="color:red; text-align:center;">Mất kết nối API.</td></tr>`; });
+        }, () => { 
+            if(status) status.innerText = "Lỗi mạng."; 
+            tbody.innerHTML = `<tr><td colspan="3" style="color:red; text-align:center;">Mất kết nối API.</td></tr>`; 
+        });
     }
 </script>
 </body>

@@ -581,33 +581,44 @@
 <!-- Nền mờ phía sau -->
 <div class="panel-backdrop" id="panelBackdrop" onclick="dongTatCaPanel()"></div>
 
-<!-- PANEL 1: KHO LƯU TRỮ -->
+<!-- PANEL 1: KHO LƯU TRỮ (Đã ép mỏng vùng đệm & chia 2 cột chuẩn) -->
 <div class="side-panel" id="panelKhoLuuTru">
-    <div class="panel-header">
-        <h3>📂 Kho Lưu Trữ & Quản Lý</h3>
+    <div class="panel-header" style="padding: 8px 15px;">
+        <h3 style="font-size: 1.1rem;">📂 Kho Lưu Trữ & Quản Lý</h3>
         <button class="btn-close-panel" onclick="dongTatCaPanel()">✖</button>
     </div>
-    <div class="panel-content">
-        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-            <input type="text" id="oTimKiemTaiLieu" placeholder="Gõ tên văn bản để tìm nhanh..." oninput="HeThong.tuDongTimKiem()" style="flex: 1; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 11pt;">
-        </div>
-        <div style="display: flex; gap: 20px; flex-direction: column; height: calc(100vh - 160px);">
-            <div style="flex: 1; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; overflow-y: auto; max-height: 40%;">
-                <ul id="danhSachLuuTru" style="list-style: none; padding: 0; margin: 0;">
-                    <li style="padding: 15px; text-align: center; color: #64748b;">Hệ thống đang sẵn sàng...</li>
-                </ul>
+    
+    <!-- Ép mỏng padding của content xuống 10px, chống cuộn tràn -->
+    <div class="panel-content" style="padding: 10px; overflow: hidden;">
+        
+        <!-- Lưới 2 cột: Cột trái 350px (Danh sách), Cột phải phần còn lại (Khung xem) -->
+        <div style="display: grid; grid-template-columns: 350px 1fr; gap: 12px; height: 100%;">
+            
+            <!-- CỘT TRÁI: Thanh tìm kiếm được nhúng thẳng vào trên đầu danh sách -->
+            <div style="display: flex; flex-direction: column; gap: 8px; height: 100%;">
+                <input type="text" id="oTimKiemTaiLieu" placeholder="Gõ tên văn bản để tìm..." oninput="HeThong.tuDongTimKiem()" style="padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 10.5pt; width: 100%; box-sizing: border-box;">
+                
+                <div style="flex: 1; background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; overflow-y: auto;">
+                    <ul id="danhSachLuuTru" style="list-style: none; padding: 0; margin: 0;">
+                        <li style="padding: 10px; text-align: center; color: #64748b; font-size: 0.95rem;">Hệ thống đang sẵn sàng...</li>
+                    </ul>
+                </div>
             </div>
-            <div class="ai-preview-frame">
-                <div style="background: #f1f5f9; padding: 8px 15px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
-                    <div id="tenHienThiVanBan" style="flex: 1; font-weight: 600; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 10.5pt;">Chưa chọn văn bản</div>
+
+            <!-- CỘT PHẢI: Khung xem trước tài liệu Word -->
+            <div class="ai-preview-frame" style="display: flex; flex-direction: column; border: 1px solid #e2e8f0; border-radius: 6px; background: #fff; height: 100%; overflow: hidden;">
+                <div style="background: #f1f5f9; padding: 6px 12px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                    <div id="tenHienThiVanBan" style="flex: 1; font-weight: 600; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 10pt;">Chưa chọn văn bản</div>
                     <div id="thanhCongCuTaiLieu" style="display: flex; gap: 6px; visibility: hidden; flex-shrink: 0;">
-                        <button id="nutTaiDocx" class="btn btn-green" style="padding: 4px 12px; font-size: 8.5pt;">⬇️ TẢI WORD</button>
-                        <button id="nutSuaDoc" class="btn btn-sky" style="padding: 4px 12px; font-size: 8.5pt;">✏️ SỬA</button>
-                        <button id="nutXoaDoc" class="btn btn-red" style="padding: 4px 12px; font-size: 8.5pt;">🗑️ XÓA</button>
+                        <button id="nutTaiDocx" class="btn btn-green" style="padding: 4px 10px; font-size: 8pt;">⬇️ TẢI WORD</button>
+                        <button id="nutSuaDoc" class="btn btn-sky" style="padding: 4px 10px; font-size: 8pt;">✏️ SỬA</button>
+                        <button id="nutXoaDoc" class="btn btn-red" style="padding: 4px 10px; font-size: 8pt;">🗑️ XÓA</button>
                     </div>
                 </div>
-                <iframe id="khungXemTruoc" style="width: 100%; flex: 1; border: none; min-height: 300px;" src="about:blank"></iframe>
+                <!-- Giảm chiều cao tối thiểu để vừa vặn khung hình -->
+                <iframe id="khungXemTruoc" style="width: 100%; flex: 1; border: none; min-height: auto;" src="about:blank"></iframe>
             </div>
+            
         </div>
     </div>
 </div>

@@ -779,12 +779,20 @@
    function tuDongGianCao(el) {
         let t = el.style.transition; 
         el.style.transition = 'none'; 
-      
-        el.style.height = '1px'; 
         
+        // 1. VÁ LỖI CỐT LÕI: Tạm thời tắt tính năng "kéo giãn" của Flexbox
+        el.style.flexGrow = '0'; 
+        
+        // 2. Lúc này ép 1px mới thực sự có tác dụng
+        el.style.height = '1px'; 
         let h = el.scrollHeight; 
+        
+        // 3. Mặc định trả về 1 dòng (32px) nếu ô rỗng
         el.style.height = (h < 32 ? 32 : h) + 'px';
         void el.offsetHeight; 
+        
+        // 4. Trả lại thuộc tính kéo giãn mặc định
+        el.style.flexGrow = ''; 
         el.style.transition = t;
     }
 

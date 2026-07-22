@@ -608,19 +608,25 @@
         </div>
         <div class="ai-result-panel">
             <div class="ai-table-container"><table class="preview-table" style="width: 100%; margin: 0; border: none;"><thead style="position: sticky; top: 0; z-index: 10; box-shadow: 0 1px 2px rgba(0,0,0,0.05);"><tr><th style="width: 35%; background: #f3f4f6; color: #4b5563;">Văn bản gốc</th><th style="width: 20%; background: #f3f4f6; color: #4b5563;">Thời gian</th><th style="background: #ede9fe; color: #6d28d9; font-weight: 800;">Kết luận từ Trợ lý AI</th></tr></thead><tbody id="vungHienThiKetQuaAI"><tr><td colspan="3" style="text-align: center; padding: 30px; color: #94a3b8; font-style: italic;">Vui lòng thiết lập bộ lọc và đặt câu hỏi để AI tiến hành rà soát kho lưu trữ.</td></tr></tbody></table></div>
-            <div class="ai-preview-frame"><div id="aiTieuDeKhungXem" style="background: #f1f5f9; padding: 8px 15px; border-bottom: 1px solid #e2e8f0; font-weight: 600; color: #0f172a; font-size: 10.5pt; text-align: center;">Bản xem trước tài liệu gốc sẽ hiển thị tại đây</div><iframe id="aiKhungXemTruocTep" style="width: 100%; height: calc(100% - 35px); border: none;" src="about:blank"></iframe></div>
+           <div class="ai-preview-frame">
+            <div style="background: #f1f5f9; padding: 8px 15px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                <div id="aiTieuDeKhungXem" style="font-weight: 600; color: #0f172a; font-size: 10.5pt; text-align: left; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Bản xem trước tài liệu gốc sẽ hiển thị tại đây</div>
+                <button id="aiNutTaiDocx" class="btn btn-green" style="padding: 4px 12px; font-size: 8.5pt; box-shadow: none; display: none; flex-shrink: 0;">⬇️ TẢI WORD</button>
+            </div>
+            <iframe id="aiKhungXemTruocTep" style="width: 100%; height: calc(100% - 35px); border: none;" src="about:blank"></iframe>
+        </div>
         </div>
     </div>
 
-    <!-- THANH CÔNG CỤ -->
+<!-- THANH CÔNG CỤ -->
     <div class="action-bar" id="thanhCongCu" style="display: none;">
         <button class="btn btn-blue" onclick="tinhTongDiemThanhPhan(1)" id="btnDanhGia">Tính Điểm Đánh giá</button>
         <button class="btn btn-sky" onclick="chayNghiepVu('PhanTichAI')" id="btnAI" title="Kích hoạt trợ lý AI">Trợ Lý Phân Tích</button>
         <button class="btn btn-green" onclick="chayNghiepVu('LuuHoSo')" id="btnHoSo">Tạo Văn Bản</button>
-        <button class="btn btn-purple" onclick="hienThiXemTruoc()">Xem Trước Dữ Liệu</button>
+        <button class="btn btn-purple" onclick="hienThiXemTruoc()" id="btnXemTruoc">Xem Trước Dữ Liệu</button>
         <button class="btn" style="background: #f59e0b;" onclick="moGiaoDienTraCuu()" id="btnTraCuu">Kho Lưu Trữ</button>
         <button class="btn" style="background: #8b5cf6;" onclick="moGiaoDienTruyVanAI()" id="btnGoiAI" title="Tra cứu và tổng hợp dữ liệu từ nhiều cuộc họp">🤖 Truy Vấn AI</button>
-        <button class="btn btn-red" onclick="lamMoiForm(false)">Làm Mới Biểu Mẫu</button>
+        <button class="btn btn-red" onclick="lamMoiForm(false)" id="btnLamMoi">Làm Mới Biểu Mẫu</button>
     </div>
 
     <!-- MODAL XEM TRƯỚC -->
@@ -719,6 +725,18 @@
         el.style.transition = hieuUngMacDinh;
     }
 
+    function kiemSoatTrangThaiNut(trangThaiKhoa) {
+        var cacNutCanKhoa = ['btnDanhGia', 'btnAI', 'btnHoSo', 'btnXemTruoc', 'btnLamMoi'];
+        cacNutCanKhoa.forEach(function(id) {
+            var nut = document.getElementById(id);
+            if (nut) {
+                nut.disabled = trangThaiKhoa;
+                nut.style.opacity = trangThaiKhoa ? '0.4' : '1';
+                nut.style.cursor = trangThaiKhoa ? 'not-allowed' : 'pointer';
+            }
+        });
+    }
+    
     function khoiTaoOChonVanBan() {
         var oChon = document.getElementById('loaiVanBan');
         var chuoiHTML = '<option value="0">-- Vui lòng click để chọn biểu mẫu làm việc --</option>';
@@ -1062,25 +1080,36 @@
         }
     }
 
-    // ============================================================
-    // HÀM MỞ KHO LƯU TRỮ (ĐÃ SỬA: TỰ ĐỘNG ẨN AI KHI MỞ KHO)
+ // ============================================================
+    // HÀM MỞ KHO LƯU TRỮ 
     // ============================================================
     function moGiaoDienTraCuu() {
         var khuVuc = document.getElementById('khuVucTraCuu');
+        var loai = document.getElementById('loaiVanBan').value;
+        var khoiHienTai = document.getElementById('khoi_' + loai);
+
         if (khuVuc.style.display === 'block') {
             khuVuc.style.display = 'none';
+            if (khoiHienTai && loai !== "0") khoiHienTai.style.display = 'block';
+            kiemSoatTrangThaiNut(false); // Mở khóa nút
             return;
         }
 
-        // Ẩn giao diện AI nếu đang mở
+        // Ẩn giao diện AI và làm mới nó nếu đang mở
         var khuVucAI = document.getElementById('khuVucTruyVanAI');
         if (khuVucAI && (khuVucAI.style.display === 'grid' || khuVucAI.style.display === 'block')) {
             khuVucAI.style.display = 'none';
-            // Hiển thị lại biểu mẫu làm việc
-            var loai = document.getElementById('loaiVanBan').value;
-            var khoi = document.getElementById('khoi_' + loai);
-            if (khoi) khoi.style.display = 'block';
+            document.getElementById('aiCauHoiTruyVan').value = '';
+            document.getElementById('vungHienThiKetQuaAI').innerHTML = '<tr><td colspan="3" style="text-align: center; padding: 30px; color: #94a3b8; font-style: italic;">Vui lòng thiết lập bộ lọc và đặt câu hỏi để AI tiến hành rà soát kho lưu trữ.</td></tr>';
+            document.getElementById('aiTieuDeKhungXem').innerText = 'Bản xem trước tài liệu gốc sẽ hiển thị tại đây';
+            document.getElementById('aiKhungXemTruocTep').src = 'about:blank';
+            document.getElementById('aiNutTaiDocx').style.display = 'none';
+            document.getElementById('aiThongBaoTrangThai').innerText = '';
         }
+
+        // Ẩn form và Khóa nút
+        if (khoiHienTai) khoiHienTai.style.display = 'none';
+        kiemSoatTrangThaiNut(true);
 
         khuVuc.style.display = 'block';
         khuVuc.scrollIntoView({ behavior: 'smooth' });
@@ -1334,7 +1363,7 @@
             theTr.onmouseover = function() { if (this.dataset.selected !== 'true') this.style.backgroundColor = '#f8fafc'; };
             theTr.onmouseout = function() { if (this.dataset.selected !== 'true') this.style.backgroundColor = 'transparent'; };
             theTr.innerHTML = '<td style="font-weight: 500; color: #0f172a; padding: 10px;">' + (item.tenCuocHop || 'Không rõ tên') + '</td><td style="color: #64748b; font-size: 0.9rem; padding: 10px;">' + (item.thoiGian || '---') + '</td><td style="color: #4c1d95; font-weight: 600; padding: 10px; text-align: justify;">' + (item.tomTatAction || '') + '</td>';
-            theTr.onclick = function() {
+           theTr.onclick = function() {
                 bangKetQua.querySelectorAll('tr').forEach(function(tr) {
                     tr.dataset.selected = 'false';
                     tr.style.backgroundColor = 'transparent';
@@ -1342,9 +1371,22 @@
                 });
                 this.dataset.selected = 'true';
                 this.classList.add('ai-scanning');
+                
                 if (item.idFile) {
                     document.getElementById('aiTieuDeKhungXem').innerText = '📄 Đang xem: ' + item.tenCuocHop;
                     document.getElementById('aiKhungXemTruocTep').src = "https://docs.google.com/document/d/" + item.idFile + "/preview";
+                    
+                    var nutTai = document.getElementById('aiNutTaiDocx');
+                    nutTai.style.display = 'block';
+                    nutTai.onclick = function() {
+                        var theTaiNgam = document.createElement('a');
+                        // Tạo đường dẫn tải docx trực tiếp
+                        theTaiNgam.href = "https://docs.google.com/document/d/" + item.idFile + "/export?format=docx";
+                        theTaiNgam.style.display = 'none';
+                        document.body.appendChild(theTaiNgam);
+                        theTaiNgam.click(); // Trình duyệt sẽ tải ngầm mà không mở tab mới
+                        setTimeout(function() { document.body.removeChild(theTaiNgam); }, 500);
+                    };
                 }
             };
             doanMaFragment.appendChild(theTr);
@@ -1352,8 +1394,8 @@
         bangKetQua.appendChild(doanMaFragment);
     }
 
-    // ============================================================
-    // HÀM MỞ GIAO DIỆN TRUY VẤN AI (ĐÃ SỬA: ĐÓNG KHO NẾU ĐANG MỞ)
+ // ============================================================
+    // HÀM MỞ GIAO DIỆN TRUY VẤN AI
     // ============================================================
     function moGiaoDienTruyVanAI() {
         try {
@@ -1361,31 +1403,24 @@
             var khuVucTraCuu = document.getElementById('khuVucTraCuu');
             var loaiVanBan = document.getElementById('loaiVanBan').value;
             var khoiHienTai = document.getElementById('khoi_' + loaiVanBan);
-            if (!khuVucAI) {
-                alert("LỖI GIAO DIỆN: Hệ thống không tìm thấy khung làm việc AI.");
-                return;
-            }
-            // Đóng kho lưu trữ nếu đang mở
-            if (khuVucTraCuu && khuVucTraCuu.style.display === 'block') {
-                khuVucTraCuu.style.display = 'none';
-            }
-            // Nếu AI đang mở thì đóng lại
+            
+            if (!khuVucAI) { alert("LỖI GIAO DIỆN: Hệ thống không tìm thấy khung làm việc AI."); return; }
+            
+            if (khuVucTraCuu && khuVucTraCuu.style.display === 'block') khuVucTraCuu.style.display = 'none';
+            
             if (khuVucAI.style.display === 'grid' || khuVucAI.style.display === 'block') {
                 khuVucAI.style.display = 'none';
-                if (khoiHienTai && loaiVanBan !== "0") {
-                    khoiHienTai.style.display = 'block';
-                }
+                if (khoiHienTai && loaiVanBan !== "0") khoiHienTai.style.display = 'block';
+                kiemSoatTrangThaiNut(false); // Mở khóa nút
                 return;
             }
-            // Ẩn khối biểu mẫu
-            if (khoiHienTai) {
-                khoiHienTai.style.display = 'none';
-            }
+            
+            if (khoiHienTai) khoiHienTai.style.display = 'none';
+            kiemSoatTrangThaiNut(true); // Khóa nút
+            
             khuVucAI.style.display = 'grid';
             window.scrollTo({ top: 0, behavior: 'smooth' });
-        } catch (loi) {
-            alert("LỖI KỊCH BẢN: " + loi.message);
-        }
+        } catch (loi) { alert("LỖI KỊCH BẢN: " + loi.message); }
     }
 
 </script>

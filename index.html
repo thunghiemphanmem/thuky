@@ -175,12 +175,27 @@
 <!-- ĐẦU TRANG -->
 <div class="top-header">
     <div class="top-header-content">
-        <div id="userBadgeArea" style="position: absolute; right: 0; top: 0; display: flex; align-items: center; gap: 8px;"></div>
         <div class="header-title">HỆ THỐNG SOẠN THẢO VĂN BẢN CHUYÊN NGHIỆP</div>
-        <div class="form-group col-layout" style="margin-bottom:0; max-width: 500px; margin: 0 auto;">
-            <label style="color: #0369a1; font-size: 0.95rem; text-transform: uppercase; text-align: center;">📌 Chọn loại văn bản để khởi tạo:</label>
-            <select id="loaiVanBan" onchange="chuyenDoiBieuMau()" style="font-weight: bold; font-size: 11pt; color: #0284c7; border-bottom: 2px solid #0284c7; padding: 4px 0; text-align: center;">
-            </select>
+        
+        <!-- Bố cục Flexbox 3 cột giúp căn giữa ô chọn và đẩy Đăng xuất sang phải ngang hàng -->
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; position: relative;">
+            
+            <!-- Cột trái: Tạo khoảng trống đối trọng để ô chọn căn giữa tuyệt đối -->
+            <div style="flex: 1; display: none; /* Hiện trên màn lớn nếu cần */"></div>
+            <div style="flex: 1;" class="spacer-desktop"></div>
+            
+            <!-- Cột giữa: Ô chọn loại văn bản -->
+            <div class="form-group col-layout" style="margin-bottom:0; flex: 0 1 500px; width: 100%;">
+                <label style="color: #0369a1; font-size: 0.95rem; text-transform: uppercase; text-align: center;">📌 Chọn loại văn bản để khởi tạo:</label>
+                <select id="loaiVanBan" onchange="chuyenDoiBieuMau()" style="font-weight: bold; font-size: 11pt; color: #0284c7; border-bottom: 2px solid #0284c7; padding: 4px 0; text-align: center;">
+                </select>
+            </div>
+
+            <!-- Cột phải: Chứa thông tin tài khoản và nút Đăng xuất (Căn đáy bằng padding-bottom) -->
+            <div style="flex: 1; display: flex; justify-content: flex-end; padding-bottom: 4px;">
+                <div id="userBadgeArea" style="display: flex; align-items: center; gap: 8px;"></div>
+            </div>
+            
         </div>
     </div>
 </div>

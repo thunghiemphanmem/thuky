@@ -562,7 +562,6 @@
 
     <!-- THANH CÔNG CỤ -->
     <div class="action-bar" id="thanhCongCu" style="display: none;">
-        <button class="btn btn-blue" onclick="tinhTongDiemThanhPhan(1)" id="btnDanhGia">Tính Điểm Đánh giá</button>
         <button class="btn btn-sky" onclick="chayNghiepVu('PhanTichAI')" id="btnAI" title="Kích hoạt trợ lý AI">Trợ Lý Phân Tích</button>
         <button class="btn btn-green" onclick="chayNghiepVu('LuuHoSo')" id="btnHoSo">Tạo Văn Bản</button>
         <button class="btn btn-purple" onclick="hienThiXemTruoc()" id="btnXemTruoc">Xem Trước Dữ Liệu</button>
@@ -836,7 +835,6 @@
             const k = document.getElementById('khoi_' + loai);
             if (k) { setTimeout(() => { k.style.display = 'block'; void k.offsetWidth; k.classList.add('active'); k.querySelectorAll('textarea').forEach(ta => tuDongGianCao(ta)); }, 200); }
             document.getElementById('thanhCongCu').style.display = 'flex';
-            document.getElementById('btnDanhGia').style.display = (loai === "1") ? "block" : "none";
             HeThong.kiemSoatNut(false);
         } else { document.getElementById('thanhCongCu').style.display = 'none'; }
     }

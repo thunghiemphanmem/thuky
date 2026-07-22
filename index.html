@@ -7,8 +7,8 @@
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="ketnoi.js"></script>
     <style>
-        :root {
-            --primary: #0284c7; --secondary: #334155; --text: #0f172a;
+        :root { 
+            --primary: #0284c7; --secondary: #334155; --text: #0f172a; 
             --border: #cbd5e1; --accent: #38bdf8;
             --glass-bg: rgba(255, 255, 255, 0.95);
             --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.05);
@@ -16,13 +16,13 @@
 
         @keyframes aurora-bg { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             background: linear-gradient(-45deg, #f8fafc, #f1f5f9, #e2e8f0, #f8fafc);
             background-size: 400% 400%; animation: aurora-bg 15s ease infinite;
-            color: var(--text); margin: 0; padding: 0; font-size: 10.5pt; line-height: 1.4;
+            color: var(--text); margin: 0; padding: 0; font-size: 10.5pt; line-height: 1.4; 
         }
-
+        
         .top-header {
             position: sticky; top: 0; z-index: 1000;
             background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
@@ -30,28 +30,28 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.06);
             display: flex; flex-direction: column; align-items: center;
         }
-
+        
         .top-header-content { width: 100%; max-width: 1100px; position: relative; }
 
-        .header-title {
-            text-align: center; font-size: 1.3rem; font-weight: 800; color: var(--primary);
-            text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px;
+        .header-title { 
+            text-align: center; font-size: 1.3rem; font-weight: 800; color: var(--primary); 
+            text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px; 
         }
 
         .container { max-width: 1100px; margin: 15px auto; padding: 0 15px; }
-
-        .form-panel {
-            background: #ffffff; border: 1px solid #e2e8f0;
-            border-radius: 6px; padding: 12px 16px; margin-bottom: 12px;
+        
+        .form-panel { 
+            background: #ffffff; border: 1px solid #e2e8f0; 
+            border-radius: 6px; padding: 12px 16px; margin-bottom: 12px; 
             box-shadow: 0 1px 3px rgba(0,0,0,0.02);
         }
 
-        .section-title {
-            font-size: 1.05rem; font-weight: 700; color: var(--secondary);
-            margin: 0 0 10px 0; padding-bottom: 6px; border-bottom: 1px solid #e2e8f0;
-            display: flex; justify-content: space-between; align-items: center;
+        .section-title { 
+            font-size: 1.05rem; font-weight: 700; color: var(--secondary); 
+            margin: 0 0 10px 0; padding-bottom: 6px; border-bottom: 1px solid #e2e8f0; 
+            display: flex; justify-content: space-between; align-items: center; 
         }
-
+        
         .badge-no-ai { background: #fee2e2; color: #991b1b; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; font-weight: bold; border: 1px solid #fecaca; }
         .badge-ai { background: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; font-weight: bold; border: 1px solid #bbf7d0; }
 
@@ -59,7 +59,7 @@
         .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px 20px; }
         .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px 15px; }
         .grid-2-1-1 { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 6px 20px; }
-
+        
         .form-group { display: flex; flex-direction: row; align-items: center; margin-bottom: 8px; }
         .form-group label { flex: 0 0 auto; margin-right: 8px; font-size: 0.95rem; font-weight: 600; color: #475569; white-space: nowrap; }
         .form-group.col-layout { flex-direction: column; align-items: stretch; }
@@ -67,81 +67,81 @@
         .form-group.align-top { align-items: flex-start; }
         .form-group.align-top label { margin-top: 6px; }
 
-        .form-group input, .form-group select, .form-group textarea {
-            flex-grow: 1; width: 100%; padding: 4px 6px; border: none; border-bottom: 1px solid #cbd5e1;
-            border-radius: 0; font-family: inherit; font-size: 11pt; background: transparent;
+        .form-group input, .form-group select, .form-group textarea { 
+            flex-grow: 1; width: 100%; padding: 4px 6px; border: none; border-bottom: 1px solid #cbd5e1; 
+            border-radius: 0; font-family: inherit; font-size: 11pt; background: transparent; 
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); box-sizing: border-box;
         }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-            outline: none; border-bottom: 2px solid var(--primary); background: #f8fafc;
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { 
+            outline: none; border-bottom: 2px solid var(--primary); background: #f8fafc; 
         }
-
+        
         .tiny-input { flex-grow: 0 !important; width: 60px !important; text-align: center; }
         .short-input { flex-grow: 0 !important; width: 100px !important; text-align: center; }
         .med-input { flex-grow: 0 !important; width: 150px !important; }
 
-        textarea {
-            resize: none;
-            overflow: hidden;
-            min-height: 32px;
-            height: 32px;
-            line-height: 1.5;
+        textarea { 
+            resize: none; 
+            overflow: hidden; 
+            min-height: 32px; 
+            height: 32px; 
+            line-height: 1.5; 
         }
-
+        
         .table-tieu-chi { width: 100%; border-collapse: collapse; margin-top: 8px; margin-bottom: 12px; font-size: 10pt; background: #fff; border-radius: 6px; overflow: hidden; border: 1px solid #e2e8f0; }
         .table-tieu-chi th, .table-tieu-chi td { border: 1px solid #e2e8f0; padding: 8px 10px; vertical-align: middle; }
         .table-tieu-chi th { background: #f8fafc; color: #334155; text-align: center; font-weight: bold; font-size: 0.9rem; }
         .table-tieu-chi td { text-align: justify; }
-
+        
         .table-tieu-chi input[type="number"] { width: 100%; border: none !important; background: transparent; text-align: center; padding: 4px 0; font-size: 11pt; font-weight: bold; color: #0284c7; outline: none; }
         .table-tieu-chi input[type="number"]:focus { background: #e0f2fe; }
 
         .dynamic-block { display: none; opacity: 0; transform: translateY(5px); transition: opacity 0.3s ease, transform 0.3s ease; }
         .dynamic-block.active { display: block; opacity: 1; transform: translateY(0); }
-
-        .action-bar {
-            display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap;
-            position: sticky; bottom: 0; background: rgba(255, 255, 255, 0.98);
-            padding: 12px; border-radius: 8px; box-shadow: 0 -2px 10px rgba(0,0,0,0.05), inset 0 1px 0 #e2e8f0;
-            margin-top: 15px; z-index: 100; backdrop-filter: blur(10px);
+        
+        .action-bar { 
+            display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap; 
+            position: sticky; bottom: 0; background: rgba(255, 255, 255, 0.98); 
+            padding: 12px; border-radius: 8px; box-shadow: 0 -2px 10px rgba(0,0,0,0.05), inset 0 1px 0 #e2e8f0; 
+            margin-top: 15px; z-index: 100; backdrop-filter: blur(10px); 
         }
-
+        
         .btn { padding: 10px 6px; font-size: 9pt; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important; font-weight: 700 !important; letter-spacing: 0.5px !important; color: white; border: none; border-radius: 4px; cursor: pointer; text-align: center; transition: all 0.3s; text-transform: uppercase; position: relative; overflow: hidden; }
         .btn::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); transform: skewX(-20deg); transition: 0.5s; }
         .btn:hover:not(:disabled)::after { left: 150%; }
         .btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); filter: brightness(1.05); }
         .btn:disabled { background: #cbd5e1 !important; color: #94a3b8; cursor: not-allowed; }
-
+        
         .btn-blue { background: #3b82f6; } .btn-sky { background: #0ea5e9; } .btn-green { background: #10b981; } .btn-purple { background: #8b5cf6; } .btn-red { background: #ef4444; } .btn-orange { background: #f97316; }
-
+        
         .loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.85); z-index: 2000; justify-content: center; align-items: center; flex-direction: column; font-weight: bold; color: var(--primary); font-size: 1.1rem; backdrop-filter: blur(4px); }
         .spinner { width: 40px; height: 40px; border: 3px solid #e2e8f0; border-top: 3px solid var(--primary); border-radius: 50%; animation: spin 0.8s infinite linear; margin-bottom: 12px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
+        
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.65); z-index: 3000; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
         .modal-content { background: #fff; width: 95%; max-width: 850px; max-height: 85vh; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 40px -10px rgba(0,0,0,0.3); transform: scale(0.98); transition: transform 0.2s ease; }
         .modal-overlay.active .modal-content { transform: scale(1); }
         .modal-header { padding: 12px 20px; background: linear-gradient(135deg, var(--primary), #0ea5e9); color: white; font-weight: bold; font-size: 1.05rem; display: flex; justify-content: space-between; align-items: center; }
         .modal-body { padding: 20px; overflow-y: auto; background: #f8fafc; }
         .modal-footer { padding: 12px 20px; background: #fff; display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid #e2e8f0; }
-
+        
         .preview-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 6px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
         .preview-table th, .preview-table td { border-bottom: 1px solid #e2e8f0; padding: 10px; vertical-align: top; }
         .preview-table th { background: #f1f5f9; width: 35%; text-align: left; color: #475569; font-weight: 700; border-right: 1px solid #e2e8f0; }
-
+        
         .signature-footer { text-align: center; margin-top: 20px; color: #64748b; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; transition: 0.3s; }
         .signature-footer:hover { opacity: 1; color: var(--primary); }
 
         .btn-logout { background: #ef4444; padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; border: none; color: white; cursor: pointer; font-weight: bold; transition: opacity 0.2s; }
         .btn-logout:hover { opacity: 0.8; }
 
-        #khuVucTraCuu input,
-        #khuVucTraCuu button,
+        #khuVucTraCuu input, 
+        #khuVucTraCuu button, 
         #danhSachLuuTru li div,
         #tenHienThiVanBan {
-            font-family: 'Times New Roman', Times, serif !important;
+            font-family: 'Times New Roman', Times, serif !important; 
         }
-
+        
         #thanhCongCuTaiLieu button { font-size: 9.5pt !important; letter-spacing: 0.5px; }
         #danhSachLuuTru li div, #tenHienThiVanBan { font-family: 'Times New Roman', Times, serif !important; font-size: 12pt !important; }
 
@@ -158,9 +158,10 @@
         .ai-dashboard { display: grid; grid-template-columns: 320px 1fr; gap: 20px; padding: 15px; background: rgba(255, 255, 255, 0.95); border-radius: 12px; border: 1px solid #cbd5e1; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 20px; }
         .ai-control-panel { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
         .ai-result-panel { display: flex; flex-direction: column; gap: 15px; }
-        .ai-table-container { height: 250px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .ai-table-container { height: 300px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
         .ai-preview-frame { flex: 1; border: 1px solid #e2e8f0; border-radius: 8px; min-height: 400px; background: #fff; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
         .ai-scanning { border-left: 4px solid #8b5cf6 !important; background: #f3e8ff !important; transition: all 0.3s ease; }
+        .ai-stats { background: #f0fdf4; padding: 8px 12px; border-radius: 6px; margin-bottom: 8px; font-size: 0.9rem; color: #166534; border-left: 3px solid #22c55e; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
     </style>
 </head>
 <body>
@@ -178,7 +179,7 @@
 
 <div class="loading-overlay" id="boDemTai"><div class="spinner"></div><span id="chuoiThongBao">Hệ thống đang xử lý...</span></div>
 
-<!-- ĐẦU TRANG -->
+<!-- CỐ ĐỊNH ĐẦU TRANG -->
 <div class="top-header">
     <div class="top-header-content">
         <div id="userBadgeArea" style="position: absolute; right: 0; top: 0; display: flex; align-items: center; gap: 8px;"></div>
@@ -192,7 +193,6 @@
 </div>
 
 <div class="container">
-
     <!-- KHỐI 1: PHIẾU ĐÁNH GIÁ BÀI DẠY -->
     <div id="khoi_1" class="dynamic-block">
         <div class="form-panel">
@@ -586,13 +586,33 @@
             <div class="form-group col-layout"><label style="color: #475569; font-weight: 600;">Câu hỏi truy vấn:</label><textarea id="aiCauHoiTruyVan" placeholder="VD: Ai được biểu dương trong các cuộc họp chi bộ gần đây? Nội dung là gì?" style="height: 70px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px;"></textarea></div>
             <div class="form-group col-layout" style="margin-top: 12px;"><label style="color: #475569; font-weight: 600;">Phạm vi văn bản:</label><select id="aiLoaiVanBan" style="border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px;"><option value="ALL">-- Quét tất cả Biên bản/Cuộc họp --</option><option value="2">Biên bản sự việc (Hành chính)</option><option value="5">Biên bản triển khai kiểm tra</option><option value="8">Biên bản họp chi bộ</option><option value="9">Biên bản công bố kết quả</option></select></div>
             <div class="grid-2" style="margin-top: 12px;"><div class="form-group col-layout"><label style="color: #475569; font-weight: 600;">Từ ngày:</label><input type="date" id="aiTuNgay" style="border: 1px solid #cbd5e1; border-radius: 6px;"></div><div class="form-group col-layout"><label style="color: #475569; font-weight: 600;">Đến ngày:</label><input type="date" id="aiDenNgay" style="border: 1px solid #cbd5e1; border-radius: 6px;"></div></div>
-            <div class="form-group col-layout" style="margin-top: 12px;"><label style="color: #475569; font-weight: 600;">Giới hạn quét (Hồ sơ mới nhất):</label><select id="aiGioiHanQuet" style="border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px;"><option value="5">5 hồ sơ</option><option value="10" selected>10 hồ sơ</option><option value="20">20 hồ sơ</option></select></div>
+            <div class="form-group col-layout" style="margin-top: 12px;"><label style="color: #475569; font-weight: 600;">Giới hạn quét (Hồ sơ mới nhất):</label><select id="aiGioiHanQuet" style="border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px;"><option value="5">5 hồ sơ</option><option value="10" selected>10 hồ sơ</option><option value="20">20 hồ sơ</option><option value="50">50 hồ sơ</option><option value="0">Không giới hạn</option></select></div>
             <button class="btn btn-purple" style="width: 100%; margin-top: 15px; padding: 12px 0; font-size: 10pt;" onclick="kichHoatTruyVanCheo()">✨ YÊU CẦU AI PHÂN TÍCH</button>
             <div id="aiThongBaoTrangThai" style="margin-top: 10px; font-size: 0.85rem; color: #64748b; text-align: center; font-style: italic;"></div>
         </div>
         <div class="ai-result-panel">
-            <div class="ai-table-container"><table class="preview-table" style="width: 100%; margin: 0; border: none;"><thead style="position: sticky; top: 0; z-index: 10; box-shadow: 0 1px 2px rgba(0,0,0,0.05);"><tr><th style="width: 35%; background: #f3f4f6; color: #4b5563;">Văn bản gốc</th><th style="width: 20%; background: #f3f4f6; color: #4b5563;">Thời gian</th><th style="background: #ede9fe; color: #6d28d9; font-weight: 800;">Kết luận từ Trợ lý AI</th></tr></thead><tbody id="vungHienThiKetQuaAI"><tr><td colspan="3" style="text-align: center; padding: 30px; color: #94a3b8; font-style: italic;">Vui lòng thiết lập bộ lọc và đặt câu hỏi để AI tiến hành rà soát kho lưu trữ.</td></tr></tbody></table></div>
-            <div class="ai-preview-frame"><div id="aiTieuDeKhungXem" style="background: #f1f5f9; padding: 8px 15px; border-bottom: 1px solid #e2e8f0; font-weight: 600; color: #0f172a; font-size: 10.5pt; text-align: center;">Bản xem trước tài liệu gốc sẽ hiển thị tại đây</div><iframe id="aiKhungXemTruocTep" style="width: 100%; height: calc(100% - 35px); border: none;" src="about:blank"></iframe></div>
+            <div class="ai-table-container">
+                <div id="aiStats" class="ai-stats" style="display: none;">
+                    <span id="aiStatTong">Đã quét 0 văn bản</span>
+                    <span id="aiStatTimThay">Tìm thấy 0 kết quả</span>
+                </div>
+                <table class="preview-table" style="width: 100%; margin: 0; border: none;">
+                    <thead style="position: sticky; top: 0; z-index: 10; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+                        <tr>
+                            <th style="width: 35%; background: #f3f4f6; color: #4b5563;">Văn bản gốc</th>
+                            <th style="width: 20%; background: #f3f4f6; color: #4b5563;">Thời gian</th>
+                            <th style="background: #ede9fe; color: #6d28d9; font-weight: 800;">Kết luận từ Trợ lý AI</th>
+                        </tr>
+                    </thead>
+                    <tbody id="vungHienThiKetQuaAI">
+                        <tr><td colspan="3" style="text-align: center; padding: 30px; color: #94a3b8; font-style: italic;">Vui lòng thiết lập bộ lọc và đặt câu hỏi để AI tiến hành rà soát kho lưu trữ.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="ai-preview-frame">
+                <div id="aiTieuDeKhungXem" style="background: #f1f5f9; padding: 8px 15px; border-bottom: 1px solid #e2e8f0; font-weight: 600; color: #0f172a; font-size: 10.5pt; text-align: center;">Bản xem trước tài liệu gốc sẽ hiển thị tại đây</div>
+                <iframe id="aiKhungXemTruocTep" style="width: 100%; height: calc(100% - 35px); border: none;" src="about:blank"></iframe>
+            </div>
         </div>
     </div>
 
@@ -1231,7 +1251,7 @@
     }
 
     // ============================================================
-    // HÀM KÍCH HOẠT TRUY VẤN AI (ĐÃ SỬA: RESET KHUNG XEM TRƯỚC)
+    // HÀM KÍCH HOẠT TRUY VẤN AI (ĐÃ SỬA: RESET KHUNG + HIỂN THỊ TẤT CẢ KẾT QUẢ)
     // ============================================================
     function kichHoatTruyVanCheo() {
         try {
@@ -1246,9 +1266,10 @@
                 return;
             }
 
-            // RESET khung xem trước ngay khi bấm nút
+            // RESET khung xem trước
             document.getElementById('aiTieuDeKhungXem').innerText = 'Đang tải kết quả...';
             document.getElementById('aiKhungXemTruocTep').src = 'about:blank';
+            document.getElementById('aiStats').style.display = 'none';
 
             var dieuKienLoc = {
                 loaiVanBan: document.getElementById('aiLoaiVanBan').value,
@@ -1271,7 +1292,7 @@
                     .withSuccessHandler(xuLyDuLieuAIRaBang)
                     .withFailureHandler(function(loi) {
                         theThongBao.innerText = "Lỗi kết nối.";
-                        bangKetQua.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #ef4444;">Lỗi Server</td></tr>';
+                        bangKetQua.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #ef4444;">Lỗi Server: ' + loi.message + '</td></tr>';
                     })
                     .truyVanCheoAI(cauHoi, dieuKienLoc, phienLamViec);
             } else if (typeof KET_NOI !== 'undefined' && KET_NOI.URL_API_BACKEND) {
@@ -1296,20 +1317,36 @@
     function xuLyDuLieuAIRaBang(phanHoi) {
         var bangKetQua = document.getElementById('vungHienThiKetQuaAI');
         var theThongBao = document.getElementById('aiThongBaoTrangThai');
+        var statsDiv = document.getElementById('aiStats');
+        var statTong = document.getElementById('aiStatTong');
+        var statTimThay = document.getElementById('aiStatTimThay');
+
         if (phanHoi.trangThai === "Loi") {
             theThongBao.innerText = "Xử lý hoàn tất với thông báo lỗi.";
             bangKetQua.innerHTML = '<tr><td colspan="3" style="text-align: center; padding: 20px; color: #ef4444;">' + phanHoi.thongBao + '</td></tr>';
+            statsDiv.style.display = 'none';
             return;
         }
-        var mangKetQua = phanHoi.duLieu;
-        theThongBao.innerText = "Đã rà soát " + phanHoi.soLuongDaQuet + " tài liệu thành công.";
+
+        var mangKetQua = phanHoi.duLieu || [];
+        var soLuongDaQuet = phanHoi.soLuongDaQuet || 0;
+
+        theThongBao.innerText = "Đã rà soát " + soLuongDaQuet + " tài liệu.";
         bangKetQua.innerHTML = '';
+
+        // Hiển thị thống kê
+        statsDiv.style.display = 'flex';
+        statTong.innerText = 'Đã quét ' + soLuongDaQuet + ' văn bản';
+        statTimThay.innerText = 'Tìm thấy ' + mangKetQua.length + ' kết quả';
+
         if (!mangKetQua || mangKetQua.length === 0) {
             bangKetQua.innerHTML = '<tr><td colspan="3" style="text-align: center; padding: 30px; color: #0284c7;">AI không tìm thấy thông tin nào phù hợp với câu hỏi trong khoảng thời gian này.</td></tr>';
             document.getElementById('aiTieuDeKhungXem').innerText = 'Bản xem trước tài liệu gốc sẽ hiển thị tại đây';
             document.getElementById('aiKhungXemTruocTep').src = 'about:blank';
             return;
         }
+
+        // Tạo các dòng kết quả
         var doanMaFragment = document.createDocumentFragment();
         mangKetQua.forEach(function(item) {
             var theTr = document.createElement('tr');

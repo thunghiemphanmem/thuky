@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sổ Soạn Thảo Hành Chính Thông Minh</title>
+    <!-- Thư viện Google Identity Services -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="ketnoi.js"></script>
     <style>
@@ -93,7 +94,7 @@
         .btn:disabled { background: #cbd5e1 !important; color: #94a3b8; cursor: not-allowed; box-shadow: none; transform: none; }
         .btn-blue { background: #3b82f6; } .btn-sky { background: #0ea5e9; } .btn-green { background: #10b981; } .btn-purple { background: #8b5cf6; } .btn-red { background: #ef4444; } .btn-orange { background: #f97316; }
 
-        /* OVERLAY LOADING MƯỢT MÀ */
+        /* MÃ HIỆU ỨNG LOADING LẤY TỪ REACTBITS THEO YÊU CẦU */
         .loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.85); z-index: 3000; justify-content: center; align-items: center; flex-direction: column; backdrop-filter: blur(4px); }
         .reactbits-spinner { width: 50px; height: 50px; border: 4px solid rgba(2, 132, 199, 0.2); border-top-color: #0284c7; border-radius: 50%; animation: spin-rb 1s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite; margin-bottom: 15px; }
         @keyframes spin-rb { to { transform: rotate(360deg); } }
@@ -128,7 +129,6 @@
         .btn-close-panel:hover { background: #e2e8f0; color: #ef4444; transform: rotate(90deg); }
         .panel-content { flex: 1; overflow-y: auto; padding: 20px; }
 
-        /* Bố cục riêng cho AI trong Panel */
         .ai-dashboard { display: grid; grid-template-columns: 320px 1fr; gap: 20px; height: 100%; }
         @media (max-width: 768px) { .ai-dashboard { grid-template-columns: 1fr; } }
         .ai-control-panel { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); height: fit-content; }
@@ -146,13 +146,15 @@
 <!-- HỆ THỐNG TOAST NOTIFICATION -->
 <div id="toastContainer"></div>
 
-<!-- MÀN HÌNH ĐĂNG NHẬP -->
+<!-- MÀN HÌNH ĐĂNG NHẬP (Đã cấu trúc lại Logic kiểm tra tải thư viện để sửa lỗi mất nút) -->
 <div id="loginUI" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.95); z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center; backdrop-filter:blur(5px);">
     <div style="background:#fff; padding:30px; border-radius:8px; text-align:center; box-shadow:0 10px 25px rgba(0,0,0,0.5); max-width:400px; width:90%;">
         <img src="" id="loginLogo" style="width:80px; margin-bottom:15px; display:none;">
         <h2 style="color:#0284c7; margin-top:0;">XÁC THỰC BẢO MẬT</h2>
         <p style="color:#475569; font-size:0.9rem; margin-bottom:20px;">Hệ thống yêu cầu cấp quyền truy cập.</p>
-        <div id="googleButtonDiv" style="display:flex; justify-content:center; margin-bottom:15px;"></div>
+        <div id="googleButtonDiv" style="display:flex; justify-content:center; margin-bottom:15px; min-height: 40px;">
+            <!-- Nút Google sẽ được render vào đây -->
+        </div>
         <div id="loginWarning" style="display:none; margin-top:15px; padding:10px; font-size:0.85rem; border-radius:4px;"></div>
     </div>
 </div>
@@ -292,6 +294,7 @@
         </div>
     </div>
 
+    <!-- KHỐI 3 TO 9: CÁC KHỐI KHÁC (GIỮ NGUYÊN) -->
     <!-- KHỐI 3: QUYẾT ĐỊNH ĐẢNG -->
     <div id="khoi_3" class="dynamic-block">
         <div class="form-panel">
@@ -565,7 +568,7 @@
     </div>
     <div class="panel-content">
         <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-            <input type="text" id="oTimKiemTaiLieu" placeholder="Gõ tên văn bản để tìm nhanh..." oninput="HeThong.tuDongTimKiem()" style="flex: 1; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 11pt;">
+            <input type="text" id="oTimKiemTaiLieu" placeholder="Gõ tên văn bản để tìm nhanh..." oninput="tuDongTimKiemKho()" style="flex: 1; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 11pt;">
         </div>
         <div style="display: flex; gap: 20px; flex-direction: column; height: calc(100vh - 160px);">
             <div style="flex: 1; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; overflow-y: auto; max-height: 40%;">
@@ -648,90 +651,45 @@
 
 <script>
     // =========================================================================
-    // KHỐI 1: QUẢN LÝ TRẠNG THÁI VÀ GIAO TIẾP MÁY CHỦ (API WRAPPER LÕI)
+    // KHỐI 1: KHAI BÁO BIẾN TOÀN CỤC VÀ CÁC HÀM TIỆN ÍCH CƠ BẢN
     // =========================================================================
     
-    const HeThong = {
-        trangThai: { idFileDangSua: null, boDemTimKiem: null },
-        
-        phienLamViec: function() { return sessionStorage.getItem('SessionAccountActive'); },
-        
-        thongBao: function(noiDung, loai = 'thanh-cong') {
-            const container = document.getElementById('toastContainer');
-            const toast = document.createElement('div');
-            toast.className = `toast-msg ${loai}`;
-            toast.innerHTML = (loai === 'loi' ? '⚠️ ' : '✅ ') + noiDung;
-            container.appendChild(toast);
-            setTimeout(() => toast.classList.add('show'), 10);
-            setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 400); }, 3500);
-        },
-        
-        hienTai: function(trangThai, text = 'Hệ thống đang xử lý...') {
-            document.getElementById('chuoiThongBao').innerText = text;
-            document.getElementById('boDemTai').style.display = trangThai ? 'flex' : 'none';
-        },
+    let idFileDangSua = null;
+    let boDemTimKiemKho = null;
+    
+    function thongBao(noiDung, loai = 'thanh-cong') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast-msg ${loai}`;
+        toast.innerHTML = (loai === 'loi' ? '⚠️ ' : '✅ ') + noiDung;
+        container.appendChild(toast);
+        setTimeout(() => toast.classList.add('show'), 10);
+        setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 400); }, 3500);
+    }
+    
+    function hienTai(trangThai, text = 'Hệ thống đang xử lý...') {
+        document.getElementById('chuoiThongBao').innerText = text;
+        document.getElementById('boDemTai').style.display = trangThai ? 'flex' : 'none';
+    }
 
-        kiemSoatNut: function(khoa) {
-            const cacNut = ['btnDanhGia', 'btnAI', 'btnHoSo', 'btnXemTruoc', 'btnLamMoi'];
-            cacNut.forEach(id => {
-                const nut = document.getElementById(id);
-                if (nut) { nut.disabled = khoa; nut.style.opacity = khoa ? '0.4' : '1'; nut.style.cursor = khoa ? 'not-allowed' : 'pointer'; }
-            });
-            if (!khoa) {
-                const loai = document.getElementById('loaiVanBan').value;
-                const btnAI = document.getElementById('btnAI');
-                if (btnAI) {
-                    if (["1", "2", "8"].includes(loai)) { btnAI.disabled = false; btnAI.style.opacity = '1'; btnAI.style.cursor = 'pointer'; } 
-                    else { btnAI.disabled = true; btnAI.style.opacity = '0.4'; btnAI.style.cursor = 'not-allowed'; }
-                }
-            }
-        },
-
-        tuDongTimKiem: function() {
-            clearTimeout(this.trangThai.boDemTimKiem);
-            this.trangThai.boDemTimKiem = setTimeout(thucHienTimKiem, 400);
-        },
-
-goiMayChu: function(tenLenh, thamSo, hamThanhCong, hamThatBai = null) {
-            const phien = this.phienLamViec();
-            if (!phien) { this.thongBao("Phiên đăng nhập hết hạn.", "loi"); return; }
-            
-            thamSo.taiKhoanYeuCau = phien;
-            const laGAS = (typeof google !== 'undefined' && google.script && google.script.run);
-            const xuLyLoi = hamThatBai || (l => { this.hienTai(false); this.thongBao(l.message, "loi"); });
-
-            if (laGAS) {
-                const runner = google.script.run
-                    .withSuccessHandler(res => {
-                        let parsed = res;
-                        if (typeof res === 'string') { try { parsed = JSON.parse(res); } catch(e) {} }
-                        hamThanhCong(parsed);
-                    })
-                    .withFailureHandler(xuLyLoi);
-                    
-                if(tenLenh === 'PhanTichAI') runner.phanTichUuKhuyetDiem(thamSo.noiDung, thamSo.chuoiPhanLoai);
-                // SỬA LỖI ĐỐI SỐ: Chỉ truyền 1 gói tham số duy nhất để khớp với Code.gs
-                else if(tenLenh === 'LuuHoSo' || tenLenh === 'XuatWord') runner.xuLyLuuHoSo(thamSo.dongGoiTruyenLen);
-                else if(tenLenh === 'TimKiem') runner.timKiemVanBanHanhChinh(thamSo.tuKhoa, thamSo.taiKhoanYeuCau);
-                else if(tenLenh === 'XoaFile') runner.xoaVanBanHanhChinh(thamSo.idFile, thamSo.taiKhoanYeuCau);
-                else if(tenLenh === 'TruyVanCheoAI') runner.truyVanCheoAI(thamSo.cauHoi, thamSo.dieuKienLoc, thamSo.taiKhoanYeuCau);
-                    if (thamSo.dongGoiTruyenLen) {
-                        thamSo.dongGoiTruyenLen.taiKhoanYeuCau = thamSo.taiKhoanYeuCau;
-                    }
-                    runner.xuLyLuuHoSo(thamSo.dongGoiTruyenLen);
-                }
-                else if(tenLenh === 'TimKiem') runner.timKiemVanBanHanhChinh(thamSo.tuKhoa, thamSo.taiKhoanYeuCau);
-                else if(tenLenh === 'XoaFile') runner.xoaVanBanHanhChinh(thamSo.idFile, thamSo.taiKhoanYeuCau);
-                else if(tenLenh === 'TruyVanCheoAI') runner.truyVanCheoAI(thamSo.cauHoi, thamSo.dieuKienLoc, thamSo.taiKhoanYeuCau);
-            } else if (typeof KET_NOI !== 'undefined' && KET_NOI.URL_API_BACKEND) {
-                fetch(KET_NOI.URL_API_BACKEND, { method: 'POST', body: JSON.stringify({ hanhDong: tenLenh, ...thamSo }), headers: { 'Content-Type': 'text/plain;charset=utf-8' } })
-                .then(res => res.text()).then(txt => { let p = txt; try { p = JSON.parse(txt); } catch(e) {} hamThanhCong(p); }).catch(xuLyLoi);
+    function kiemSoatNut(khoa) {
+        const cacNut = ['btnDanhGia', 'btnAI', 'btnHoSo', 'btnXemTruoc', 'btnLamMoi'];
+        cacNut.forEach(id => {
+            const nut = document.getElementById(id);
+            if (nut) { nut.disabled = khoa; nut.style.opacity = khoa ? '0.4' : '1'; nut.style.cursor = khoa ? 'not-allowed' : 'pointer'; }
+        });
+        if (!khoa) {
+            const loai = document.getElementById('loaiVanBan').value;
+            const btnAI = document.getElementById('btnAI');
+            if (btnAI) {
+                if (["1", "2", "8"].includes(loai)) { btnAI.disabled = false; btnAI.style.opacity = '1'; btnAI.style.cursor = 'pointer'; } 
+                else { btnAI.disabled = true; btnAI.style.opacity = '0.4'; btnAI.style.cursor = 'not-allowed'; }
             }
         }
-    };
+    }
 
     // =========================================================================
-    // KHỐI 2: ĐIỀU KHIỂN GIAO DIỆN VÀ KHÔNG GIAN TRƯỢT
+    // KHỐI 2: ĐIỀU KHIỂN GIAO DIỆN TRƯỢT (OFFCANVAS PANELS)
     // =========================================================================
 
     function moPanel(idPanel) {
@@ -739,7 +697,7 @@ goiMayChu: function(tenLenh, thamSo, hamThanhCong, hamThatBai = null) {
         document.querySelectorAll('.side-panel').forEach(p => p.classList.remove('open'));
         document.getElementById(idPanel).classList.add('open');
         document.body.style.overflow = 'hidden';
-        HeThong.kiemSoatNut(true);
+        kiemSoatNut(true);
         if (idPanel === 'panelKhoLuuTru') { thucHienTimKiem(); }
     }
 
@@ -747,7 +705,7 @@ goiMayChu: function(tenLenh, thamSo, hamThanhCong, hamThatBai = null) {
         document.getElementById('panelBackdrop').classList.remove('open');
         document.querySelectorAll('.side-panel').forEach(p => p.classList.remove('open'));
         document.body.style.overflow = 'auto';
-        HeThong.kiemSoatNut(false);
+        kiemSoatNut(false);
     }
 
     function tuDongGianCao(el) {
@@ -757,45 +715,98 @@ goiMayChu: function(tenLenh, thamSo, hamThanhCong, hamThatBai = null) {
     }
 
     // =========================================================================
-    // KHỐI 3: QUẢN TRỊ NGHIỆP VỤ BIỂU MẪU CHÍNH
+    // KHỐI 3: KIỂM SOÁT ĐĂNG NHẬP VÀ KHỞI TẠO BIỂU MẪU (BẢN GỐC ĐÃ SỬA LỖI TẢI)
     // =========================================================================
 
-    document.addEventListener("DOMContentLoaded", function() {
-        if (KET_NOI.LOGO_TRUONG) { document.getElementById('loginLogo').src = KET_NOI.LOGO_TRUONG; document.getElementById('loginLogo').style.display = 'inline-block'; }
-        const phien = HeThong.phienLamViec();
+    // Dùng window.onload thay vì DOMContentLoaded để đảm bảo Google Library tải xong
+    window.onload = function() {
+        if (KET_NOI.LOGO_TRUONG) { 
+            document.getElementById('loginLogo').src = KET_NOI.LOGO_TRUONG; 
+            document.getElementById('loginLogo').style.display = 'inline-block'; 
+        }
+        
+        const phien = sessionStorage.getItem('SessionAccountActive');
+        
         if (phien && KET_NOI.DANH_SACH_TAI_KHOAN && KET_NOI.DANH_SACH_TAI_KHOAN.includes(phien)) {
             document.getElementById('userBadgeArea').innerHTML = `<div style="font-size:0.75rem; color:#047857; font-weight:bold; background:#d1fae5; padding:4px 8px; border-radius:4px; border:1px solid #34d399;" title="${phien}">👤 ${phien}</div><button class="btn-logout" onclick="executeLogout()">Đăng xuất</button>`;
             document.getElementById('loginUI').style.display = 'none';
-        } else { sessionStorage.removeItem('SessionAccountActive'); document.getElementById('loginUI').style.display = 'flex'; }
-        
-        if (typeof google !== 'undefined' && google.accounts) {
-            google.accounts.id.initialize({ client_id: KET_NOI.CLIENT_ID, callback: res => {
-                let p = JSON.parse(decodeURIComponent(window.atob(res.credential.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))));
-                let m = (p['em'+'ail'] || "").toLowerCase().trim();
-                if (KET_NOI.DANH_SACH_TAI_KHOAN.includes(m)) { sessionStorage.setItem('SessionAccountActive', m); location.reload(); }
-                else { let cb = document.getElementById('loginWarning'); cb.innerHTML = `Tài khoản <b>${m}</b> bị từ chối!`; cb.style.display = 'block'; cb.style.color = 'red'; }
-            }});
-            google.accounts.id.renderButton(document.getElementById("googleButtonDiv"), { theme: "outline", size: "large", type: "standard" });
+        } else { 
+            sessionStorage.removeItem('SessionAccountActive'); 
+            document.getElementById('loginUI').style.display = 'flex'; 
+            
+            // Xử lý load Google Button an toàn
+            if (typeof google !== 'undefined' && google.accounts) {
+                google.accounts.id.initialize({ 
+                    client_id: KET_NOI.CLIENT_ID, 
+                    callback: handleCredentialResponse
+                });
+                google.accounts.id.renderButton(
+                    document.getElementById("googleButtonDiv"), 
+                    { theme: "outline", size: "large", type: "standard" }
+                );
+            } else {
+                document.getElementById('loginWarning').innerHTML = "Không thể tải dịch vụ Đăng nhập Google. Vui lòng kiểm tra kết nối mạng hoặc F5 lại trang.";
+                document.getElementById('loginWarning').style.display = 'block';
+                document.getElementById('loginWarning').style.color = 'red';
+            }
         }
         
-        let select = document.getElementById('loaiVanBan'); select.innerHTML = '<option value="0">-- Vui lòng click để chọn biểu mẫu làm việc --</option>';
+        // Khởi tạo danh mục
+        let select = document.getElementById('loaiVanBan'); 
+        select.innerHTML = '<option value="0">-- Vui lòng click để chọn biểu mẫu làm việc --</option>';
         KET_NOI.DANH_MUC_VAN_BAN.forEach(m => select.innerHTML += `<option value="${m.giaTri}">${m.tenHienThi}</option>`);
         document.querySelectorAll('textarea').forEach(ta => ta.addEventListener('input', function() { tuDongGianCao(this); }));
-    });
+    };
 
-    function executeLogout() { if(confirm("Đăng xuất khỏi phiên hiện tại?")) { sessionStorage.removeItem('SessionAccountActive'); location.reload(); } }
+    function handleCredentialResponse(res) {
+        let p = JSON.parse(decodeURIComponent(window.atob(res.credential.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))));
+        let m = (p['em'+'ail'] || "").toLowerCase().trim();
+        if (KET_NOI.DANH_SACH_TAI_KHOAN.includes(m)) { 
+            sessionStorage.setItem('SessionAccountActive', m); 
+            location.reload(); 
+        } else { 
+            let cb = document.getElementById('loginWarning'); 
+            cb.innerHTML = `Tài khoản <b>${m}</b> bị từ chối truy cập!`; 
+            cb.style.display = 'block'; 
+            cb.style.color = 'red'; 
+        }
+    }
+
+    function executeLogout() { 
+        if(confirm("Đăng xuất khỏi phiên hiện tại?")) { 
+            sessionStorage.removeItem('SessionAccountActive'); 
+            location.reload(); 
+        } 
+    }
 
     function chuyenDoiBieuMau(laLenhTuDong = false) {
         const loai = document.getElementById('loaiVanBan').value;
-        if (!laLenhTuDong) { HeThong.trangThai.idFileDangSua = null; const b = document.getElementById('btnHoSo'); if(b){ b.innerText = "Tạo Văn Bản"; b.className = "btn btn-green"; } }
-        document.querySelectorAll('.dynamic-block').forEach(k => { k.classList.remove('active'); setTimeout(() => { if(!k.classList.contains('active')) k.style.display = 'none'; }, 200); });
+        if (!laLenhTuDong) { 
+            idFileDangSua = null; 
+            const b = document.getElementById('btnHoSo'); 
+            if(b){ b.innerText = "Tạo Văn Bản"; b.className = "btn btn-green"; } 
+        }
+        document.querySelectorAll('.dynamic-block').forEach(k => { 
+            k.classList.remove('active'); 
+            setTimeout(() => { if(!k.classList.contains('active')) k.style.display = 'none'; }, 200); 
+        });
+        
         if (loai !== "0") {
             const k = document.getElementById('khoi_' + loai);
-            if (k) { setTimeout(() => { k.style.display = 'block'; void k.offsetWidth; k.classList.add('active'); k.querySelectorAll('textarea').forEach(ta => tuDongGianCao(ta)); }, 200); }
+            if (k) { 
+                setTimeout(() => { 
+                    k.style.display = 'block'; 
+                    void k.offsetWidth; 
+                    k.classList.add('active'); 
+                    k.querySelectorAll('textarea').forEach(ta => tuDongGianCao(ta)); 
+                }, 200); 
+            }
             document.getElementById('thanhCongCu').style.display = 'flex';
             document.getElementById('btnDanhGia').style.display = (loai === "1") ? "block" : "none";
-            HeThong.kiemSoatNut(false);
-        } else { document.getElementById('thanhCongCu').style.display = 'none'; }
+            kiemSoatNut(false);
+        } else { 
+            document.getElementById('thanhCongCu').style.display = 'none'; 
+        }
     }
 
     function tinhTongDiemThanhPhan(laFormDanhGia = 0) {
@@ -803,7 +814,16 @@ goiMayChu: function(tenLenh, thamSo, hamThanhCong, hamThatBai = null) {
         let tong = 0; const maTran = [1, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 1];
         for (let i=1; i<=12; i++) {
             let o = document.querySelector(`#khoi_1 input[data-key="Diem_TC${i}"]`);
-            if (o) { let d = parseFloat(o.value)||0; if(d > maTran[i-1]){ d = maTran[i-1]; o.value=d; o.style.backgroundColor="#fee2e2"; setTimeout(()=>o.style.backgroundColor="transparent", 1500); } tong += d; }
+            if (o) { 
+                let d = parseFloat(o.value)||0; 
+                if(d > maTran[i-1]){ 
+                    d = maTran[i-1]; 
+                    o.value=d; 
+                    o.style.backgroundColor="#fee2e2"; 
+                    setTimeout(()=>o.style.backgroundColor="transparent", 1500); 
+                } 
+                tong += d; 
+            }
         }
         let td = document.getElementById('tongDiem_1'), xl = document.getElementById('xepLoai_1');
         if(td) td.value = tong;
@@ -813,19 +833,36 @@ goiMayChu: function(tenLenh, thamSo, hamThanhCong, hamThatBai = null) {
     function layToanBoDuLieuGiaoDien() {
         const khoi = document.getElementById('khoi_' + document.getElementById('loaiVanBan').value);
         let dl = {}, nd = {};
-        if(khoi) khoi.querySelectorAll('input, textarea, select').forEach(p => { if(p.dataset.key) { dl[p.dataset.key] = p.value; let nhan = p.previousElementSibling; nd[p.dataset.key] = nhan ? nhan.innerText.replace(':','').trim() : p.dataset.key; }});
+        if(khoi) khoi.querySelectorAll('input, textarea, select').forEach(p => { 
+            if(p.dataset.key) { 
+                dl[p.dataset.key] = p.value; 
+                let nhan = p.previousElementSibling; 
+                nd[p.dataset.key] = nhan ? nhan.innerText.replace(':','').trim() : p.dataset.key; 
+            }
+        });
         return { data: dl, labels: nd };
     }
 
     function hienThiXemTruoc() {
-        const t = layToanBoDuLieuGiaoDien(); if(document.getElementById('loaiVanBan').value === "0") return;
+        const t = layToanBoDuLieuGiaoDien(); 
+        if(document.getElementById('loaiVanBan').value === "0") return;
         let html = "<table class='preview-table'><tbody>", coDuLieu = false;
-        for (let id in t.data) { if (t.data[id].trim() !== "") { html += `<tr><th>${t.labels[id]}</th><td>${t.data[id].replace(/\n/g, '<br>')}</td></tr>`; coDuLieu = true; } }
-        if (!coDuLieu) { HeThong.thongBao("Biểu mẫu đang trống!", "loi"); return; }
+        for (let id in t.data) { 
+            if (t.data[id].trim() !== "") { 
+                html += `<tr><th>${t.labels[id]}</th><td>${t.data[id].replace(/\n/g, '<br>')}</td></tr>`; 
+                coDuLieu = true; 
+            } 
+        }
+        if (!coDuLieu) { thongBao("Biểu mẫu đang trống!", "loi"); return; }
         document.getElementById('previewBody').innerHTML = html + "</tbody></table>";
-        document.getElementById('previewModal').style.display = 'flex'; setTimeout(() => document.getElementById('previewModal').classList.add('active'), 50);
+        document.getElementById('previewModal').style.display = 'flex'; 
+        setTimeout(() => document.getElementById('previewModal').classList.add('active'), 50);
     }
-    function dongXemTruoc() { document.getElementById('previewModal').classList.remove('active'); setTimeout(() => document.getElementById('previewModal').style.display = 'none', 300); }
+    
+    function dongXemTruoc() { 
+        document.getElementById('previewModal').classList.remove('active'); 
+        setTimeout(() => document.getElementById('previewModal').style.display = 'none', 300); 
+    }
 
     function lamMoiForm(boQua = false) {
         if (boQua || confirm("Xóa toàn bộ dữ liệu đang nhập?")) {
@@ -836,110 +873,163 @@ goiMayChu: function(tenLenh, thamSo, hamThanhCong, hamThatBai = null) {
                 khoi.querySelectorAll('textarea').forEach(ta => tuDongGianCao(ta));
                 if(loai === "1") { document.getElementById('tongDiem_1').value=''; document.getElementById('xepLoai_1').value=''; }
             }
-            HeThong.trangThai.idFileDangSua = null;
-            const b = document.getElementById('btnHoSo'); if(b) { b.innerText = "Tạo Văn Bản"; b.className = "btn btn-green"; }
-            HeThong.thongBao("Đã làm mới biểu mẫu.");
+            idFileDangSua = null;
+            const b = document.getElementById('btnHoSo'); 
+            if(b) { b.innerText = "Tạo Văn Bản"; b.className = "btn btn-green"; }
+            thongBao("Đã làm mới biểu mẫu.");
         }
     }
 
     // =========================================================================
-    // KHỐI 4: ĐIỀU PHỐI AI VÀ TẠO FILE (Gọi qua Lõi API)
+    // KHỐI 4: GỌI TRỰC TIẾP MÁY CHỦ (BẢN GỐC - KHÔNG QUA WRAPPER RƯỜM RÀ)
     // =========================================================================
 
     function chayNghiepVu(hanhDong) {
         const loai = document.getElementById('loaiVanBan').value;
+        const taiKhoanXacThuc = sessionStorage.getItem('SessionAccountActive');
+        
+        if (!taiKhoanXacThuc) { thongBao("Vui lòng đăng nhập lại.", "loi"); return; }
+
         if(hanhDong === 'PhanTichAI') {
             let nd = "", pl = "";
             if (loai==='1') { nd=document.getElementById('noiDungTruyenAI_1').value; pl="Phiếu đánh giá tiết dạy sư phạm"; }
             else if (loai==='2') { nd=document.getElementById('noiDungTruyenAI_2').value; pl="Biên bản hành chính sự việc"; }
             else if (loai==='8') { nd=document.getElementById('noiDungTruyenAI_8').value; pl="Biên bản họp chi bộ"; }
             
-            if(!nd.trim()) return HeThong.thongBao("Khung nội dung AI đang trống!", "loi");
-            HeThong.hienTai(true, "AI đang suy nghĩ...");
+            if(!nd.trim()) return thongBao("Khung nội dung AI đang trống!", "loi");
+            hienTai(true, "AI đang suy nghĩ...");
             
-            HeThong.goiMayChu('PhanTichAI', { noiDung: nd, chuoiPhanLoai: pl }, (kq) => {
-                HeThong.hienTai(false);
-                if(typeof kq === 'string' && kq.startsWith("LỖI")) return HeThong.thongBao(kq, "loi");
-                try {
-                    let json = typeof kq === 'string' ? JSON.parse(kq.replace(/```json/gi, '').replace(/```/g, '').trim()) : kq;
-                    const fill = (id, val) => { let e = document.getElementById(id); if(e){ e.value=val||""; tuDongGianCao(e); e.style.backgroundColor="#dcfce7"; setTimeout(()=>e.style.backgroundColor="transparent",1500); }};
-                    if(loai==='1') { fill('ketQuaUuDiem_1', json.UuDiem); fill('ketQuaHanChe_1', json.HanChe); fill('ketQuaCaiTien_1', json.CaiTien); for(let i=1;i<=12;i++){ let oi = document.querySelector(`#khoi_1 input[data-key="Diem_TC${i}"]`); if(oi && json['Diem_TC'+i]!==undefined){ oi.value=json['Diem_TC'+i]; oi.style.backgroundColor="#dcfce7"; setTimeout(()=>oi.style.backgroundColor="transparent",1500); }} tinhTongDiemThanhPhan(1); }
-                    else if(loai==='2') { fill('ketQuaKetLuan_2', json.KetLuan); } else if(loai==='8') { fill('ketQuaUuDiem_8', json.UuDiem); fill('ketQuaKhuyetDiem_8', json.HanChe); }
-                    HeThong.thongBao("AI phân tích hoàn tất.");
-                } catch(e) { HeThong.thongBao("Lỗi định dạng AI trả về.", "loi"); }
-            });
+            google.script.run
+                .withSuccessHandler(function(kq) {
+                    hienTai(false);
+                    if(typeof kq === 'string' && kq.startsWith("LỖI")) return thongBao(kq, "loi");
+                    try {
+                        let json = typeof kq === 'string' ? JSON.parse(kq.replace(/```json/gi, '').replace(/```/g, '').trim()) : kq;
+                        const fill = (id, val) => { let e = document.getElementById(id); if(e){ e.value=val||""; tuDongGianCao(e); e.style.backgroundColor="#dcfce7"; setTimeout(()=>e.style.backgroundColor="transparent",1500); }};
+                        
+                        if(loai==='1') { 
+                            fill('ketQuaUuDiem_1', json.UuDiem); fill('ketQuaHanChe_1', json.HanChe); fill('ketQuaCaiTien_1', json.CaiTien); 
+                            for(let i=1;i<=12;i++){ 
+                                let oi = document.querySelector(`#khoi_1 input[data-key="Diem_TC${i}"]`); 
+                                if(oi && json['Diem_TC'+i]!==undefined){ 
+                                    oi.value=json['Diem_TC'+i]; oi.style.backgroundColor="#dcfce7"; setTimeout(()=>oi.style.backgroundColor="transparent",1500); 
+                                }
+                            } 
+                            tinhTongDiemThanhPhan(1); 
+                        }
+                        else if(loai==='2') { fill('ketQuaKetLuan_2', json.KetLuan); } 
+                        else if(loai==='8') { fill('ketQuaUuDiem_8', json.UuDiem); fill('ketQuaKhuyetDiem_8', json.HanChe); }
+                        
+                        thongBao("AI phân tích hoàn tất.");
+                    } catch(e) { thongBao("Lỗi định dạng AI trả về.", "loi"); }
+                })
+                .withFailureHandler(function(loi) { hienTai(false); thongBao(loi.message, "loi"); })
+                .phanTichUuKhuyetDiem(nd, pl);
         }
-else if (hanhDong === 'LuuHoSo' || hanhDong === 'XuatWord') {
-            HeThong.hienTai(true, HeThong.trangThai.idFileDangSua ? "Đang ghi đè tài liệu..." : "Đang tạo tài liệu mới...");
+        else if (hanhDong === 'LuuHoSo' || hanhDong === 'XuatWord') {
+            hienTai(true, idFileDangSua ? "Đang ghi đè tài liệu..." : "Đang tạo tài liệu mới...");
             
-            // ĐÓNG GÓI TRỰC TIẾP: Nhúng tài khoản vào thẳng payload lõi
             const payloadLuu = { 
                 loaiVanBan: loai, 
                 duLieuForm: layToanBoDuLieuGiaoDien().data, 
-                idFileDangCapNhat: HeThong.trangThai.idFileDangSua,
-                taiKhoanYeuCau: HeThong.phienLamViec() 
+                idFileDangCapNhat: idFileDangSua,
+                taiKhoanYeuCau: taiKhoanXacThuc 
             };
 
-            HeThong.goiMayChu(hanhDong, { dongGoiTruyenLen: payloadLuu }, (kq) => {
-                HeThong.hienTai(false);
-                if(kq.trangThai === "ThanhCong") { 
-                    HeThong.thongBao(HeThong.trangThai.idFileDangSua ? "Cập nhật thành công!" : "Khởi tạo thành công!"); 
-                    lamMoiForm(true); 
-                    if (document.getElementById('panelKhoLuuTru').classList.contains('open')) {
-                        thucHienTimKiem();
+            google.script.run
+                .withSuccessHandler(function(kq) {
+                    hienTai(false);
+                    if(kq.trangThai === "ThanhCong") { 
+                        thongBao(idFileDangSua ? "Cập nhật thành công!" : "Khởi tạo thành công!"); 
+                        lamMoiForm(true); 
+                        if (document.getElementById('panelKhoLuuTru').classList.contains('open')) {
+                            thucHienTimKiem();
+                        }
+                    } else {
+                        thongBao(kq.thongBao, "loi");
                     }
-                } 
-                else HeThong.thongBao(kq.thongBao, "loi");
-            });
+                })
+                .withFailureHandler(function(loi) { hienTai(false); thongBao(loi.message, "loi"); })
+                .xuLyLuuHoSo(payloadLuu);
         }
     }
 
     // =========================================================================
-    // KHỐI 5: KHO LƯU TRỮ VÀ TRUY VẤN AI TRONG PANEL
+    // KHỐI 5: KHO LƯU TRỮ VÀ TRUY VẤN AI TRONG PANEL (GỌI TRỰC TIẾP CODE.GS)
     // =========================================================================
 
-function thucHienTimKiem() {
+    function tuDongTimKiemKho() {
+        clearTimeout(boDemTimKiemKho);
+        boDemTimKiemKho = setTimeout(thucHienTimKiem, 400);
+    }
+
+    function thucHienTimKiem() {
         const tuKhoa = document.getElementById('oTimKiemTaiLieu').value;
         const ul = document.getElementById('danhSachLuuTru');
+        const taiKhoanXacThuc = sessionStorage.getItem('SessionAccountActive');
+        
         ul.innerHTML = `<div class="skeleton-wrapper"><div class="skeleton-item"></div><div class="skeleton-item"></div><div class="skeleton-item" style="width: 85%;"></div></div>`;
         
-        HeThong.goiMayChu('TimKiem', { tuKhoa: tuKhoa }, (kq) => {
-            document.getElementById('tenHienThiVanBan').innerText = "Chưa chọn văn bản"; document.getElementById('thanhCongCuTaiLieu').style.visibility = 'hidden'; document.getElementById('khungXemTruoc').src = "about:blank";
-            
-            // Tách mảng an toàn đề phòng bị bọc trong Object
-            const mangDuLieu = Array.isArray(kq) ? kq : (kq && kq.duLieu ? kq.duLieu : []);
-            
-            if(!kq || mangDuLieu.length === 0 || kq.trangThai === "Loi") { 
-                ul.innerHTML = `<li style="padding: 15px; text-align: center; color: #ef4444;">${kq?.thongBao || 'Không tìm thấy văn bản phù hợp.'}</li>`; 
-                return; 
-            }
-            
-            ul.innerHTML = ''; const frag = document.createDocumentFragment();
-            mangDuLieu.forEach(bg => {
-                let li = document.createElement('li'); li.style.cssText = "padding:12px 15px; border-bottom:1px solid #e2e8f0; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:0.2s;";
-                li.onmouseover = function() { if(this.dataset.sel!=='1') this.style.background = '#f8fafc'; }; li.onmouseout = function() { if(this.dataset.sel!=='1') this.style.background = 'transparent'; };
-                li.innerHTML = `<div style="flex:1; color:#0f172a; font-weight:500;">${bg.tenBanGhi}</div>${(!bg.duLieuGoc || !bg.duLieuGoc.includes("loaiVanBan")) ? '<span style="font-size:8pt;">🔒</span>' : ''}`;
+        google.script.run
+            .withSuccessHandler(function(kq) {
+                document.getElementById('tenHienThiVanBan').innerText = "Chưa chọn văn bản"; 
+                document.getElementById('thanhCongCuTaiLieu').style.visibility = 'hidden'; 
+                document.getElementById('khungXemTruoc').src = "about:blank";
                 
-                li.onclick = function() {
-                    ul.querySelectorAll('li').forEach(n => { n.dataset.sel='0'; n.style.background='transparent'; n.style.borderLeft='none'; n.querySelector('div').style.color='#0f172a'; });
-                    this.dataset.sel='1'; this.style.background='#e0f2fe'; this.style.borderLeft='4px solid #0284c7'; this.querySelector('div').style.color='#0284c7';
-                    document.getElementById('khungXemTruoc').src = bg.duongDanXem;
-                    document.getElementById('tenHienThiVanBan').innerText = bg.tenBanGhi;
-                    document.getElementById('thanhCongCuTaiLieu').style.visibility = 'visible';
+                const mangDuLieu = Array.isArray(kq) ? kq : (kq && kq.duLieu ? kq.duLieu : []);
+                
+                if(!kq || mangDuLieu.length === 0 || kq.trangThai === "Loi") { 
+                    ul.innerHTML = `<li style="padding: 15px; text-align: center; color: #ef4444;">${kq?.thongBao || 'Không tìm thấy văn bản phù hợp.'}</li>`; 
+                    return; 
+                }
+                
+                ul.innerHTML = ''; const frag = document.createDocumentFragment();
+                mangDuLieu.forEach(bg => {
+                    let li = document.createElement('li'); 
+                    li.style.cssText = "padding:12px 15px; border-bottom:1px solid #e2e8f0; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:0.2s;";
+                    li.onmouseover = function() { if(this.dataset.sel!=='1') this.style.background = '#f8fafc'; }; 
+                    li.onmouseout = function() { if(this.dataset.sel!=='1') this.style.background = 'transparent'; };
+                    li.innerHTML = `<div style="flex:1; color:#0f172a; font-weight:500;">${bg.tenBanGhi}</div>${(!bg.duLieuGoc || !bg.duLieuGoc.includes("loaiVanBan")) ? '<span style="font-size:8pt;">🔒</span>' : ''}`;
                     
-                    document.getElementById('nutTaiDocx').onclick = function() { let a = document.createElement('a'); a.href = bg.duongDanTai; a.style.display='none'; document.body.appendChild(a); a.click(); setTimeout(()=>a.remove(), 500); };
-                    
-                    let ns = document.getElementById('nutSuaDoc'), nx = document.getElementById('nutXoaDoc');
-                    if (bg.duLieuGoc && bg.duLieuGoc.includes("loaiVanBan")) {
-                        ns.style.display='inline-block'; nx.style.display='inline-block';
-                        ns.onclick = function() { HeThong.trangThai.idFileDangSua = bg.idFile; napDuLieuSua(bg.duLieuGoc); };
-                        nx.onclick = function() { if(confirm("XÓA VĨNH VIỄN?")) HeThong.goiMayChu('XoaFile', {idFile: bg.idFile}, (k) => { HeThong.hienTai(false); HeThong.thongBao(k.thongBao, k.trangThai==="ThanhCong"?"thanh-cong":"loi"); if(k.trangThai==="ThanhCong") thucHienTimKiem(); }); };
-                    } else { ns.style.display='none'; nx.style.display='none'; }
-                };
-                frag.appendChild(li);
-            });
-            ul.appendChild(frag);
-        }, () => { ul.innerHTML = '<li style="padding: 15px; text-align: center; color: #ef4444;">Lỗi tải dữ liệu.</li>'; });
+                    li.onclick = function() {
+                        ul.querySelectorAll('li').forEach(n => { n.dataset.sel='0'; n.style.background='transparent'; n.style.borderLeft='none'; n.querySelector('div').style.color='#0f172a'; });
+                        this.dataset.sel='1'; this.style.background='#e0f2fe'; this.style.borderLeft='4px solid #0284c7'; this.querySelector('div').style.color='#0284c7';
+                        
+                        document.getElementById('khungXemTruoc').src = bg.duongDanXem;
+                        document.getElementById('tenHienThiVanBan').innerText = bg.tenBanGhi;
+                        document.getElementById('thanhCongCuTaiLieu').style.visibility = 'visible';
+                        
+                        document.getElementById('nutTaiDocx').onclick = function() { 
+                            let a = document.createElement('a'); a.href = bg.duongDanTai; a.style.display='none'; document.body.appendChild(a); a.click(); setTimeout(()=>a.remove(), 500); 
+                        };
+                        
+                        let ns = document.getElementById('nutSuaDoc'), nx = document.getElementById('nutXoaDoc');
+                        if (bg.duLieuGoc && bg.duLieuGoc.includes("loaiVanBan")) {
+                            ns.style.display='inline-block'; nx.style.display='inline-block';
+                            ns.onclick = function() { idFileDangSua = bg.idFile; napDuLieuSua(bg.duLieuGoc); };
+                            nx.onclick = function() { 
+                                if(confirm("XÓA VĨNH VIỄN?")) {
+                                    hienTai(true, "Đang dọn dẹp...");
+                                    google.script.run
+                                        .withSuccessHandler(function(k) {
+                                            hienTai(false); 
+                                            thongBao(k.thongBao, k.trangThai==="ThanhCong"?"thanh-cong":"loi"); 
+                                            if(k.trangThai==="ThanhCong") thucHienTimKiem();
+                                        })
+                                        .withFailureHandler(function(l){ hienTai(false); thongBao("Lỗi kết nối", "loi"); })
+                                        .xoaVanBanHanhChinh(bg.idFile, taiKhoanXacThuc);
+                                }
+                            };
+                        } else { ns.style.display='none'; nx.style.display='none'; }
+                    };
+                    frag.appendChild(li);
+                });
+                ul.appendChild(frag);
+            })
+            .withFailureHandler(function() {
+                ul.innerHTML = '<li style="padding: 15px; text-align: center; color: #ef4444;">Lỗi tải dữ liệu.</li>';
+            })
+            .timKiemVanBanHanhChinh(tuKhoa, taiKhoanXacThuc);
     }
 
     function napDuLieuSua(chuoi) {
@@ -950,63 +1040,79 @@ function thucHienTimKiem() {
             setTimeout(() => {
                 const k = document.getElementById('khoi_'+loai);
                 if(k) {
-                    for(let c in f) { let inp = k.querySelector(`[data-key="${c}"]`); if(inp){ inp.value=f[c]; if(inp.tagName==='TEXTAREA') tuDongGianCao(inp); } }
+                    for(let c in f) { 
+                        let inp = k.querySelector(`[data-key="${c}"]`); 
+                        if(inp){ inp.value=f[c]; if(inp.tagName==='TEXTAREA') tuDongGianCao(inp); } 
+                    }
                     if(loai==="1") tinhTongDiemThanhPhan(1);
                     window.scrollTo({ top: 0, behavior: 'smooth' });
-                    let btn = document.getElementById('btnHoSo'); if(btn){ btn.innerText="Cập Nhật Văn Bản"; btn.className="btn btn-orange"; }
+                    let btn = document.getElementById('btnHoSo'); 
+                    if(btn){ btn.innerText="Cập Nhật Văn Bản"; btn.className="btn btn-orange"; }
                     k.style.boxShadow="0 0 15px #f97316"; setTimeout(()=>k.style.boxShadow="none", 1500);
                 }
             }, 250);
-        } catch(e) { HeThong.thongBao("Dữ liệu hỏng.", "loi"); }
+        } catch(e) { thongBao("Dữ liệu hỏng.", "loi"); }
     }
 
-function kichHoatTruyVanCheo() {
+    function kichHoatTruyVanCheo() {
         const cauHoi = document.getElementById('aiCauHoiTruyVan').value.trim();
-        if(!cauHoi) return HeThong.thongBao("Vui lòng nhập câu hỏi.", "loi");
-        document.getElementById('aiTieuDeKhungXem').innerText = 'Đang chờ dữ liệu...'; document.getElementById('aiKhungXemTruocTep').src = 'about:blank'; document.getElementById('aiNutTaiDocx').style.display='none';
+        const taiKhoanXacThuc = sessionStorage.getItem('SessionAccountActive');
+        if(!cauHoi) return thongBao("Vui lòng nhập câu hỏi.", "loi");
         
-        const dieuKien = { loaiVanBan: document.getElementById('aiLoaiVanBan').value, tuNgay: document.getElementById('aiTuNgay').value, denNgay: document.getElementById('aiDenNgay').value, soLuongQuet: parseInt(document.getElementById('aiGioiHanQuet').value) };
+        document.getElementById('aiTieuDeKhungXem').innerText = 'Đang chờ dữ liệu...'; 
+        document.getElementById('aiKhungXemTruocTep').src = 'about:blank'; 
+        document.getElementById('aiNutTaiDocx').style.display='none';
+        
+        const dieuKien = { 
+            loaiVanBan: document.getElementById('aiLoaiVanBan').value, 
+            tuNgay: document.getElementById('aiTuNgay').value, 
+            denNgay: document.getElementById('aiDenNgay').value, 
+            soLuongQuet: parseInt(document.getElementById('aiGioiHanQuet').value) 
+        };
+        
         const tbody = document.getElementById('vungHienThiKetQuaAI'), status = document.getElementById('aiThongBaoTrangThai');
         
         tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding:30px;"><div class="reactbits-spinner" style="margin:0 auto 15px auto;"></div><br><span style="color:#8b5cf6; font-weight:bold;">Hệ thống đang quét kho dữ liệu...</span></td></tr>`;
         if (status) status.innerText = "Đang gửi tín hiệu...";
         
-        HeThong.goiMayChu('TruyVanCheoAI', { cauHoi: cauHoi, dieuKienLoc: dieuKien }, (kq) => {
-            if(!kq || kq.trangThai === "Loi") { 
-                if(status) status.innerText = "Hoàn tất có lỗi."; 
-                tbody.innerHTML = `<tr><td colspan="3" style="color:red; text-align:center; padding:20px;">${kq?.thongBao || 'Máy chủ phản hồi sai định dạng.'}</td></tr>`; return; 
-            }
-            
-            // Tách mảng kết quả an toàn
-            const mangKetQua = Array.isArray(kq) ? kq : (kq.duLieu || []);
-            if(status) status.innerText = `Hoàn tất rà soát ${kq.soLuongDaQuet || mangKetQua.length} tài liệu.`; 
-            tbody.innerHTML = '';
-            
-            if(mangKetQua.length === 0) { 
-                tbody.innerHTML = `<tr><td colspan="3" style="color:#0284c7; text-align:center; padding:30px;">Không tìm thấy kết quả phù hợp.</td></tr>`; return; 
-            }
-            
-            const frag = document.createDocumentFragment();
-            mangKetQua.forEach(item => {
-                let tr = document.createElement('tr'); tr.style.cursor = 'pointer';
-                tr.innerHTML = `<td style="font-weight:500; padding:10px;">${item.tenCuocHop||'---'}</td><td style="color:#64748b; padding:10px;">${item.thoiGian||'---'}</td><td style="color:#4c1d95; font-weight:600; padding:10px;">${item.tomTatAction||''}</td>`;
-                tr.onclick = function() {
-                    tbody.querySelectorAll('tr').forEach(r => { r.style.background='transparent'; r.classList.remove('ai-scanning'); });
-                    this.classList.add('ai-scanning');
-                    if(item.idFile) {
-                        document.getElementById('aiTieuDeKhungXem').innerText = `📄 ${item.tenCuocHop}`;
-                        document.getElementById('aiKhungXemTruocTep').src = `https://docs.google.com/document/d/${item.idFile}/preview`;
-                        let nt = document.getElementById('aiNutTaiDocx'); nt.style.display='block';
-                        nt.onclick = function() { let a = document.createElement('a'); a.href = `https://docs.google.com/document/d/${item.idFile}/export?format=docx`; a.style.display='none'; document.body.appendChild(a); a.click(); setTimeout(()=>a.remove(),500); };
-                    }
-                };
-                frag.appendChild(tr);
-            });
-            tbody.appendChild(frag);
-        }, () => { 
-            if(status) status.innerText = "Lỗi mạng."; 
-            tbody.innerHTML = `<tr><td colspan="3" style="color:red; text-align:center;">Mất kết nối API.</td></tr>`; 
-        });
+        google.script.run
+            .withSuccessHandler(function(kq) {
+                if(!kq || kq.trangThai === "Loi") { 
+                    if(status) status.innerText = "Hoàn tất có lỗi."; 
+                    tbody.innerHTML = `<tr><td colspan="3" style="color:red; text-align:center; padding:20px;">${kq?.thongBao || 'Máy chủ phản hồi sai định dạng.'}</td></tr>`; return; 
+                }
+                
+                const mangKetQua = Array.isArray(kq) ? kq : (kq.duLieu || []);
+                if(status) status.innerText = `Hoàn tất rà soát ${kq.soLuongDaQuet || mangKetQua.length} tài liệu.`; 
+                tbody.innerHTML = '';
+                
+                if(mangKetQua.length === 0) { 
+                    tbody.innerHTML = `<tr><td colspan="3" style="color:#0284c7; text-align:center; padding:30px;">Không tìm thấy kết quả phù hợp.</td></tr>`; return; 
+                }
+                
+                const frag = document.createDocumentFragment();
+                mangKetQua.forEach(item => {
+                    let tr = document.createElement('tr'); tr.style.cursor = 'pointer';
+                    tr.innerHTML = `<td style="font-weight:500; padding:10px;">${item.tenCuocHop||'---'}</td><td style="color:#64748b; padding:10px;">${item.thoiGian||'---'}</td><td style="color:#4c1d95; font-weight:600; padding:10px;">${item.tomTatAction||''}</td>`;
+                    tr.onclick = function() {
+                        tbody.querySelectorAll('tr').forEach(r => { r.style.background='transparent'; r.classList.remove('ai-scanning'); });
+                        this.classList.add('ai-scanning');
+                        if(item.idFile) {
+                            document.getElementById('aiTieuDeKhungXem').innerText = `📄 ${item.tenCuocHop}`;
+                            document.getElementById('aiKhungXemTruocTep').src = `https://docs.google.com/document/d/${item.idFile}/preview`;
+                            let nt = document.getElementById('aiNutTaiDocx'); nt.style.display='block';
+                            nt.onclick = function() { let a = document.createElement('a'); a.href = `https://docs.google.com/document/d/${item.idFile}/export?format=docx`; a.style.display='none'; document.body.appendChild(a); a.click(); setTimeout(()=>a.remove(),500); };
+                        }
+                    };
+                    frag.appendChild(tr);
+                });
+                tbody.appendChild(frag);
+            })
+            .withFailureHandler(function(loi) {
+                if(status) status.innerText = "Lỗi mạng."; 
+                tbody.innerHTML = `<tr><td colspan="3" style="color:red; text-align:center;">Mất kết nối API.</td></tr>`; 
+            })
+            .truyVanCheoAI(cauHoi, dieuKien, taiKhoanXacThuc);
     }
 </script>
 </body>

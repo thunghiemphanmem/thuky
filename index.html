@@ -1453,30 +1453,54 @@ function napDuLieuSua(chuoiDuLieu) {
     }
 
 // =====================================================================
-    // HÀM ĐIỀU KHIỂN GIAO DIỆN TRUY VẤN AI (ĐÃ NÂNG CẤP BẮT LỖI)
+    // HÀM ĐIỀU KHIỂN GIAO DIỆN TRUY VẤN AI (ĐÃ NÂNG CẤP UX: CHE PHỦ FORM)
     // =====================================================================
     function moGiaoDienTruyVanAI() {
         try {
             const khuVucAI = document.getElementById('khuVucTruyVanAI');
             const khuVucTraCuu = document.getElementById('khuVucTraCuu');
             
-            // Chốt chặn 1: Kiểm tra xem tệp TraCuuAI.html đã được nhúng thành công chưa
+            // Lấy ID của khối biểu mẫu đang làm việc trên màn hình
+            const loaiVanBan = document.getElementById('loaiVanBan').value;
+            const khoiHienTai = document.getElementById('khoi_' + loaiVanBan);
+            
+            // Chốt chặn 1: Kiểm tra xem tệp TraCuuAI đã được nhúng chưa
             if (!khuVucAI) {
-                alert("LỖI GIAO DIỆN: Hệ thống không tìm thấy khung làm việc AI. Đồng chí vui lòng kiểm tra lại thẻ <?!= nhungGiaoDien('TraCuuAI'); ?> đã được đặt đúng vị trí trong Index.html chưa.");
+                alert("LỖI GIAO DIỆN: Hệ thống không tìm thấy khung làm việc AI.");
                 return;
             }
 
+            // Đóng khu vực tra cứu kho lưu trữ (nếu đang mở)
             if (khuVucTraCuu && khuVucTraCuu.style.display === 'block') {
                 khuVucTraCuu.style.display = 'none';
             }
             
+            // -------------------------------------------------------------
+            // TRẠNG THÁI 1: ĐANG MỞ AI -> NHẤN NÚT ĐỂ ĐÓNG
+            // -------------------------------------------------------------
             if(khuVucAI.style.display === 'grid' || khuVucAI.style.display === 'block') { 
                 khuVucAI.style.display = 'none'; 
+                
+                // Khôi phục lại khối biểu mẫu làm việc ban đầu
+                if (khoiHienTai && loaiVanBan !== "0") {
+                    khoiHienTai.style.display = 'block';
+                }
                 return; 
             }
             
+            // -------------------------------------------------------------
+            // TRẠNG THÁI 2: ĐANG ĐÓNG AI -> NHẤN NÚT ĐỂ MỞ
+            // -------------------------------------------------------------
+            // Ẩn khối biểu mẫu hiện tại đi để nhường toàn bộ không gian cho AI
+            if (khoiHienTai) {
+                khoiHienTai.style.display = 'none';
+            }
+            
             khuVucAI.style.display = 'grid'; 
-            khuVucAI.scrollIntoView({ behavior: 'smooth' });
+            
+            // Tự động cuộn màn hình lên sát đầu trang để vùng nhìn được bao quát nhất
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
         } catch (loi) {
             alert("LỖI KỊCH BẢN (Index.html): " + loi.message);
         }

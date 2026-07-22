@@ -90,50 +90,57 @@
 </div>
 
 <script>
-    function kichHoatTruyVanCheo() {
-        const cauHoi = document.getElementById('aiCauHoiTruyVan').value.trim();
-        if (!cauHoi) return alert("Đồng chí vui lòng nhập câu hỏi truy vấn cho hệ thống AI.");
+function kichHoatTruyVanCheo() {
+        try {
+            const cauHoiInput = document.getElementById('aiCauHoiTruyVan');
+            if (!cauHoiInput) {
+                alert("LỖI HTML: Không tìm thấy ô nhập câu hỏi. Hãy kiểm tra lại ID 'aiCauHoiTruyVan'.");
+                return;
+            }
 
-        const dieuKienLoc = {
-            loaiVanBan: document.getElementById('aiLoaiVanBan').value,
-            tuNgay: document.getElementById('aiTuNgay').value,
-            denNgay: document.getElementById('aiDenNgay').value,
-            soLuongQuet: parseInt(document.getElementById('aiGioiHanQuet').value)
-        };
+            const cauHoi = cauHoiInput.value.trim();
+            if (!cauHoi) {
+                alert("Đồng chí vui lòng nhập câu hỏi truy vấn cho hệ thống AI.");
+                return;
+            }
 
-        const phienLamViec = sessionStorage.getItem('SessionAccountActive');
-        if (!phienLamViec) return alert("Phiên đăng nhập đã hết hạn.");
+            const dieuKienLoc = {
+                loaiVanBan: document.getElementById('aiLoaiVanBan').value,
+                tuNgay: document.getElementById('aiTuNgay').value,
+                denNgay: document.getElementById('aiDenNgay').value,
+                soLuongQuet: parseInt(document.getElementById('aiGioiHanQuet').value)
+            };
 
-        // Hiệu ứng chờ UI
-        const bangKetQua = document.getElementById('vungHienThiKetQuaAI');
-        const theThongBao = document.getElementById('aiThongBaoTrangThai');
-        
-        bangKetQua.innerHTML = `<tr><td colspan="3" style="text-align: center; padding: 30px; color: #8b5cf6; font-weight: bold;">
-            <div class="spinner" style="margin: 0 auto; width: 30px; height: 30px; border-top-color: #8b5cf6;"></div>
-            Hệ thống đang rà soát dữ liệu và phân tích ngữ nghĩa...
-        </td></tr>`;
-        theThongBao.innerText = "Đang kết nối đến Máy chủ AI Google...";
-        
-        const laMoiTruongGoogle = (typeof google !== 'undefined' && google.script && google.script.run);
-        
-        if (laMoiTruongGoogle) {
-            google.script.run
-                .withSuccessHandler(xuLyDuLieuAIRaBang)
-                .withFailureHandler(function(loi) { 
-                    theThongBao.innerText = "Lỗi kết nối mạng nội bộ.";
-                    bangKetQua.innerHTML = `<tr><td colspan="3" style="text-align: center; padding: 20px; color: #ef4444;">Lỗi: ${loi.message}</td></tr>`;
-                })
-                .truyVanCheoAI(cauHoi, dieuKienLoc, phienLamViec);
-        } else if (typeof KET_NOI !== 'undefined' && KET_NOI.URL_API_BACKEND) {
-            // Trường hợp chạy từ môi trường ngoài (GitHub Pages)
-            const dongGoi = { hanhDong: 'TruyVanCheoAI', cauHoi: cauHoi, dieuKienLoc: dieuKienLoc, taiKhoanYeuCau: phienLamViec };
-            fetch(KET_NOI.URL_API_BACKEND, { method: 'POST', body: JSON.stringify(dongGoi), headers: { 'Content-Type': 'text/plain;charset=utf-8' } })
-            .then(res => res.json())
-            .then(phanHoi => xuLyDuLieuAIRaBang(phanHoi))
-            .catch(loi => {
-                theThongBao.innerText = "Mất kết nối API bên ngoài.";
-                bangKetQua.innerHTML = `<tr><td colspan="3" style="text-align: center; padding: 20px; color: #ef4444;">Đứt gãy đường truyền hệ thống.</td></tr>`;
-            });
+            const phienLamViec = sessionStorage.getItem('SessionAccountActive');
+            if (!phienLamViec) {
+                alert("Phiên đăng nhập đã hết hạn. Vui lòng tải lại trang.");
+                return;
+            }
+
+            const bangKetQua = document.getElementById('vungHienThiKetQuaAI');
+            const theThongBao = document.getElementById('aiThongBaoTrangThai');
+            
+            bangKetQua.innerHTML = `<tr><td colspan="3" style="text-align: center; padding: 30px; color: #8b5cf6; font-weight: bold;">
+                <div class="spinner" style="margin: 0 auto; width: 30px; height: 30px; border-top-color: #8b5cf6;"></div>
+                Hệ thống đang kết nối và phân tích khối lượng dữ liệu lớn...
+            </td></tr>`;
+            theThongBao.innerText = "Đang gửi yêu cầu đến Máy chủ Google...";
+            
+            const laMoiTruongGoogle = (typeof google !== 'undefined' && google.script && google.script.run);
+            
+            if (laMoiTruongGoogle) {
+                google.script.run
+                    .withSuccessHandler(xuLyDuLieuAIRaBang)
+                    .withFailureHandler(function(loi) { 
+                        theThongBao.innerText = "Lỗi kết nối nội bộ GAS.";
+                        bangKetQua.innerHTML = `<tr><td colspan="3" style="text-align: center; padding: 20px; color: #ef4444;">Lỗi Server: ${loi.message}. (Kiểm tra lại hàm truyVanCheoAI trong Code.gs)</td></tr>`;
+                    })
+                    .truyVanCheoAI(cauHoi, dieuKienLoc, phienLamViec);
+            } else {
+                alert("Lỗi: Không tìm thấy môi trường thực thi Google Apps Script.");
+            }
+        } catch (loiNghiepVu) {
+            alert("LỖI KỊCH BẢN (TraCuuAI.html): " + loiNghiepVu.message);
         }
     }
 

@@ -776,10 +776,16 @@
         HeThong.kiemSoatNut(false);
     }
 
-    function tuDongGianCao(el) {
-        let t = el.style.transition; el.style.transition = 'none'; el.style.height = 'auto';
-        let h = el.scrollHeight; el.style.height = (h < 32 ? 32 : h) + 'px';
-        void el.offsetHeight; el.style.transition = t;
+   function tuDongGianCao(el) {
+        let t = el.style.transition; 
+        el.style.transition = 'none'; 
+      
+        el.style.height = '1px'; 
+        
+        let h = el.scrollHeight; 
+        el.style.height = (h < 32 ? 32 : h) + 'px';
+        void el.offsetHeight; 
+        el.style.transition = t;
     }
 
     // =========================================================================

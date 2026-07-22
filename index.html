@@ -803,26 +803,35 @@
     // =========================================================================
 
     document.addEventListener("DOMContentLoaded", function() {
-        if (KET_NOI.LOGO_TRUONG) { document.getElementById('loginLogo').src = KET_NOI.LOGO_TRUONG; document.getElementById('loginLogo').style.display = 'inline-block'; }
-        const phien = HeThong.phienLamViec();
-        if (phien && KET_NOI.DANH_SACH_TAI_KHOAN && KET_NOI.DANH_SACH_TAI_KHOAN.includes(phien)) {
-            document.getElementById('userBadgeArea').innerHTML = `<div style="font-size:0.75rem; color:#047857; font-weight:bold; background:#d1fae5; padding:4px 8px; border-radius:4px; border:1px solid #34d399;" title="${phien}">👤 ${phien}</div><button class="btn-logout" onclick="executeLogout()">Đăng xuất</button>`;
-            document.getElementById('loginUI').style.display = 'none';
-        } else { sessionStorage.removeItem('SessionAccountActive'); document.getElementById('loginUI').style.display = 'flex'; }
+    setTimeout(function() {
+            try {
+                if (KET_NOI.LOGO_TRUONG) { document.getElementById('loginLogo').src = KET_NOI.LOGO_TRUONG; document.getElementById('loginLogo').style.display = 'inline-block'; }
+                const phien = HeThong.phienLamViec();
+                if (phien && KET_NOI.DANH_SACH_TAI_KHOAN && KET_NOI.DANH_SACH_TAI_KHOAN.includes(phien)) {
+                    document.getElementById('userBadgeArea').innerHTML = `<div style="font-size:0.75rem; color:#047857; font-weight:bold; background:#d1fae5; padding:4px 8px; border-radius:4px; border:1px solid #34d399;" title="${phien}">👤 ${phien}</div><button class="btn-logout" onclick="executeLogout()">Đăng xuất</button>`;
+                    document.getElementById('loginUI').style.display = 'none';
+                } else { sessionStorage.removeItem('SessionAccountActive'); document.getElementById('loginUI').style.display = 'flex'; }
+                
+                // Khởi tạo luồng xác thực Google
+                if (typeof google !== 'undefined' && google.accounts) {
+                    google.accounts.id.initialize({ client_id: KET_NOI.CLIENT_ID, callback: res => {
+                        let p = JSON.parse(decodeURIComponent(window.atob(res.credential.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))));
+                        let m = (p['em'+'ail'] || "").toLowerCase().trim();
+                        if (KET_NOI.DANH_SACH_TAI_KHOAN.includes(m)) { sessionStorage.setItem('SessionAccountActive', m); location.reload(); }
+                        else { let cb = document.getElementById('loginWarning'); cb.innerHTML = `Tài khoản <b>${m}</b> bị từ chối! Bạn chưa đăng ký sử dụng phần mềm`; cb.style.display = 'block'; cb.style.color = 'red'; }
+                    }});
+                    google.accounts.id.renderButton(document.getElementById("googleButtonDiv"), { theme: "outline", size: "large", type: "standard" });
+                }
+                
+                let select = document.getElementById('loaiVanBan'); select.innerHTML = '<option value="0">-- Vui lòng click để chọn biểu mẫu làm việc --</option>';
+                KET_NOI.DANH_MUC_VAN_BAN.forEach(m => select.innerHTML += `<option value="${m.giaTri}">${m.tenHienThi}</option>`);
+                document.querySelectorAll('textarea').forEach(ta => ta.addEventListener('input', function() { tuDongGianCao(this); }));
+                
+            } catch (loiKhoiTao) {
+                console.error("Luồng xác thực bị gián đoạn: ", loiKhoiTao);
+            }
+        }, 300);
         
-        if (typeof google !== 'undefined' && google.accounts) {
-            google.accounts.id.initialize({ client_id: KET_NOI.CLIENT_ID, callback: res => {
-                let p = JSON.parse(decodeURIComponent(window.atob(res.credential.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))));
-                let m = (p['em'+'ail'] || "").toLowerCase().trim();
-                if (KET_NOI.DANH_SACH_TAI_KHOAN.includes(m)) { sessionStorage.setItem('SessionAccountActive', m); location.reload(); }
-                else { let cb = document.getElementById('loginWarning'); cb.innerHTML = `Tài khoản <b>${m}</b> bị từ chối! Bạn chưa đăng ký sử dụng phần mềm`; cb.style.display = 'block'; cb.style.color = 'red'; }
-            }});
-            google.accounts.id.renderButton(document.getElementById("googleButtonDiv"), { theme: "outline", size: "large", type: "standard" });
-        }
-        
-        let select = document.getElementById('loaiVanBan'); select.innerHTML = '<option value="0">-- Vui lòng click để chọn biểu mẫu làm việc --</option>';
-        KET_NOI.DANH_MUC_VAN_BAN.forEach(m => select.innerHTML += `<option value="${m.giaTri}">${m.tenHienThi}</option>`);
-        document.querySelectorAll('textarea').forEach(ta => ta.addEventListener('input', function() { tuDongGianCao(this); }));
     });
 
     function executeLogout() { if(confirm("Đăng xuất khỏi phiên hiện tại?")) { sessionStorage.removeItem('SessionAccountActive'); location.reload(); } }

@@ -917,10 +917,13 @@
     // =========================================================================
 
     function thucHienTimKiem() {
-        const tuKhoa = document.getElementById('oTimKiemTaiLieu').value;
+       const tuKhoa = document.getElementById('oTimKiemTaiLieu').value;
         const ul = document.getElementById('danhSachLuuTru');
-        ul.innerHTML = `<div class="skeleton-wrapper"><div class="skeleton-item"></div><div class="skeleton-item"></div><div class="skeleton-item" style="width: 85%;"></div></div>`;
-        
+        ul.innerHTML = `
+            <li style="padding: 50px 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: none; background: transparent;">
+                <div class="reactbits-spinner" style="width: 35px; height: 35px; border-width: 3px; margin-bottom: 15px;"></div>
+                <span style="color: #0284c7; font-size: 0.95rem; font-weight: 600; animation: pulse 1.5s infinite;">Đang đồng bộ hồ sơ...</span>
+            </li>`;
         HeThong.goiMayChu('TimKiem', { tuKhoa: tuKhoa }, (kq) => {
             document.getElementById('tenHienThiVanBan').innerText = "Chưa chọn văn bản"; document.getElementById('thanhCongCuTaiLieu').style.visibility = 'hidden'; document.getElementById('khungXemTruoc').src = "about:blank";
             

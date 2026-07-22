@@ -933,7 +933,7 @@
             
             ul.innerHTML = ''; const frag = document.createDocumentFragment();
             mangDuLieu.forEach(bg => {
-                let li = document.createElement('li'); li.style.cssText = "padding:12px 15px; border-bottom:1px solid #e2e8f0; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:0.2s;";
+                let li = document.createElement('li'); li.style.cssText = "padding:7px 10px; border-bottom:1px solid #e2e8f0; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:0.2s; font-size:10pt;";
                 li.onmouseover = function() { if(this.dataset.sel!=='1') this.style.background = '#f8fafc'; }; li.onmouseout = function() { if(this.dataset.sel!=='1') this.style.background = 'transparent'; };
                 li.innerHTML = `<div style="flex:1; color:#0f172a; font-weight:500;">${bg.tenBanGhi}</div>${(!bg.duLieuGoc || !bg.duLieuGoc.includes("loaiVanBan")) ? '<span style="font-size:8pt;">🔒</span>' : ''}`;
                 

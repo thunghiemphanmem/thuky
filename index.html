@@ -625,11 +625,14 @@
 
 <!-- PANEL 2: TRUY VẤN AI CHÉO -->
 <div class="side-panel" id="panelTruyVanAI">
-    <div class="panel-header">
-        <h3 style="color: #6d28d9;">🤖 Trợ Lý Phân Tích Dữ Liệu</h3>
+    <!-- Ép padding thanh tiêu đề từ 15px xuống 6px -->
+    <div class="panel-header" style="padding: 6px 15px;">
+        <h3 style="color: #6d28d9; font-size: 1.1rem; margin: 0;">🤖 Trợ Lý Phân Tích Dữ Liệu</h3>
         <button class="btn-close-panel" onclick="dongTatCaPanel()">✖</button>
     </div>
-    <div class="panel-content">
+    
+    <!-- Ép padding vùng nội dung từ 20px xuống 10px (giống chuẩn kho lưu trữ) -->
+    <div class="panel-content" style="padding: 10px 15px;">
         <div class="ai-dashboard">
             <div class="ai-control-panel">
                 <div class="form-group col-layout"><label style="color: #475569;">Câu hỏi truy vấn:</label><textarea id="aiCauHoiTruyVan" placeholder="Ai được biểu dương trong các cuộc họp chi bộ gần đây? Nội dung là gì?" style="height: 70px; border-radius: 6px; padding: 8px; border: 1px solid #cbd5e1;"></textarea></div>

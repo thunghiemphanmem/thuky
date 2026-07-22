@@ -704,14 +704,14 @@ goiMayChu: function(tenLenh, thamSo, hamThanhCong, hamThatBai = null) {
                 const runner = google.script.run
                     .withSuccessHandler(res => {
                         let parsed = res;
-                        // Ép kiểu về Object/Array nếu Google trả về dạng chuỗi String
                         if (typeof res === 'string') { try { parsed = JSON.parse(res); } catch(e) {} }
                         hamThanhCong(parsed);
                     })
                     .withFailureHandler(xuLyLoi);
                     
                 if(tenLenh === 'PhanTichAI') runner.phanTichUuKhuyetDiem(thamSo.noiDung, thamSo.chuoiPhanLoai);
-                else if(tenLenh === 'LuuHoSo' || tenLenh === 'XuatWord') runner.xuLyLuuHoSo(thamSo.dongGoiTruyenLen);
+                // ĐIỂM SỬA LỖI: Bổ sung thamSo.taiKhoanYeuCau làm đối số thứ 2 để máy chủ cấp quyền
+                else if(tenLenh === 'LuuHoSo' || tenLenh === 'XuatWord') runner.xuLyLuuHoSo(thamSo.dongGoiTruyenLen, thamSo.taiKhoanYeuCau);
                 else if(tenLenh === 'TimKiem') runner.timKiemVanBanHanhChinh(thamSo.tuKhoa, thamSo.taiKhoanYeuCau);
                 else if(tenLenh === 'XoaFile') runner.xoaVanBanHanhChinh(thamSo.idFile, thamSo.taiKhoanYeuCau);
                 else if(tenLenh === 'TruyVanCheoAI') runner.truyVanCheoAI(thamSo.cauHoi, thamSo.dieuKienLoc, thamSo.taiKhoanYeuCau);
@@ -861,26 +861,15 @@ goiMayChu: function(tenLenh, thamSo, hamThanhCong, hamThatBai = null) {
                 } catch(e) { HeThong.thongBao("Lỗi định dạng AI trả về.", "loi"); }
             });
         }
-        else if (hanhDong === 'LuuHoSo' || hanhDong === 'XuatWord') {
-            const idSua = HeThong.trangThai.idFileDangSua;
-            HeThong.hienTai(true, idSua ? "Đang ghi đè tài liệu..." : "Đang tạo tài liệu mới...");
+else if (hanhDong === 'LuuHoSo' || hanhDong === 'XuatWord') {
+            HeThong.hienTai(true, HeThong.trangThai.idFileDangSua ? "Đang ghi đè tài liệu..." : "Đang tạo tài liệu mới...");
             
-            // ĐIỂM SỬA LỖI: Phục hồi biến phân quyền taiKhoanYeuCau vào thẳng payload lõi 
-            // để máy chủ Google (Code.gs) xác thực được tư cách người cập nhật văn bản.
-            const payload = {
-                loaiVanBan: loai,
-                duLieuForm: layToanBoDuLieuGiaoDien().data,
-                taiKhoanYeuCau: HeThong.phienLamViec(),
-                idFileDangCapNhat: idSua
-            };
-
-            HeThong.goiMayChu(hanhDong, { dongGoiTruyenLen: payload }, (kq) => {
+            HeThong.goiMayChu(hanhDong, { dongGoiTruyenLen: { loaiVanBan: loai, duLieuForm: layToanBoDuLieuGiaoDien().data, idFileDangCapNhat: HeThong.trangThai.idFileDangSua } }, (kq) => {
                 HeThong.hienTai(false);
                 if(kq.trangThai === "ThanhCong") { 
-                    HeThong.thongBao(idSua ? "Cập nhật văn bản thành công!" : "Khởi tạo văn bản thành công!"); 
+                    HeThong.thongBao(HeThong.trangThai.idFileDangSua ? "Cập nhật thành công!" : "Khởi tạo thành công!"); 
                     lamMoiForm(true); 
-                    
-                    // UX Tự động: Nếu đang mở Kho Lưu Trữ thì tự động tải lại danh sách để hiện bản mới nhất
+                    // Tự động tải lại danh sách nếu Kho lưu trữ đang mở
                     if (document.getElementById('panelKhoLuuTru').classList.contains('open')) {
                         thucHienTimKiem();
                     }

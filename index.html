@@ -815,7 +815,7 @@
                 let p = JSON.parse(decodeURIComponent(window.atob(res.credential.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))));
                 let m = (p['em'+'ail'] || "").toLowerCase().trim();
                 if (KET_NOI.DANH_SACH_TAI_KHOAN.includes(m)) { sessionStorage.setItem('SessionAccountActive', m); location.reload(); }
-                else { let cb = document.getElementById('loginWarning'); cb.innerHTML = `Tài khoản <b>${m}</b> bị từ chối!`; cb.style.display = 'block'; cb.style.color = 'red'; }
+                else { let cb = document.getElementById('loginWarning'); cb.innerHTML = `Tài khoản <b>${m}</b> bị từ chối! Bạn chưa đăng ký sử dụng phần mềm`; cb.style.display = 'block'; cb.style.color = 'red'; }
             }});
             google.accounts.id.renderButton(document.getElementById("googleButtonDiv"), { theme: "outline", size: "large", type: "standard" });
         }

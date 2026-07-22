@@ -710,8 +710,14 @@ goiMayChu: function(tenLenh, thamSo, hamThanhCong, hamThatBai = null) {
                     .withFailureHandler(xuLyLoi);
                     
                 if(tenLenh === 'PhanTichAI') runner.phanTichUuKhuyetDiem(thamSo.noiDung, thamSo.chuoiPhanLoai);
-                // ĐIỂM SỬA LỖI: Bổ sung thamSo.taiKhoanYeuCau làm đối số thứ 2 để máy chủ cấp quyền
-                else if(tenLenh === 'LuuHoSo' || tenLenh === 'XuatWord') runner.xuLyLuuHoSo(thamSo.dongGoiTruyenLen, thamSo.taiKhoanYeuCau);
+                else if(tenLenh === 'LuuHoSo' || tenLenh === 'XuatWord') {
+                    // ĐIỂM SỬA LỖI: Nhúng trực tiếp tài khoản vào TRONG gói dữ liệu 
+                    // để khớp với cách lấy biến của hàm xuLyLuuHoSo(dongGoiTruyenLen) bên Code.gs
+                    if (thamSo.dongGoiTruyenLen) {
+                        thamSo.dongGoiTruyenLen.taiKhoanYeuCau = thamSo.taiKhoanYeuCau;
+                    }
+                    runner.xuLyLuuHoSo(thamSo.dongGoiTruyenLen);
+                }
                 else if(tenLenh === 'TimKiem') runner.timKiemVanBanHanhChinh(thamSo.tuKhoa, thamSo.taiKhoanYeuCau);
                 else if(tenLenh === 'XoaFile') runner.xoaVanBanHanhChinh(thamSo.idFile, thamSo.taiKhoanYeuCau);
                 else if(tenLenh === 'TruyVanCheoAI') runner.truyVanCheoAI(thamSo.cauHoi, thamSo.dieuKienLoc, thamSo.taiKhoanYeuCau);

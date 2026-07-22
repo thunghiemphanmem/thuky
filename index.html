@@ -1319,27 +1319,34 @@ function napDuLieuSua(chuoiDuLieu) {
         document.getElementById('danhSachLuuTru').innerHTML = '<li style="padding: 15px; text-align: center; color: #ef4444;">Tải dữ liệu thất bại.</li>';
     }
 
-    // =====================================================================
-    // HÀM ĐIỀU KHIỂN GIAO DIỆN TRUY VẤN AI 
+// =====================================================================
+    // HÀM ĐIỀU KHIỂN GIAO DIỆN TRUY VẤN AI (ĐÃ NÂNG CẤP BẮT LỖI)
     // =====================================================================
     function moGiaoDienTruyVanAI() {
-        const khuVucAI = document.getElementById('khuVucTruyVanAI');
-        const khuVucTraCuu = document.getElementById('khuVucTraCuu');
-        
-        // Thuật toán UX: Tự động đóng Kho lưu trữ nếu đang mở để tránh tràn giao diện
-        if (khuVucTraCuu && khuVucTraCuu.style.display === 'block') {
-            khuVucTraCuu.style.display = 'none';
+        try {
+            const khuVucAI = document.getElementById('khuVucTruyVanAI');
+            const khuVucTraCuu = document.getElementById('khuVucTraCuu');
+            
+            // Chốt chặn 1: Kiểm tra xem tệp TraCuuAI.html đã được nhúng thành công chưa
+            if (!khuVucAI) {
+                alert("LỖI GIAO DIỆN: Hệ thống không tìm thấy khung làm việc AI. Đồng chí vui lòng kiểm tra lại thẻ <?!= nhungGiaoDien('TraCuuAI'); ?> đã được đặt đúng vị trí trong Index.html chưa.");
+                return;
+            }
+
+            if (khuVucTraCuu && khuVucTraCuu.style.display === 'block') {
+                khuVucTraCuu.style.display = 'none';
+            }
+            
+            if(khuVucAI.style.display === 'grid' || khuVucAI.style.display === 'block') { 
+                khuVucAI.style.display = 'none'; 
+                return; 
+            }
+            
+            khuVucAI.style.display = 'grid'; 
+            khuVucAI.scrollIntoView({ behavior: 'smooth' });
+        } catch (loi) {
+            alert("LỖI KỊCH BẢN (Index.html): " + loi.message);
         }
-        
-        // Cơ chế Bật/Tắt (Toggle)
-        if(khuVucAI.style.display === 'grid' || khuVucAI.style.display === 'block') { 
-            khuVucAI.style.display = 'none'; 
-            return; 
-        }
-        
-        // Hiển thị ở chế độ Grid (Lưới) theo đúng thiết kế CSS ban đầu
-        khuVucAI.style.display = 'grid'; 
-        khuVucAI.scrollIntoView({ behavior: 'smooth' });
     }
     
 </script>

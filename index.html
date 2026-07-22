@@ -926,7 +926,7 @@
                 .withFailureHandler(function(loi) { hienTai(false); thongBao(loi.message, "loi"); })
                 .phanTichUuKhuyetDiem(nd, pl);
         }
-        else if (hanhDong === 'LuuHoSo' || hanhDong === 'XuatWord') {
+else if (hanhDong === 'LuuHoSo' || hanhDong === 'XuatWord') {
             hienTai(true, idFileDangSua ? "Đang ghi đè tài liệu..." : "Đang tạo tài liệu mới...");
             
             const payloadLuu = { 
@@ -937,8 +937,12 @@
             };
 
             google.script.run
-                .withSuccessHandler(function(kq) {
+                .withSuccessHandler(function(res) {
                     hienTai(false);
+                    // ĐIỂM SỬA LỖI: Giải mã chuỗi JSON thành Object
+                    let kq = res;
+                    if (typeof res === 'string') { try { kq = JSON.parse(res); } catch(e) {} }
+
                     if(kq.trangThai === "ThanhCong") { 
                         thongBao(idFileDangSua ? "Cập nhật thành công!" : "Khởi tạo thành công!"); 
                         lamMoiForm(true); 
@@ -963,7 +967,7 @@
         boDemTimKiemKho = setTimeout(thucHienTimKiem, 400);
     }
 
-    function thucHienTimKiem() {
+function thucHienTimKiem() {
         const tuKhoa = document.getElementById('oTimKiemTaiLieu').value;
         const ul = document.getElementById('danhSachLuuTru');
         const taiKhoanXacThuc = sessionStorage.getItem('SessionAccountActive');
@@ -971,10 +975,14 @@
         ul.innerHTML = `<div class="skeleton-wrapper"><div class="skeleton-item"></div><div class="skeleton-item"></div><div class="skeleton-item" style="width: 85%;"></div></div>`;
         
         google.script.run
-            .withSuccessHandler(function(kq) {
+            .withSuccessHandler(function(res) {
                 document.getElementById('tenHienThiVanBan').innerText = "Chưa chọn văn bản"; 
                 document.getElementById('thanhCongCuTaiLieu').style.visibility = 'hidden'; 
                 document.getElementById('khungXemTruoc').src = "about:blank";
+                
+                // ĐIỂM SỬA LỖI: Giải mã chuỗi JSON để tạo danh sách
+                let kq = res;
+                if (typeof res === 'string') { try { kq = JSON.parse(res); } catch(e) {} }
                 
                 const mangDuLieu = Array.isArray(kq) ? kq : (kq && kq.duLieu ? kq.duLieu : []);
                 
@@ -1011,7 +1019,9 @@
                                 if(confirm("XÓA VĨNH VIỄN?")) {
                                     hienTai(true, "Đang dọn dẹp...");
                                     google.script.run
-                                        .withSuccessHandler(function(k) {
+                                        .withSuccessHandler(function(kRes) {
+                                            let k = kRes;
+                                            if (typeof kRes === 'string') { try { k = JSON.parse(kRes); } catch(e) {} }
                                             hienTai(false); 
                                             thongBao(k.thongBao, k.trangThai==="ThanhCong"?"thanh-cong":"loi"); 
                                             if(k.trangThai==="ThanhCong") thucHienTimKiem();
@@ -1054,7 +1064,7 @@
         } catch(e) { thongBao("Dữ liệu hỏng.", "loi"); }
     }
 
-    function kichHoatTruyVanCheo() {
+function kichHoatTruyVanCheo() {
         const cauHoi = document.getElementById('aiCauHoiTruyVan').value.trim();
         const taiKhoanXacThuc = sessionStorage.getItem('SessionAccountActive');
         if(!cauHoi) return thongBao("Vui lòng nhập câu hỏi.", "loi");
@@ -1076,7 +1086,11 @@
         if (status) status.innerText = "Đang gửi tín hiệu...";
         
         google.script.run
-            .withSuccessHandler(function(kq) {
+            .withSuccessHandler(function(res) {
+                // ĐIỂM SỬA LỖI: Giải mã JSON cho dữ liệu AI
+                let kq = res;
+                if (typeof res === 'string') { try { kq = JSON.parse(res); } catch(e) {} }
+
                 if(!kq || kq.trangThai === "Loi") { 
                     if(status) status.innerText = "Hoàn tất có lỗi."; 
                     tbody.innerHTML = `<tr><td colspan="3" style="color:red; text-align:center; padding:20px;">${kq?.thongBao || 'Máy chủ phản hồi sai định dạng.'}</td></tr>`; return; 

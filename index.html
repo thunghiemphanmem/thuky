@@ -895,10 +895,20 @@
                 } catch(e) { HeThong.thongBao("Lỗi định dạng AI trả về.", "loi"); }
             });
         }
-        else if (hanhDong === 'LuuHoSo' || hanhDong === 'XuatWord') {
+else if (hanhDong === 'LuuHoSo' || hanhDong === 'XuatWord') {
             HeThong.hienTai(true, HeThong.trangThai.idFileDangSua ? "Đang ghi đè tài liệu..." : "Đang tạo tài liệu mới...");
             
-            HeThong.goiMayChu(hanhDong, { dongGoiTruyenLen: { loaiVanBan: loai, duLieuForm: layToanBoDuLieuGiaoDien().data, idFileDangCapNhat: HeThong.trangThai.idFileDangSua } }, (kq) => {
+            // Lấy trực tiếp phiên tài khoản hiện tại gán thẳng vào gói dữ liệu gửi đi
+            const taiKhoanHienTai = HeThong.phienLamViec();
+
+            HeThong.goiMayChu(hanhDong, { 
+                dongGoiTruyenLen: { 
+                    loaiVanBan: loai, 
+                    duLieuForm: layToanBoDuLieuGiaoDien().data, 
+                    idFileDangCapNhat: HeThong.trangThai.idFileDangSua,
+                    taiKhoanYeuCau: taiKhoanHienTai // [VÁ LỖI] Đảm bảo gói dữ liệu luôn có định danh
+                } 
+            }, (kq) => {
                 HeThong.hienTai(false);
                 if(kq.trangThai === "ThanhCong") { 
                     HeThong.thongBao(HeThong.trangThai.idFileDangSua ? "Cập nhật thành công!" : "Khởi tạo thành công!"); 

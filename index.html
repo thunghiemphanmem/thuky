@@ -968,80 +968,91 @@ else if (hanhDong === 'LuuHoSo' || hanhDong === 'XuatWord') {
     }
 
 function thucHienTimKiem() {
-        const tuKhoa = document.getElementById('oTimKiemTaiLieu').value;
-        const ul = document.getElementById('danhSachLuuTru');
-        const taiKhoanXacThuc = sessionStorage.getItem('SessionAccountActive');
-        
-        ul.innerHTML = `<div class="skeleton-wrapper"><div class="skeleton-item"></div><div class="skeleton-item"></div><div class="skeleton-item" style="width: 85%;"></div></div>`;
-        
-        google.script.run
-            .withSuccessHandler(function(res) {
-                document.getElementById('tenHienThiVanBan').innerText = "Chưa chọn văn bản"; 
-                document.getElementById('thanhCongCuTaiLieu').style.visibility = 'hidden'; 
-                document.getElementById('khungXemTruoc').src = "about:blank";
-                
-                // ĐIỂM SỬA LỖI: Giải mã chuỗi JSON để tạo danh sách
-                let kq = res;
-                if (typeof res === 'string') { try { kq = JSON.parse(res); } catch(e) {} }
-                
-                const mangDuLieu = Array.isArray(kq) ? kq : (kq && kq.duLieu ? kq.duLieu : []);
-                
-                if(!kq || mangDuLieu.length === 0 || kq.trangThai === "Loi") { 
-                    ul.innerHTML = `<li style="padding: 15px; text-align: center; color: #ef4444;">${kq?.thongBao || 'Không tìm thấy văn bản phù hợp.'}</li>`; 
-                    return; 
-                }
-                
-                ul.innerHTML = ''; const frag = document.createDocumentFragment();
-                mangDuLieu.forEach(bg => {
-                    let li = document.createElement('li'); 
-                    li.style.cssText = "padding:12px 15px; border-bottom:1px solid #e2e8f0; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:0.2s;";
-                    li.onmouseover = function() { if(this.dataset.sel!=='1') this.style.background = '#f8fafc'; }; 
-                    li.onmouseout = function() { if(this.dataset.sel!=='1') this.style.background = 'transparent'; };
-                    li.innerHTML = `<div style="flex:1; color:#0f172a; font-weight:500;">${bg.tenBanGhi}</div>${(!bg.duLieuGoc || !bg.duLieuGoc.includes("loaiVanBan")) ? '<span style="font-size:8pt;">🔒</span>' : ''}`;
-                    
-                    li.onclick = function() {
-                        ul.querySelectorAll('li').forEach(n => { n.dataset.sel='0'; n.style.background='transparent'; n.style.borderLeft='none'; n.querySelector('div').style.color='#0f172a'; });
-                        this.dataset.sel='1'; this.style.background='#e0f2fe'; this.style.borderLeft='4px solid #0284c7'; this.querySelector('div').style.color='#0284c7';
+        try {
+            const tuKhoa = document.getElementById('oTimKiemTaiLieu').value;
+            const ul = document.getElementById('danhSachLuuTru');
+            const taiKhoanXacThuc = sessionStorage.getItem('SessionAccountActive');
+            
+            // Thay thế Skeleton bằng thông báo text rõ ràng để tránh lỗi CSS
+            ul.innerHTML = '<li style="padding: 15px; text-align: center; color: #0284c7; font-weight: bold; font-style: italic;">⏳ Đang tải dữ liệu từ máy chủ...</li>';
+            
+            google.script.run
+                .withSuccessHandler(function(res) {
+                    try {
+                        document.getElementById('tenHienThiVanBan').innerText = "Chưa chọn văn bản"; 
+                        document.getElementById('thanhCongCuTaiLieu').style.visibility = 'hidden'; 
+                        document.getElementById('khungXemTruoc').src = "about:blank";
                         
-                        document.getElementById('khungXemTruoc').src = bg.duongDanXem;
-                        document.getElementById('tenHienThiVanBan').innerText = bg.tenBanGhi;
-                        document.getElementById('thanhCongCuTaiLieu').style.visibility = 'visible';
+                        let kq = res;
+                        if (typeof res === 'string') { try { kq = JSON.parse(res); } catch(e) {} }
                         
-                        document.getElementById('nutTaiDocx').onclick = function() { 
-                            let a = document.createElement('a'); a.href = bg.duongDanTai; a.style.display='none'; document.body.appendChild(a); a.click(); setTimeout(()=>a.remove(), 500); 
-                        };
+                        const mangDuLieu = Array.isArray(kq) ? kq : (kq && kq.duLieu ? kq.duLieu : []);
+                        let thongBaoLoi = (kq && kq.thongBao) ? kq.thongBao : 'Không tìm thấy văn bản phù hợp.';
                         
-                        let ns = document.getElementById('nutSuaDoc'), nx = document.getElementById('nutXoaDoc');
-                        if (bg.duLieuGoc && bg.duLieuGoc.includes("loaiVanBan")) {
-                            ns.style.display='inline-block'; nx.style.display='inline-block';
-                            ns.onclick = function() { idFileDangSua = bg.idFile; napDuLieuSua(bg.duLieuGoc); };
-                            nx.onclick = function() { 
-                                if(confirm("XÓA VĨNH VIỄN?")) {
-                                    hienTai(true, "Đang dọn dẹp...");
-                                    google.script.run
-                                        .withSuccessHandler(function(kRes) {
-                                            let k = kRes;
-                                            if (typeof kRes === 'string') { try { k = JSON.parse(kRes); } catch(e) {} }
-                                            hienTai(false); 
-                                            thongBao(k.thongBao, k.trangThai==="ThanhCong"?"thanh-cong":"loi"); 
-                                            if(k.trangThai==="ThanhCong") thucHienTimKiem();
-                                        })
-                                        .withFailureHandler(function(l){ hienTai(false); thongBao("Lỗi kết nối", "loi"); })
-                                        .xoaVanBanHanhChinh(bg.idFile, taiKhoanXacThuc);
-                                }
+                        if(!kq || mangDuLieu.length === 0 || (kq && kq.trangThai === "Loi")) { 
+                            ul.innerHTML = '<li style="padding: 15px; text-align: center; color: #ef4444;">' + thongBaoLoi + '</li>'; 
+                            return; 
+                        }
+                        
+                        ul.innerHTML = ''; const frag = document.createDocumentFragment();
+                        mangDuLieu.forEach(bg => {
+                            let li = document.createElement('li'); 
+                            li.style.cssText = "padding:12px 15px; border-bottom:1px solid #e2e8f0; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:0.2s;";
+                            li.onmouseover = function() { if(this.dataset.sel!=='1') this.style.background = '#f8fafc'; }; 
+                            li.onmouseout = function() { if(this.dataset.sel!=='1') this.style.background = 'transparent'; };
+                            
+                            // Sử dụng cú pháp nối chuỗi an toàn thay vì template literal phức tạp
+                            let htmlKhoa = (bg.duLieuGoc && typeof bg.duLieuGoc === 'string' && bg.duLieuGoc.includes("loaiVanBan")) ? '' : '<span style="font-size:8pt;">🔒</span>';
+                            li.innerHTML = '<div style="flex:1; color:#0f172a; font-weight:500;">' + (bg.tenBanGhi || 'Văn bản không tên') + '</div>' + htmlKhoa;
+                            
+                            li.onclick = function() {
+                                ul.querySelectorAll('li').forEach(n => { n.dataset.sel='0'; n.style.background='transparent'; n.style.borderLeft='none'; n.querySelector('div').style.color='#0f172a'; });
+                                this.dataset.sel='1'; this.style.background='#e0f2fe'; this.style.borderLeft='4px solid #0284c7'; this.querySelector('div').style.color='#0284c7';
+                                
+                                document.getElementById('khungXemTruoc').src = bg.duongDanXem;
+                                document.getElementById('tenHienThiVanBan').innerText = bg.tenBanGhi;
+                                document.getElementById('thanhCongCuTaiLieu').style.visibility = 'visible';
+                                
+                                document.getElementById('nutTaiDocx').onclick = function() { 
+                                    let a = document.createElement('a'); a.href = bg.duongDanTai; a.style.display='none'; document.body.appendChild(a); a.click(); setTimeout(()=>a.remove(), 500); 
+                                };
+                                
+                                let ns = document.getElementById('nutSuaDoc'), nx = document.getElementById('nutXoaDoc');
+                                if (bg.duLieuGoc && typeof bg.duLieuGoc === 'string' && bg.duLieuGoc.includes("loaiVanBan")) {
+                                    ns.style.display='inline-block'; nx.style.display='inline-block';
+                                    ns.onclick = function() { idFileDangSua = bg.idFile; napDuLieuSua(bg.duLieuGoc); };
+                                    nx.onclick = function() { 
+                                        if(confirm("XÓA VĨNH VIỄN?")) {
+                                            hienTai(true, "Đang dọn dẹp...");
+                                            google.script.run
+                                                .withSuccessHandler(function(kRes) {
+                                                    let k = kRes;
+                                                    if (typeof kRes === 'string') { try { k = JSON.parse(kRes); } catch(e) {} }
+                                                    hienTai(false); 
+                                                    thongBao((k && k.thongBao) ? k.thongBao : "Đã xóa", (k && k.trangThai==="ThanhCong")?"thanh-cong":"loi"); 
+                                                    if(k && k.trangThai==="ThanhCong") thucHienTimKiem();
+                                                })
+                                                .withFailureHandler(function(l){ hienTai(false); thongBao("Lỗi kết nối", "loi"); })
+                                                .xoaVanBanHanhChinh(bg.idFile, taiKhoanXacThuc);
+                                        }
+                                    };
+                                } else { ns.style.display='none'; nx.style.display='none'; }
                             };
-                        } else { ns.style.display='none'; nx.style.display='none'; }
-                    };
-                    frag.appendChild(li);
-                });
-                ul.appendChild(frag);
-            })
-            .withFailureHandler(function() {
-                ul.innerHTML = '<li style="padding: 15px; text-align: center; color: #ef4444;">Lỗi tải dữ liệu.</li>';
-            })
-            .timKiemVanBanHanhChinh(tuKhoa, taiKhoanXacThuc);
+                            frag.appendChild(li);
+                        });
+                        ul.appendChild(frag);
+                    } catch(err) {
+                        ul.innerHTML = '<li style="padding: 15px; text-align: center; color: #ef4444;">Lỗi vẽ giao diện Kho: ' + err.message + '</li>';
+                    }
+                })
+                .withFailureHandler(function(err) {
+                    ul.innerHTML = '<li style="padding: 15px; text-align: center; color: #ef4444;">Lỗi kết nối máy chủ: ' + err.message + '</li>';
+                })
+                .timKiemVanBanHanhChinh(tuKhoa, taiKhoanXacThuc);
+        } catch(e) {
+            console.error("Lỗi khởi tạo:", e);
+        }
     }
-
     function napDuLieuSua(chuoi) {
         try {
             const dl = JSON.parse(chuoi), loai = dl.loaiVanBan, f = dl.duLieu;
@@ -1065,68 +1076,83 @@ function thucHienTimKiem() {
     }
 
 function kichHoatTruyVanCheo() {
-        const cauHoi = document.getElementById('aiCauHoiTruyVan').value.trim();
-        const taiKhoanXacThuc = sessionStorage.getItem('SessionAccountActive');
-        if(!cauHoi) return thongBao("Vui lòng nhập câu hỏi.", "loi");
-        
-        document.getElementById('aiTieuDeKhungXem').innerText = 'Đang chờ dữ liệu...'; 
-        document.getElementById('aiKhungXemTruocTep').src = 'about:blank'; 
-        document.getElementById('aiNutTaiDocx').style.display='none';
-        
-        const dieuKien = { 
-            loaiVanBan: document.getElementById('aiLoaiVanBan').value, 
-            tuNgay: document.getElementById('aiTuNgay').value, 
-            denNgay: document.getElementById('aiDenNgay').value, 
-            soLuongQuet: parseInt(document.getElementById('aiGioiHanQuet').value) 
-        };
-        
-        const tbody = document.getElementById('vungHienThiKetQuaAI'), status = document.getElementById('aiThongBaoTrangThai');
-        
-        tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding:30px;"><div class="reactbits-spinner" style="margin:0 auto 15px auto;"></div><br><span style="color:#8b5cf6; font-weight:bold;">Hệ thống đang quét kho dữ liệu...</span></td></tr>`;
-        if (status) status.innerText = "Đang gửi tín hiệu...";
-        
-        google.script.run
-            .withSuccessHandler(function(res) {
-                // ĐIỂM SỬA LỖI: Giải mã JSON cho dữ liệu AI
-                let kq = res;
-                if (typeof res === 'string') { try { kq = JSON.parse(res); } catch(e) {} }
+        try {
+            const cauHoi = document.getElementById('aiCauHoiTruyVan').value.trim();
+            const taiKhoanXacThuc = sessionStorage.getItem('SessionAccountActive');
+            if(!cauHoi) return thongBao("Vui lòng nhập câu hỏi.", "loi");
+            
+            document.getElementById('aiTieuDeKhungXem').innerText = 'Đang chờ dữ liệu...'; 
+            document.getElementById('aiKhungXemTruocTep').src = 'about:blank'; 
+            document.getElementById('aiNutTaiDocx').style.display='none';
+            
+            const dieuKien = { 
+                loaiVanBan: document.getElementById('aiLoaiVanBan').value, 
+                tuNgay: document.getElementById('aiTuNgay').value, 
+                denNgay: document.getElementById('aiDenNgay').value, 
+                soLuongQuet: parseInt(document.getElementById('aiGioiHanQuet').value) 
+            };
+            
+            const tbody = document.getElementById('vungHienThiKetQuaAI');
+            const status = document.getElementById('aiThongBaoTrangThai');
+            
+            tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:30px;"><div class="reactbits-spinner" style="margin:0 auto 15px auto;"></div><br><span style="color:#8b5cf6; font-weight:bold;">Hệ thống đang quét kho dữ liệu...</span></td></tr>';
+            if (status) status.innerText = "Đang gửi tín hiệu...";
+            
+            google.script.run
+                .withSuccessHandler(function(res) {
+                    try {
+                        let kq = res;
+                        if (typeof res === 'string') { try { kq = JSON.parse(res); } catch(e) {} }
 
-                if(!kq || kq.trangThai === "Loi") { 
-                    if(status) status.innerText = "Hoàn tất có lỗi."; 
-                    tbody.innerHTML = `<tr><td colspan="3" style="color:red; text-align:center; padding:20px;">${kq?.thongBao || 'Máy chủ phản hồi sai định dạng.'}</td></tr>`; return; 
-                }
-                
-                const mangKetQua = Array.isArray(kq) ? kq : (kq.duLieu || []);
-                if(status) status.innerText = `Hoàn tất rà soát ${kq.soLuongDaQuet || mangKetQua.length} tài liệu.`; 
-                tbody.innerHTML = '';
-                
-                if(mangKetQua.length === 0) { 
-                    tbody.innerHTML = `<tr><td colspan="3" style="color:#0284c7; text-align:center; padding:30px;">Không tìm thấy kết quả phù hợp.</td></tr>`; return; 
-                }
-                
-                const frag = document.createDocumentFragment();
-                mangKetQua.forEach(item => {
-                    let tr = document.createElement('tr'); tr.style.cursor = 'pointer';
-                    tr.innerHTML = `<td style="font-weight:500; padding:10px;">${item.tenCuocHop||'---'}</td><td style="color:#64748b; padding:10px;">${item.thoiGian||'---'}</td><td style="color:#4c1d95; font-weight:600; padding:10px;">${item.tomTatAction||''}</td>`;
-                    tr.onclick = function() {
-                        tbody.querySelectorAll('tr').forEach(r => { r.style.background='transparent'; r.classList.remove('ai-scanning'); });
-                        this.classList.add('ai-scanning');
-                        if(item.idFile) {
-                            document.getElementById('aiTieuDeKhungXem').innerText = `📄 ${item.tenCuocHop}`;
-                            document.getElementById('aiKhungXemTruocTep').src = `https://docs.google.com/document/d/${item.idFile}/preview`;
-                            let nt = document.getElementById('aiNutTaiDocx'); nt.style.display='block';
-                            nt.onclick = function() { let a = document.createElement('a'); a.href = `https://docs.google.com/document/d/${item.idFile}/export?format=docx`; a.style.display='none'; document.body.appendChild(a); a.click(); setTimeout(()=>a.remove(),500); };
+                        // Loại bỏ hoàn toàn Optional Chaining "?." để tương thích mọi trình duyệt
+                        if(!kq || (kq && kq.trangThai === "Loi")) { 
+                            if(status) status.innerText = "Hoàn tất có lỗi."; 
+                            let loi = (kq && kq.thongBao) ? kq.thongBao : 'Máy chủ phản hồi sai định dạng.';
+                            tbody.innerHTML = '<tr><td colspan="3" style="color:red; text-align:center; padding:20px;">' + loi + '</td></tr>'; 
+                            return; 
                         }
-                    };
-                    frag.appendChild(tr);
-                });
-                tbody.appendChild(frag);
-            })
-            .withFailureHandler(function(loi) {
-                if(status) status.innerText = "Lỗi mạng."; 
-                tbody.innerHTML = `<tr><td colspan="3" style="color:red; text-align:center;">Mất kết nối API.</td></tr>`; 
-            })
-            .truyVanCheoAI(cauHoi, dieuKien, taiKhoanXacThuc);
+                        
+                        const mangKetQua = Array.isArray(kq) ? kq : (kq && kq.duLieu ? kq.duLieu : []);
+                        if(status) status.innerText = 'Hoàn tất rà soát ' + (kq.soLuongDaQuet || mangKetQua.length) + ' tài liệu.'; 
+                        tbody.innerHTML = '';
+                        
+                        if(mangKetQua.length === 0) { 
+                            tbody.innerHTML = '<tr><td colspan="3" style="color:#0284c7; text-align:center; padding:30px;">Không tìm thấy kết quả phù hợp.</td></tr>'; 
+                            return; 
+                        }
+                        
+                        const frag = document.createDocumentFragment();
+                        mangKetQua.forEach(item => {
+                            let tr = document.createElement('tr'); tr.style.cursor = 'pointer';
+                            tr.innerHTML = '<td style="font-weight:500; padding:10px;">' + (item.tenCuocHop||'---') + '</td><td style="color:#64748b; padding:10px;">' + (item.thoiGian||'---') + '</td><td style="color:#4c1d95; font-weight:600; padding:10px;">' + (item.tomTatAction||'') + '</td>';
+                            
+                            tr.onclick = function() {
+                                tbody.querySelectorAll('tr').forEach(r => { r.style.background='transparent'; r.classList.remove('ai-scanning'); });
+                                this.classList.add('ai-scanning');
+                                if(item.idFile) {
+                                    document.getElementById('aiTieuDeKhungXem').innerText = '📄 ' + item.tenCuocHop;
+                                    document.getElementById('aiKhungXemTruocTep').src = 'https://docs.google.com/document/d/' + item.idFile + '/preview';
+                                    let nt = document.getElementById('aiNutTaiDocx'); nt.style.display='block';
+                                    nt.onclick = function() { let a = document.createElement('a'); a.href = 'https://docs.google.com/document/d/' + item.idFile + '/export?format=docx'; a.style.display='none'; document.body.appendChild(a); a.click(); setTimeout(()=>a.remove(),500); };
+                                }
+                            };
+                            frag.appendChild(tr);
+                        });
+                        tbody.appendChild(frag);
+                        
+                    } catch (err) {
+                        if(status) status.innerText = "Lỗi xử lý giao diện."; 
+                        tbody.innerHTML = '<tr><td colspan="3" style="color:red; text-align:center;">Lỗi JS cục bộ: ' + err.message + '</td></tr>';
+                    }
+                })
+                .withFailureHandler(function(loi) {
+                    if(status) status.innerText = "Lỗi mạng hoặc hết thời gian chờ."; 
+                    tbody.innerHTML = '<tr><td colspan="3" style="color:red; text-align:center;">' + loi.message + '</td></tr>'; 
+                })
+                .truyVanCheoAI(cauHoi, dieuKien, taiKhoanXacThuc);
+        } catch(e) {
+            console.error("Lỗi khởi tạo AI:", e);
+        }
     }
 </script>
 </body>

@@ -859,14 +859,24 @@
     }
     function dongXemTruoc() { document.getElementById('previewModal').classList.remove('active'); setTimeout(() => document.getElementById('previewModal').style.display = 'none', 300); }
 
-    function lamMoiForm(boQua = false) {
+function lamMoiForm(boQua = false) {
         if (boQua || confirm("Xóa toàn bộ dữ liệu đang nhập?")) {
             const loai = document.getElementById('loaiVanBan').value;
             if(loai !== "0") {
                 const khoi = document.getElementById('khoi_' + loai);
+                
+                // 1. Xóa sạch chữ trên giao diện
                 khoi.querySelectorAll('input:not([type="datetime-local"]), textarea').forEach(o => o.value = '');
-                khoi.querySelectorAll('textarea').forEach(ta => tuDongGianCao(ta));
-                if(loai === "1") { document.getElementById('tongDiem_1').value=''; document.getElementById('xepLoai_1').value=''; }
+                
+                // 2. VÁ LỖI HIỂN THỊ: Đẩy lệnh thu nhỏ vào hàng đợi 50ms để trình duyệt kịp cập nhật khung rỗng
+                setTimeout(() => {
+                    khoi.querySelectorAll('textarea').forEach(ta => tuDongGianCao(ta));
+                }, 50);
+                
+                if(loai === "1") { 
+                    let td = document.getElementById('tongDiem_1'); if(td) td.value=''; 
+                    let xl = document.getElementById('xepLoai_1'); if(xl) xl.value=''; 
+                }
             }
             HeThong.trangThai.idFileDangSua = null;
             const b = document.getElementById('btnHoSo'); if(b) { b.innerText = "Tạo Văn Bản"; b.className = "btn btn-green"; }

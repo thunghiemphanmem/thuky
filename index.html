@@ -929,7 +929,7 @@ function lamMoiForm(boQua = false) {
             else if (loai==='8') { nd=document.getElementById('noiDungTruyenAI_8').value; pl="Biên bản họp chi bộ"; }
             
             if(!nd.trim()) return HeThong.thongBao("Khung nội dung AI đang trống!", "loi");
-            HeThong.hienTai(true, "🤖 đang suy nghĩ...");
+            HeThong.hienTai(true, "🤖 Tôi đang suy nghĩ...");
             
             HeThong.goiMayChu('PhanTichAI', { noiDung: nd, chuoiPhanLoai: pl }, (kq) => {
                 HeThong.hienTai(false);

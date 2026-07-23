@@ -261,9 +261,9 @@
             </div>
         </div>
         <div class="form-panel">
-            <div class="section-title">PHÂN TÍCH NHẬN XÉT GIỜ HỌC (AI HỖ TRỢ)</div>
+            <div class="section-title">PHÂN TÍCH NHẬN XÉT GIỜ HỌC (CÓ AI HỖ TRỢ)</div>
             <div class="form-group col-layout">
-                <label>Nội dung quan sát diễn biến giờ học (Bấm "Trợ Lý AI" để máy tự chấm điểm và viết nhận xét):</label>
+                <label>Nội dung quan sát diễn biến giờ học (Bấm "Trợ Lý đánh giá" để máy tự chấm điểm và viết nhận xét):</label>
                 <textarea id="noiDungTruyenAI_1" data-key="Dien_Bien_tiet_hoc" placeholder="Ghi lại diễn biến giờ học"></textarea>
             </div>
             <div class="grid-3">
@@ -928,7 +928,7 @@ function lamMoiForm(boQua = false) {
             else if (loai==='2') { nd=document.getElementById('noiDungTruyenAI_2').value; pl="Biên bản hành chính sự việc"; }
             else if (loai==='8') { nd=document.getElementById('noiDungTruyenAI_8').value; pl="Biên bản họp chi bộ"; }
             
-            if(!nd.trim()) return HeThong.thongBao("Khung nội dung AI đang trống!", "loi");
+            if(!nd.trim()) return HeThong.thongBao("Chưa có diễn biến giờ học!", "loi");
             HeThong.hienTai(true, "🤖 Tôi đang suy nghĩ...");
             
             HeThong.goiMayChu('PhanTichAI', { noiDung: nd, chuoiPhanLoai: pl }, (kq) => {

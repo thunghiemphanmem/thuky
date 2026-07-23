@@ -562,7 +562,7 @@
 
     <!-- THANH CÔNG CỤ -->
     <div class="action-bar" id="thanhCongCu" style="display: none;">
-        <button class="btn btn-sky" onclick="chayNghiepVu('PhanTichAI')" id="btnAI" title="Kích hoạt trợ lý AI">Trợ Lý Phân Tích</button>
+        <button class="btn btn-sky" onclick="chayNghiepVu('PhanTichAI')" id="btnAI" title="Kích hoạt trợ lý AI">Trợ Lý Đánh giá</button>
         <button class="btn btn-green" onclick="chayNghiepVu('LuuHoSo')" id="btnHoSo">Tạo Văn Bản</button>
         <button class="btn btn-purple" onclick="hienThiXemTruoc()" id="btnXemTruoc">Xem Trước Dữ Liệu</button>
         <button class="btn" style="background: #f59e0b;" onclick="moPanel('panelKhoLuuTru')" id="btnTraCuu">Kho Lưu Trữ</button>
@@ -570,7 +570,7 @@
         <button class="btn btn-red" onclick="lamMoiForm(false)" id="btnLamMoi">Làm Mới Biểu Mẫu</button>
     </div>
 
-    <div class="signature-footer">Thiết kế và phát triển<br>Hoàng Ngọc Lâm</div>
+    <div class="signature-footer">Phát triển bởi<br>Hoàng Ngọc Lâm</div>
 </div>
 
 <!-- ========================================================================= -->
@@ -651,7 +651,7 @@
                 </div>
                 <div class="grid-2" style="margin-top: 12px;"><div class="form-group col-layout"><label style="color: #475569;">Từ ngày:</label><input type="date" id="aiTuNgay" style="border-radius: 6px; border: 1px solid #cbd5e1;"></div><div class="form-group col-layout"><label style="color: #475569;">Đến ngày:</label><input type="date" id="aiDenNgay" style="border-radius: 6px; border: 1px solid #cbd5e1;"></div></div>
                 <div class="form-group col-layout" style="margin-top: 12px;"><label style="color: #475569;">Giới hạn quét (Mới nhất):</label><select id="aiGioiHanQuet" style="border-radius: 6px; padding: 6px; border: 1px solid #cbd5e1;"><option value="5">5 hồ sơ</option><option value="10" selected>10 hồ sơ</option><option value="20">20 hồ sơ</option></select></div>
-                <button class="btn btn-purple" style="width: 100%; margin-top: 15px; padding: 12px 0;" onclick="kichHoatTruyVanCheo()">✨ YÊU CẦU AI PHÂN TÍCH</button>
+                <button class="btn btn-purple" style="width: 100%; margin-top: 15px; padding: 12px 0;" onclick="kichHoatTruyVanCheo()">🤖 YÊU CẦU AI PHÂN TÍCH</button>
                <div id="aiThongBaoTrangThai" style="margin-top: 10px; font-size: 0.85rem; color: #64748b; text-align: center; font-style: italic;"></div>
             </div>
             <div class="ai-result-panel">
@@ -929,7 +929,7 @@ function lamMoiForm(boQua = false) {
             else if (loai==='8') { nd=document.getElementById('noiDungTruyenAI_8').value; pl="Biên bản họp chi bộ"; }
             
             if(!nd.trim()) return HeThong.thongBao("Khung nội dung AI đang trống!", "loi");
-            HeThong.hienTai(true, "AI đang suy nghĩ...");
+            HeThong.hienTai(true, "🤖 đang suy nghĩ...");
             
             HeThong.goiMayChu('PhanTichAI', { noiDung: nd, chuoiPhanLoai: pl }, (kq) => {
                 HeThong.hienTai(false);
@@ -939,7 +939,7 @@ function lamMoiForm(boQua = false) {
                     const fill = (id, val) => { let e = document.getElementById(id); if(e){ e.value=val||""; tuDongGianCao(e); e.style.backgroundColor="#dcfce7"; setTimeout(()=>e.style.backgroundColor="transparent",1500); }};
                     if(loai==='1') { fill('ketQuaUuDiem_1', json.UuDiem); fill('ketQuaHanChe_1', json.HanChe); fill('ketQuaCaiTien_1', json.CaiTien); for(let i=1;i<=12;i++){ let oi = document.querySelector(`#khoi_1 input[data-key="Diem_TC${i}"]`); if(oi && json['Diem_TC'+i]!==undefined){ oi.value=json['Diem_TC'+i]; oi.style.backgroundColor="#dcfce7"; setTimeout(()=>oi.style.backgroundColor="transparent",1500); }} tinhTongDiemThanhPhan(1); }
                     else if(loai==='2') { fill('ketQuaKetLuan_2', json.KetLuan); } else if(loai==='8') { fill('ketQuaUuDiem_8', json.UuDiem); fill('ketQuaKhuyetDiem_8', json.HanChe); }
-                    HeThong.thongBao("AI phân tích hoàn tất.");
+                    HeThong.thongBao("🤖 phân tích hoàn tất.");
                 } catch(e) { HeThong.thongBao("Lỗi định dạng AI trả về.", "loi"); }
             });
         }

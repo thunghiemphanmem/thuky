@@ -6,7 +6,7 @@
 
 const KET_NOI = {
   // 1. THÔNG SỐ KẾT NỐI MÁY CHỦ
-  URL_API_BACKEND: 'https://script.google.com/macros/s/AKfycbzso6qg0bBefy_j5-x7_xP6jRbOz4K5_Vz94e2oW5PGcD-KpnB1JfH3Tj9FnxZs5mmq/exec',
+  URL_API_BACKEND: 'https://script.google.com/macros/s/AKfycbykcfF-bHJ8S7W282LSwhrGe8QUoTj9hWJt5SJGn6VgoP3a4xwzvTTEpKk4K-oaCgMXuQ/exec',
   
   // 2. THÔNG TIN THỂ THỨC VĂN BẢN (NĐ 30/2020/NĐ-CP)
   CQ_CHU_QUAN: 'UBND XÃ HỢP THÀNH',

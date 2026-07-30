@@ -1037,7 +1037,7 @@
         }, () => { ul.innerHTML = '<li style="padding: 15px; text-align: center; color: #ef4444;">Lỗi tải dữ liệu.</li>'; });
     }
 
-    function napDuLieuSua(chuoi) {
+function napDuLieuSua(chuoi) {
         try {
             const dl = JSON.parse(chuoi), loai = dl.loaiVanBan, f = dl.duLieu;
             document.getElementById('loaiVanBan').value = loai;
@@ -1048,9 +1048,15 @@
                     for(let c in f) { 
                         let inp = k.querySelector(`[data-key="${c}"]`); 
                         if(inp) { 
-                            // Đồng bộ quá trình khôi phục dữ liệu cho khối Rich Text
-                            if(inp.classList.contains('rich-textarea')) { inp.innerHTML = f[c]; }
-                            else { inp.value = f[c]; }
+                            // [Vá lỗi & Tương thích ngược]: Xử lý đổ dữ liệu cho khối Rich Text
+                            if(inp.classList.contains('rich-textarea')) { 
+                                let noiDung = f[c] ? String(f[c]) : "";
+                                // Chuyển đổi ký tự xuống dòng (\n) của textarea cũ thành thẻ <br> để HTML hiểu và giữ nguyên định dạng
+                                inp.innerHTML = noiDung.replace(/\n/g, '<br>'); 
+                            }
+                            else { 
+                                inp.value = f[c] || ""; 
+                            }
                         } 
                     }
                     if(loai==="1") tinhTongDiemThanhPhan(1);

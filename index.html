@@ -69,7 +69,8 @@
         .short-input { flex-grow: 0 !important; width: 100px !important; text-align: center; }
         .med-input { flex-grow: 0 !important; width: 150px !important; }
 
-        textarea { resize: none; overflow: hidden; min-height: 32px; height: 32px; line-height: 1.5; }
+        /* [Nâng cấp]: Cho phép hiển thị thanh cuộn dọc (overflow-y: auto) để dự phòng khi text quá dài hoặc dán nội dung lớn */
+        textarea { resize: none; overflow-x: hidden; overflow-y: auto; min-height: 32px; height: 32px; line-height: 1.5; }
 
         .table-tieu-chi { width: 100%; border-collapse: collapse; margin-top: 8px; margin-bottom: 12px; font-size: 10pt; background: #fff; border-radius: 6px; overflow: hidden; border: 1px solid #e2e8f0; }
         .table-tieu-chi th, .table-tieu-chi td { border: 1px solid #e2e8f0; padding: 8px 10px; vertical-align: middle; }
@@ -778,25 +779,26 @@
         HeThong.kiemSoatNut(false);
     }
 
-   function tuDongGianCao(el) {
-        let t = el.style.transition; 
-        el.style.transition = 'none'; 
-        
-        // 1. VÁ LỖI CỐT LÕI: Tạm thời tắt tính năng "kéo giãn" của Flexbox
-        el.style.flexGrow = '0'; 
-        
-        // 2. Lúc này ép 1px mới thực sự có tác dụng
-        el.style.height = '1px'; 
-        let h = el.scrollHeight; 
-        
-        // 3. Mặc định trả về 1 dòng (32px) nếu ô rỗng
-        el.style.height = (h < 32 ? 32 : h) + 'px';
-        void el.offsetHeight; 
-        
-        // 4. Trả lại thuộc tính kéo giãn mặc định
-        el.style.flexGrow = ''; 
-        el.style.transition = t;
-    }
+function tuDongGianCao(el) {
+    let t = el.style.transition; 
+    el.style.transition = 'none'; 
+    
+    // Tạm thời tắt tính năng kéo giãn của Flexbox để không bị ảnh hưởng bố cục
+    el.style.flexGrow = '0'; 
+    
+    // [Nâng cấp]: Thay vì ép 1px gây giật khung, sử dụng giá trị 'auto' giúp trình duyệt 
+    // tính toán scrollHeight chính xác hơn trong môi trường Flex/Grid.
+    el.style.height = 'auto'; 
+    let h = el.scrollHeight; 
+    
+    // Mặc định trả về chiều cao 1 dòng (32px) nếu ô rỗng, ngược lại lấy chiều cao thực tế
+    el.style.height = (h < 32 ? 32 : h) + 'px';
+    void el.offsetHeight; // Kích hoạt vẽ lại giao diện (Repaint)
+    
+    // Trả lại thuộc tính kéo giãn và hiệu ứng mặc định
+    el.style.flexGrow = ''; 
+    el.style.transition = t;
+}
 
     // =========================================================================
     // KHỐI 3: QUẢN TRỊ NGHIỆP VỤ BIỂU MẪU CHÍNH

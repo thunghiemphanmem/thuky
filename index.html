@@ -880,8 +880,29 @@ function layToanBoDuLieuGiaoDien() {
     if(khoi) {
         khoi.querySelectorAll('input, select, .rich-textarea').forEach(p => { 
             if(p.dataset.key) { 
-                // Đã sửa: Thay .innerHTML thành .innerText để lấy văn bản thuần và giữ nguyên các lần xuống dòng chuẩn
-                dl[p.dataset.key] = p.classList.contains('rich-textarea') ? p.innerText : p.value; 
+                if (p.classList.contains('rich-textarea')) {
+                    // 1. Chuyển đổi thẻ định dạng sang Marker an toàn
+                    let html = p.innerHTML;
+                    html = html.replace(/<b[^>]*>/gi, '{{B}}').replace(/<\/b>/gi, '{{/B}}')
+                               .replace(/<strong[^>]*>/gi, '{{B}}').replace(/<\/strong>/gi, '{{/B}}')
+                               .replace(/<i[^>]*>/gi, '{{I}}').replace(/<\/i>/gi, '{{/I}}')
+                               .replace(/<em[^>]*>/gi, '{{I}}').replace(/<\/em>/gi, '{{/I}}')
+                               .replace(/<u[^>]*>/gi, '{{U}}').replace(/<\/u>/gi, '{{/U}}')
+                               .replace(/<div[^>]*>/gi, '\n')
+                               .replace(/<\/div>/gi, '')
+                               .replace(/<br[^>]*>/gi, '\n')
+                               .replace(/<p[^>]*>/gi, '\n')
+                               .replace(/<\/p>/gi, '')
+                               .replace(/&nbsp;/gi, ' ');
+                    
+                    // 2. Dùng textContent để lọc sạch tag rác mà không sinh thêm dòng ảo
+                    let tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = html;
+                    dl[p.dataset.key] = tempDiv.textContent; 
+                } else {
+                    dl[p.dataset.key] = p.value;
+                }
+                
                 let nhan = p.previousElementSibling; 
                 nd[p.dataset.key] = nhan ? nhan.innerText.replace(':','').trim() : p.dataset.key; 
             }
@@ -1050,8 +1071,13 @@ function napDuLieuSua(chuoi) {
                         if(inp.classList.contains('rich-textarea')) { 
                             let noiDung = f[c] ? String(f[c]) : "";
                             
-                            // Đã sửa: Cơ chế tương thích ngược giúp nạp an toàn dữ liệu cũ dính thẻ HTML
-                            if (noiDung.includes('<div') || noiDung.includes('<b')) {
+                            // 1. Dịch ngược Marker thành thẻ định dạng HTML
+                            noiDung = noiDung.replace(/\{\{B\}\}/g, '<b>').replace(/\{\{\/B\}\}/g, '</b>')
+                                             .replace(/\{\{I\}\}/g, '<i>').replace(/\{\{\/I\}\}/g, '</i>')
+                                             .replace(/\{\{U\}\}/g, '<u>').replace(/\{\{\/U\}\}/g, '</u>');
+                            
+                            // 2. Tương thích ngược: Xử lý ngắt dòng mượt mà
+                            if (noiDung.includes('<div') || (noiDung.includes('<b') && !noiDung.includes('\n'))) {
                                 inp.innerHTML = noiDung; 
                             } else {
                                 inp.innerHTML = noiDung.replace(/\n/g, '<br>'); 

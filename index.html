@@ -1033,7 +1033,10 @@ else if (hanhDong === 'LuuHoSo' || hanhDong === 'XuatWord') {
 
 function napDuLieuSua(chuoi) {
     try {
-        const dl = JSON.parse(chuoi), loai = dl.loaiVanBan, f = dl.duLieu;
+        // [NÂNG CẤP]: Đảm bảo parse an toàn tuyệt đối, đề phòng đầu vào đã là object
+        const dl = typeof chuoi === 'string' ? JSON.parse(chuoi) : chuoi; 
+        const loai = dl.loaiVanBan;
+        const f = dl.duLieu;
         
         // 1. Chuyển đổi trạng thái biểu mẫu ngay lập tức
         document.getElementById('loaiVanBan').value = loai;
@@ -1042,32 +1045,39 @@ function napDuLieuSua(chuoi) {
         // 2. Nạp dữ liệu vào DOM TRƯỚC khi hiển thị
         const k = document.getElementById('khoi_' + loai);
         if(k) {
-            for(let c in f) { 
-                let inp = k.querySelector(`[data-key="${c}"]`); 
-                if(inp){ inp.value = f[c]; } 
-            }
+            // [VÁ LỖI CỐT LÕI]: Quét toàn bộ DOM bằng querySelectorAll thay vì duyệt vòng lặp object f.
+            // Điều này đảm bảo quét sạch mọi thẻ input/textarea có data-key, không bỏ sót bất kỳ node nào.
+            k.querySelectorAll('[data-key]').forEach(inp => {
+                let key = inp.getAttribute('data-key');
+                if (f[key] !== undefined && f[key] !== null) {
+                    inp.value = f[key];
+                } else {
+                    inp.value = ""; // Chống nhiễu dữ liệu cũ nếu biểu mẫu gốc không có trường này
+                }
+            });
         }
 
         // 3. Kích hoạt hiệu ứng mở Form
         chuyenDoiBieuMau(true);
         
-        // [CẬP NHẬT QUAN TRỌNG]: Thuật toán ép nhịp giãn ô bằng vòng lặp (Polling)
-        // Đảm bảo CSS Grid và các hiệu ứng Panel đã trượt xong 100% thì mới đo chiều cao
-        let soLanQuet = 0;
-        let boDemGianO = setInterval(() => {
-            if (k && k.offsetWidth > 0) {
-                k.querySelectorAll('textarea').forEach(ta => tuDongGianCao(ta));
-                soLanQuet++;
-                // Quét liên tục 4 lần (tương đương 800ms) để triệt tiêu mọi độ trễ của trình duyệt
-                if (soLanQuet >= 4) {
-                    clearInterval(boDemGianO);
+        // [VÁ LỖI HIỂN THỊ]: Điều chỉnh lại thuật toán Polling để giãn ô textarea chuẩn xác.
+        // Triệt tiêu xung đột với setTimeout 200ms của hàm chuyenDoiBieuMau.
+        if(k) {
+            let soLanQuet = 0;
+            let boDemGianO = setInterval(() => {
+                // Chỉ bắt đầu đo chiều cao khi form thực sự có kích thước (đã vượt qua display: none)
+                if (k.offsetWidth > 0) { 
+                    k.querySelectorAll('textarea').forEach(ta => tuDongGianCao(ta));
+                    soLanQuet++;
+                    // Quét 6 nhịp (tương đương ~900ms) để bao trọn vòng đời transition CSS
+                    if (soLanQuet >= 6) {
+                        clearInterval(boDemGianO);
+                    }
                 }
-            }
-        }, 200);
-        
-        // 4. Khởi động các logic phụ trợ sau khi form đã ổn định
-        setTimeout(() => {
-            if(k) {
+            }, 150);
+            
+            // Khởi động các logic phụ trợ sau khi form đã ổn định hoàn toàn
+            setTimeout(() => {
                 if(loai === "1") tinhTongDiemThanhPhan(1);
                 
                 window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1077,8 +1087,8 @@ function napDuLieuSua(chuoi) {
                 
                 k.style.boxShadow = "0 0 15px #f97316"; 
                 setTimeout(() => k.style.boxShadow = "none", 1500);
-            }
-        }, 500); // Lùi nhịp UI về 500ms để tương thích hoàn toàn
+            }, 500);
+        }
         
     } catch(e) { 
         HeThong.thongBao("Lỗi giải mã dữ liệu: " + e.message, "loi"); 

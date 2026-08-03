@@ -874,22 +874,21 @@
         if(xl) xl.value = tong >= 18 ? "GIỎI" : (tong >= 13.5 ? "KHÁ" : (tong >= 10 ? "TRUNG BÌNH" : "KHÔNG ĐẠT"));
     }
 
-    function layToanBoDuLieuGiaoDien() {
-        const khoi = document.getElementById('khoi_' + document.getElementById('loaiVanBan').value);
-        let dl = {}, nd = {};
-        if(khoi) {
-            // Bao quát cả thẻ nhập thuần túy và thẻ nhập Rich Text
-            khoi.querySelectorAll('input, select, .rich-textarea').forEach(p => { 
-                if(p.dataset.key) { 
-                    // [Nâng cấp logic]: Nếu là rich-text, lấy nội dung HTML. Nếu là input, lấy value bình thường.
-                    dl[p.dataset.key] = p.classList.contains('rich-textarea') ? p.innerHTML : p.value; 
-                    let nhan = p.previousElementSibling; 
-                    nd[p.dataset.key] = nhan ? nhan.innerText.replace(':','').trim() : p.dataset.key; 
-                }
-            });
-        }
-        return { data: dl, labels: nd };
+function layToanBoDuLieuGiaoDien() {
+    const khoi = document.getElementById('khoi_' + document.getElementById('loaiVanBan').value);
+    let dl = {}, nd = {};
+    if(khoi) {
+        khoi.querySelectorAll('input, select, .rich-textarea').forEach(p => { 
+            if(p.dataset.key) { 
+                // Đã sửa: Thay .innerHTML thành .innerText để lấy văn bản thuần và giữ nguyên các lần xuống dòng chuẩn
+                dl[p.dataset.key] = p.classList.contains('rich-textarea') ? p.innerText : p.value; 
+                let nhan = p.previousElementSibling; 
+                nd[p.dataset.key] = nhan ? nhan.innerText.replace(':','').trim() : p.dataset.key; 
+            }
+        });
     }
+    return { data: dl, labels: nd };
+}
 
     function hienThiXemTruoc() {
         const t = layToanBoDuLieuGiaoDien(); if(document.getElementById('loaiVanBan').value === "0") return;
@@ -1038,35 +1037,39 @@
     }
 
 function napDuLieuSua(chuoi) {
-        try {
-            const dl = JSON.parse(chuoi), loai = dl.loaiVanBan, f = dl.duLieu;
-            document.getElementById('loaiVanBan').value = loai;
-            dongTatCaPanel(); chuyenDoiBieuMau(true);
-            setTimeout(() => {
-                const k = document.getElementById('khoi_'+loai);
-                if(k) {
-                    for(let c in f) { 
-                        let inp = k.querySelector(`[data-key="${c}"]`); 
-                        if(inp) { 
-                            // [Vá lỗi & Tương thích ngược]: Xử lý đổ dữ liệu cho khối Rich Text
-                            if(inp.classList.contains('rich-textarea')) { 
-                                let noiDung = f[c] ? String(f[c]) : "";
-                                // Chuyển đổi ký tự xuống dòng (\n) của textarea cũ thành thẻ <br> để HTML hiểu và giữ nguyên định dạng
+    try {
+        const dl = JSON.parse(chuoi), loai = dl.loaiVanBan, f = dl.duLieu;
+        document.getElementById('loaiVanBan').value = loai;
+        dongTatCaPanel(); chuyenDoiBieuMau(true);
+        setTimeout(() => {
+            const k = document.getElementById('khoi_'+loai);
+            if(k) {
+                for(let c in f) { 
+                    let inp = k.querySelector(`[data-key="${c}"]`); 
+                    if(inp) { 
+                        if(inp.classList.contains('rich-textarea')) { 
+                            let noiDung = f[c] ? String(f[c]) : "";
+                            
+                            // Đã sửa: Cơ chế tương thích ngược giúp nạp an toàn dữ liệu cũ dính thẻ HTML
+                            if (noiDung.includes('<div') || noiDung.includes('<b')) {
+                                inp.innerHTML = noiDung; 
+                            } else {
                                 inp.innerHTML = noiDung.replace(/\n/g, '<br>'); 
                             }
-                            else { 
-                                inp.value = f[c] || ""; 
-                            }
-                        } 
-                    }
-                    if(loai==="1") tinhTongDiemThanhPhan(1);
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                    let btn = document.getElementById('btnHoSo'); if(btn){ btn.innerText="Cập Nhật Văn Bản"; btn.className="btn btn-orange"; }
-                    k.style.boxShadow="0 0 15px #f97316"; setTimeout(()=>k.style.boxShadow="none", 1500);
+                        }
+                        else { 
+                            inp.value = f[c] || ""; 
+                        }
+                    } 
                 }
-            }, 250);
-        } catch(e) { HeThong.thongBao("Dữ liệu hỏng.", "loi"); }
-    }
+                if(loai==="1") tinhTongDiemThanhPhan(1);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                let btn = document.getElementById('btnHoSo'); if(btn){ btn.innerText="Cập Nhật Văn Bản"; btn.className="btn btn-orange"; }
+                k.style.boxShadow="0 0 15px #f97316"; setTimeout(()=>k.style.boxShadow="none", 1500);
+            }
+        }, 250);
+    } catch(e) { HeThong.thongBao("Dữ liệu hỏng.", "loi"); }
+}
 
     function kichHoatTruyVanCheo() {
         const cauHoi = document.getElementById('aiCauHoiTruyVan').value.trim();

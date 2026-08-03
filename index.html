@@ -780,31 +780,29 @@
     }
 
 function tuDongGianCao(el) {
-    // [CẬP NHẬT]: Bảo vệ chống lỗi đo lường khi khối giao diện chưa kịp hiển thị (display: none)
-    if (el.offsetWidth === 0) return; 
+    // [CẬP NHẬT]: Bảo vệ chống lỗi khi DOM chưa hiển thị hoàn toàn
+    if (!el || el.offsetWidth === 0) return; 
 
-    // 1. Lưu lại tọa độ thanh cuộn hiện tại để "neo" màn hình
+    // 1. Lưu lại tọa độ thanh cuộn hiện tại để "neo" màn hình, chống giật trang
     const viTriCuon = window.scrollY;
     
     let t = el.style.transition; 
     el.style.transition = 'none'; 
-    el.style.flexGrow = '0'; 
     
-    // 2. [CẬP NHẬT]: Ép chiều cao về 1px thay vì 'auto' để đo chính xác tuyệt đối scrollHeight
+    // 2. Ép chiều cao về 1px để đo chính xác tuyệt đối scrollHeight (không bị kẹt bởi height cũ)
     el.style.height = '1px'; 
     let h = el.scrollHeight; 
     
-    // 3. Áp dụng chiều cao thực tế cho ô nhập liệu
+    // 3. Áp dụng chiều cao thực tế cho ô nhập liệu (thấp nhất là 32px)
     el.style.height = (h < 32 ? 32 : h) + 'px';
-    void el.offsetHeight; // Kích hoạt vẽ lại giao diện (Repaint)
+    void el.offsetHeight; // Kích hoạt Repaint mượt mà
     
-    el.style.flexGrow = ''; 
     el.style.transition = t;
 
     // 4. Khôi phục lại tọa độ cuộn ban đầu
     window.scrollTo(window.scrollX, viTriCuon);
     
-    // 5. Cuộn bù trừ nếu ô nhập liệu bị tràn quá mép dưới màn hình
+    // 5. Cuộn bù trừ nếu ô nhập liệu bị tràn mép dưới màn hình
     const toaDoKhung = el.getBoundingClientRect();
     if (toaDoKhung.bottom > window.innerHeight) {
         window.scrollBy(0, toaDoKhung.bottom - window.innerHeight + 20);
@@ -1037,23 +1035,37 @@ function napDuLieuSua(chuoi) {
     try {
         const dl = JSON.parse(chuoi), loai = dl.loaiVanBan, f = dl.duLieu;
         
-        // 1. Chuyển đổi trạng thái phân loại
+        // 1. Chuyển đổi trạng thái biểu mẫu ngay lập tức
         document.getElementById('loaiVanBan').value = loai;
         dongTatCaPanel(); 
         
-        // 2. [CẬP NHẬT CỐT LÕI]: Bơm dữ liệu vào thẻ TRƯỚC KHI mở form
+        // 2. Nạp dữ liệu vào DOM TRƯỚC khi hiển thị
         const k = document.getElementById('khoi_' + loai);
         if(k) {
             for(let c in f) { 
                 let inp = k.querySelector(`[data-key="${c}"]`); 
-                if(inp) inp.value = f[c]; 
+                if(inp){ inp.value = f[c]; } 
             }
         }
 
-        // 3. Gọi lệnh mở form (Lệnh này đã tích hợp sẵn nhịp chờ 200ms để gọi tuDongGianCao)
+        // 3. Kích hoạt hiệu ứng mở Form
         chuyenDoiBieuMau(true);
         
-        // 4. Trì hoãn xử lý các hiệu ứng phụ trợ sau khi form đã ổn định trên màn hình
+        // [CẬP NHẬT QUAN TRỌNG]: Thuật toán ép nhịp giãn ô bằng vòng lặp (Polling)
+        // Đảm bảo CSS Grid và các hiệu ứng Panel đã trượt xong 100% thì mới đo chiều cao
+        let soLanQuet = 0;
+        let boDemGianO = setInterval(() => {
+            if (k && k.offsetWidth > 0) {
+                k.querySelectorAll('textarea').forEach(ta => tuDongGianCao(ta));
+                soLanQuet++;
+                // Quét liên tục 4 lần (tương đương 800ms) để triệt tiêu mọi độ trễ của trình duyệt
+                if (soLanQuet >= 4) {
+                    clearInterval(boDemGianO);
+                }
+            }
+        }, 200);
+        
+        // 4. Khởi động các logic phụ trợ sau khi form đã ổn định
         setTimeout(() => {
             if(k) {
                 if(loai === "1") tinhTongDiemThanhPhan(1);
@@ -1061,15 +1073,15 @@ function napDuLieuSua(chuoi) {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 
                 let btn = document.getElementById('btnHoSo'); 
-                if(btn) { btn.innerText = "Cập Nhật Văn Bản"; btn.className = "btn btn-orange"; }
+                if(btn){ btn.innerText = "Cập Nhật Văn Bản"; btn.className = "btn btn-orange"; }
                 
                 k.style.boxShadow = "0 0 15px #f97316"; 
                 setTimeout(() => k.style.boxShadow = "none", 1500);
             }
-        }, 250);
+        }, 500); // Lùi nhịp UI về 500ms để tương thích hoàn toàn
         
     } catch(e) { 
-        HeThong.thongBao("Dữ liệu gốc bị hỏng hoặc sai định dạng.", "loi"); 
+        HeThong.thongBao("Lỗi giải mã dữ liệu: " + e.message, "loi"); 
     }
 }
 

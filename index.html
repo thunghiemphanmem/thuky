@@ -883,34 +883,32 @@ function layToanBoDuLieuGiaoDien() {
                 if (p.classList.contains('rich-textarea')) {
                     let html = p.innerHTML;
                     
+                    // 1. Chuyển đổi định dạng thành Marker an toàn
                     html = html.replace(/<b\b[^>]*>/gi, '___B___').replace(/<\/b>/gi, '___/B___')
                                .replace(/<strong\b[^>]*>/gi, '___B___').replace(/<\/strong>/gi, '___/B___')
                                .replace(/<i\b[^>]*>/gi, '___I___').replace(/<\/i>/gi, '___/I___')
                                .replace(/<em\b[^>]*>/gi, '___I___').replace(/<\/em>/gi, '___/I___')
                                .replace(/<u\b[^>]*>/gi, '___U___').replace(/<\/u>/gi, '___/U___');
                     
-                    let tempDiv = document.createElement('div');
-                    tempDiv.style.position = 'absolute';
-                    tempDiv.style.left = '-99999px'; 
-                    tempDiv.innerHTML = html;
-                    document.body.appendChild(tempDiv);
+                    // 2. Ép các thẻ khối thành ký tự xuống dòng \n
+                    html = html.replace(/<br\s*[\/]?>/gi, '\n')
+                               .replace(/<\/div>\s*<div[^>]*>/gi, '\n')
+                               .replace(/<\/p>\s*<p[^>]*>/gi, '\n')
+                               .replace(/<div[^>]*>/gi, '\n')
+                               .replace(/<p[^>]*>/gi, '\n');
                     
-                    let cleanText = tempDiv.innerText || "";
-                    document.body.removeChild(tempDiv);
+                    // 3. Xóa sạch mọi thẻ HTML rác còn sót lại
+                    html = html.replace(/<[^>]+>/g, '');
                     
-                    // Tối ưu cốt lõi: Cắt nhỏ Marker theo từng dòng để máy chủ dễ dàng nhận diện
-                    const fixMarkers = (open, close) => {
-                        let regex = new RegExp(open + "([\\s\\S]*?)" + close, "g");
-                        cleanText = cleanText.replace(regex, (match, inner) => {
-                            return inner.split('\n').map(line => line.trim() ? (open + line + close) : line).join('\n');
-                        });
-                    };
+                    // 4. Mẹo cốt lõi: Dùng Textarea để giải mã an toàn các ký tự đặc biệt (&lt; thành <) 
+                    let txt = document.createElement("textarea");
+                    txt.innerHTML = html;
+                    let cleanText = txt.value;
                     
-                    fixMarkers('___B___', '___/B___');
-                    fixMarkers('___I___', '___/I___');
-                    fixMarkers('___U___', '___/U___');
-                    
-                    cleanText = cleanText.replace(/___[BIU]______\/[BIU]___/g, '').trim();
+                    // 5. Dọn dẹp khoảng trắng và marker rỗng
+                    cleanText = cleanText.replace(/___[BIU]______\/[BIU]___/g, '')
+                                         .replace(/\n{3,}/g, '\n\n')
+                                         .trim();
                                          
                     dl[p.dataset.key] = cleanText;
                 } else {
@@ -1085,20 +1083,18 @@ function napDuLieuSua(chuoi) {
                         if(inp.classList.contains('rich-textarea')) { 
                             let noiDung = f[c] ? String(f[c]) : "";
                             
-                            // Khôi phục thẻ đóng bị mất để chống lỗi in đậm tràn lan
-                            let countB_open = (noiDung.match(/___B___/g) || []).length;
-                            let countB_close = (noiDung.match(/___\/B___/g) || []).length;
-                            while(countB_open > countB_close) { noiDung += '___/B___'; countB_close++; }
+                            // BƯỚC QUAN TRỌNG: Mã hóa ký tự < và > để trình duyệt KHÔNG CẮT VĂN BẢN
+                            noiDung = noiDung.replace(/&/g, '&amp;')
+                                             .replace(/</g, '&lt;')
+                                             .replace(/>/g, '&gt;');
                             
-                            let countI_open = (noiDung.match(/___I___/g) || []).length;
-                            let countI_close = (noiDung.match(/___\/I___/g) || []).length;
-                            while(countI_open > countI_close) { noiDung += '___/I___'; countI_close++; }
-                            
+                            // Dịch ngược Marker thành thẻ định dạng HTML
                             noiDung = noiDung.replace(/___B___/g, '<b>').replace(/___\/B___/g, '</b>')
                                              .replace(/___I___/g, '<i>').replace(/___\/I___/g, '</i>')
                                              .replace(/___U___/g, '<u>').replace(/___\/U___/g, '</u>')
                                              .replace(/\{\{B\}\}/g, '<b>').replace(/\{\{\/B\}\}/g, '</b>'); 
                             
+                            // Khôi phục ngắt dòng cho giao diện
                             noiDung = noiDung.replace(/\n/g, '<br>'); 
                             
                             inp.innerHTML = noiDung; 

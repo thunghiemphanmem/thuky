@@ -883,26 +883,28 @@ function layToanBoDuLieuGiaoDien() {
                 if (p.classList.contains('rich-textarea')) {
                     let html = p.innerHTML;
                     
-                    // 1. Chuyển đổi định dạng thành Marker siêu an toàn (dùng Dấu gạch dưới)
+                    // 1. Chuyển đổi định dạng thành Marker an toàn
                     html = html.replace(/<b[^>]*>/gi, '___B___').replace(/<\/b>/gi, '___/B___')
                                .replace(/<strong[^>]*>/gi, '___B___').replace(/<\/strong>/gi, '___/B___')
                                .replace(/<i[^>]*>/gi, '___I___').replace(/<\/i>/gi, '___/I___')
                                .replace(/<em[^>]*>/gi, '___I___').replace(/<\/em>/gi, '___/I___')
-                               .replace(/<u[^>]*>/gi, '___U___').replace(/<\/u>/gi, '___/U___')
-                               .replace(/&nbsp;/gi, ' ');
+                               .replace(/<u[^>]*>/gi, '___U___').replace(/<\/u>/gi, '___/U___');
 
-                    // 2. Ép các thẻ khối thành ký tự \n để BẢO TOÀN tuyệt đối việc xuống dòng
-                    html = html.replace(/<div[^>]*>/gi, '\n')
+                    // 2. Ép tất cả các thẻ khối (div, p, br) thành ký tự \n để BẢO TOÀN tuyệt đối việc xuống dòng
+                    html = html.replace(/<br\s*[\/]?>/gi, '\n')
+                               .replace(/<\/div>\s*<div[^>]*>/gi, '\n')
+                               .replace(/<\/p>\s*<p[^>]*>/gi, '\n')
+                               .replace(/<div[^>]*>/gi, '\n')
                                .replace(/<\/div>/gi, '')
                                .replace(/<p[^>]*>/gi, '\n')
                                .replace(/<\/p>/gi, '')
-                               .replace(/<br[^>]*>/gi, '\n');
+                               .replace(/&nbsp;/gi, ' ');
 
-                    // 3. Xóa toàn bộ thẻ HTML rác còn lại
-                    let cleanText = html.replace(/<[^>]+>/g, '').trim();
+                    // 3. Lọc sạch thẻ HTML rác còn sót lại
+                    let cleanText = html.replace(/<[^>]+>/g, '');
                     
-                    // 4. Lọc bỏ các dòng trống thừa do div gây ra
-                    cleanText = cleanText.replace(/\n\s*\n/g, '\n');
+                    // 4. Xóa các dòng trống thừa thãi do cấu trúc DOM lồng nhau
+                    cleanText = cleanText.replace(/\n{2,}/g, '\n').trim();
                     
                     dl[p.dataset.key] = cleanText;
                 } else {
@@ -1077,7 +1079,7 @@ function napDuLieuSua(chuoi) {
                         if(inp.classList.contains('rich-textarea')) { 
                             let noiDung = f[c] ? String(f[c]) : "";
                             
-                            // Dịch ngược cả Marker chuẩn và dọn dẹp các Marker lỗi từ phiên bản trước
+                            // Dịch ngược cả Marker chuẩn lẫn các Marker bị kẹt từ phiên bản cũ
                             noiDung = noiDung.replace(/___B___/g, '<b>').replace(/___\/B___/g, '</b>')
                                              .replace(/___I___/g, '<i>').replace(/___\/I___/g, '</i>')
                                              .replace(/___U___/g, '<u>').replace(/___\/U___/g, '</u>')

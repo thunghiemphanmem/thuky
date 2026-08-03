@@ -883,31 +883,36 @@ function layToanBoDuLieuGiaoDien() {
                 if (p.classList.contains('rich-textarea')) {
                     let html = p.innerHTML;
                     
-                    // 1. Dịch các thẻ định dạng sang Marker chuẩn
                     html = html.replace(/<b\b[^>]*>/gi, '___B___').replace(/<\/b>/gi, '___/B___')
                                .replace(/<strong\b[^>]*>/gi, '___B___').replace(/<\/strong>/gi, '___/B___')
                                .replace(/<i\b[^>]*>/gi, '___I___').replace(/<\/i>/gi, '___/I___')
                                .replace(/<em\b[^>]*>/gi, '___I___').replace(/<\/em>/gi, '___/I___')
                                .replace(/<u\b[^>]*>/gi, '___U___').replace(/<\/u>/gi, '___/U___');
                     
-                    // 2. Kỹ thuật DOM Ẩn: Ép trình duyệt tự động dịch các thẻ <div>, <br> thành \n chuẩn xác
                     let tempDiv = document.createElement('div');
                     tempDiv.style.position = 'absolute';
-                    tempDiv.style.left = '-9999px'; // Đẩy ra ngoài màn hình
-                    tempDiv.style.visibility = 'hidden';
+                    tempDiv.style.left = '-99999px'; 
                     tempDiv.innerHTML = html;
                     document.body.appendChild(tempDiv);
                     
-                    // Thuộc tính innerText trên thẻ đã render sẽ giữ nguyên vẹn mọi ngắt dòng
-                    let cleanText = tempDiv.innerText;
+                    let cleanText = tempDiv.innerText || "";
                     document.body.removeChild(tempDiv);
                     
-                    // 3. Xóa Marker rỗng nếu có
-                    cleanText = cleanText.replace(/___B______\/B___/g, '')
-                                         .replace(/___I______\/I___/g, '')
-                                         .replace(/___U______\/U___/g, '');
+                    // Tối ưu cốt lõi: Cắt nhỏ Marker theo từng dòng để máy chủ dễ dàng nhận diện
+                    const fixMarkers = (open, close) => {
+                        let regex = new RegExp(open + "([\\s\\S]*?)" + close, "g");
+                        cleanText = cleanText.replace(regex, (match, inner) => {
+                            return inner.split('\n').map(line => line.trim() ? (open + line + close) : line).join('\n');
+                        });
+                    };
+                    
+                    fixMarkers('___B___', '___/B___');
+                    fixMarkers('___I___', '___/I___');
+                    fixMarkers('___U___', '___/U___');
+                    
+                    cleanText = cleanText.replace(/___[BIU]______\/[BIU]___/g, '').trim();
                                          
-                    dl[p.dataset.key] = cleanText.trim();
+                    dl[p.dataset.key] = cleanText;
                 } else {
                     dl[p.dataset.key] = p.value;
                 }
@@ -1080,7 +1085,7 @@ function napDuLieuSua(chuoi) {
                         if(inp.classList.contains('rich-textarea')) { 
                             let noiDung = f[c] ? String(f[c]) : "";
                             
-                            // KHẮC PHỤC LỖI: Tự động đóng thẻ nếu dữ liệu cũ lưu thiếu thẻ đóng (gây bôi đậm toàn bộ)
+                            // Khôi phục thẻ đóng bị mất để chống lỗi in đậm tràn lan
                             let countB_open = (noiDung.match(/___B___/g) || []).length;
                             let countB_close = (noiDung.match(/___\/B___/g) || []).length;
                             while(countB_open > countB_close) { noiDung += '___/B___'; countB_close++; }
@@ -1089,13 +1094,11 @@ function napDuLieuSua(chuoi) {
                             let countI_close = (noiDung.match(/___\/I___/g) || []).length;
                             while(countI_open > countI_close) { noiDung += '___/I___'; countI_close++; }
                             
-                            // Dịch ngược Marker thành thẻ HTML
                             noiDung = noiDung.replace(/___B___/g, '<b>').replace(/___\/B___/g, '</b>')
                                              .replace(/___I___/g, '<i>').replace(/___\/I___/g, '</i>')
                                              .replace(/___U___/g, '<u>').replace(/___\/U___/g, '</u>')
                                              .replace(/\{\{B\}\}/g, '<b>').replace(/\{\{\/B\}\}/g, '</b>'); 
                             
-                            // Chuyển \n thành <br> để hiển thị chuẩn trên Rich-textarea
                             noiDung = noiDung.replace(/\n/g, '<br>'); 
                             
                             inp.innerHTML = noiDung; 

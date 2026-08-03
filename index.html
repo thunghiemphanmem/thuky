@@ -881,24 +881,30 @@ function layToanBoDuLieuGiaoDien() {
         khoi.querySelectorAll('input, select, .rich-textarea').forEach(p => { 
             if(p.dataset.key) { 
                 if (p.classList.contains('rich-textarea')) {
-                    // 1. Chuyển đổi thẻ định dạng sang Marker an toàn
                     let html = p.innerHTML;
-                    html = html.replace(/<b[^>]*>/gi, '{{B}}').replace(/<\/b>/gi, '{{/B}}')
-                               .replace(/<strong[^>]*>/gi, '{{B}}').replace(/<\/strong>/gi, '{{/B}}')
-                               .replace(/<i[^>]*>/gi, '{{I}}').replace(/<\/i>/gi, '{{/I}}')
-                               .replace(/<em[^>]*>/gi, '{{I}}').replace(/<\/em>/gi, '{{/I}}')
-                               .replace(/<u[^>]*>/gi, '{{U}}').replace(/<\/u>/gi, '{{/U}}')
-                               .replace(/<div[^>]*>/gi, '\n')
+                    
+                    // 1. Chuyển đổi định dạng thành Marker siêu an toàn (dùng Dấu gạch dưới)
+                    html = html.replace(/<b[^>]*>/gi, '___B___').replace(/<\/b>/gi, '___/B___')
+                               .replace(/<strong[^>]*>/gi, '___B___').replace(/<\/strong>/gi, '___/B___')
+                               .replace(/<i[^>]*>/gi, '___I___').replace(/<\/i>/gi, '___/I___')
+                               .replace(/<em[^>]*>/gi, '___I___').replace(/<\/em>/gi, '___/I___')
+                               .replace(/<u[^>]*>/gi, '___U___').replace(/<\/u>/gi, '___/U___')
+                               .replace(/&nbsp;/gi, ' ');
+
+                    // 2. Ép các thẻ khối thành ký tự \n để BẢO TOÀN tuyệt đối việc xuống dòng
+                    html = html.replace(/<div[^>]*>/gi, '\n')
                                .replace(/<\/div>/gi, '')
-                               .replace(/<br[^>]*>/gi, '\n')
                                .replace(/<p[^>]*>/gi, '\n')
                                .replace(/<\/p>/gi, '')
-                               .replace(/&nbsp;/gi, ' ');
+                               .replace(/<br[^>]*>/gi, '\n');
+
+                    // 3. Xóa toàn bộ thẻ HTML rác còn lại
+                    let cleanText = html.replace(/<[^>]+>/g, '').trim();
                     
-                    // 2. Dùng textContent để lọc sạch tag rác mà không sinh thêm dòng ảo
-                    let tempDiv = document.createElement('div');
-                    tempDiv.innerHTML = html;
-                    dl[p.dataset.key] = tempDiv.textContent; 
+                    // 4. Lọc bỏ các dòng trống thừa do div gây ra
+                    cleanText = cleanText.replace(/\n\s*\n/g, '\n');
+                    
+                    dl[p.dataset.key] = cleanText;
                 } else {
                     dl[p.dataset.key] = p.value;
                 }
@@ -1071,12 +1077,12 @@ function napDuLieuSua(chuoi) {
                         if(inp.classList.contains('rich-textarea')) { 
                             let noiDung = f[c] ? String(f[c]) : "";
                             
-                            // 1. Dịch ngược Marker thành thẻ định dạng HTML
-                            noiDung = noiDung.replace(/\{\{B\}\}/g, '<b>').replace(/\{\{\/B\}\}/g, '</b>')
-                                             .replace(/\{\{I\}\}/g, '<i>').replace(/\{\{\/I\}\}/g, '</i>')
-                                             .replace(/\{\{U\}\}/g, '<u>').replace(/\{\{\/U\}\}/g, '</u>');
+                            // Dịch ngược cả Marker chuẩn và dọn dẹp các Marker lỗi từ phiên bản trước
+                            noiDung = noiDung.replace(/___B___/g, '<b>').replace(/___\/B___/g, '</b>')
+                                             .replace(/___I___/g, '<i>').replace(/___\/I___/g, '</i>')
+                                             .replace(/___U___/g, '<u>').replace(/___\/U___/g, '</u>')
+                                             .replace(/\{\{B\}\}/g, '<b>').replace(/\{\{\/B\}\}/g, '</b>'); 
                             
-                            // 2. Tương thích ngược: Xử lý ngắt dòng mượt mà
                             if (noiDung.includes('<div') || (noiDung.includes('<b') && !noiDung.includes('\n'))) {
                                 inp.innerHTML = noiDung; 
                             } else {

@@ -923,13 +923,17 @@
                 if(typeof kq === 'string' && kq.startsWith("LỖI")) return HeThong.thongBao(kq, "loi");
                 try {
                     let json = typeof kq === 'string' ? JSON.parse(kq.replace(/```json/gi, '').replace(/```/g, '').trim()) : kq;
-                    const fill = (id, val) => { 
+const fill = (id, val) => { 
                         let e = document.getElementById(id); 
                         if(e){ 
-                            e.value=val||""; 
-                            if(e.rteObject) e.rteObject.innerHTML = (val||"").replace(/\n/g, '<br>');
+                            // [VÁ LỖI]: Ép HTML ngắt dòng ngay từ dữ liệu AI trả về
+                            let htmlVal = (val || "").replace(/\r?\n/g, '<br>');
+                            
+                            e.value = htmlVal; // Đẩy dữ liệu HTML vào thẻ ẩn để lưu
+                            if(e.rteObject) e.rteObject.innerHTML = htmlVal; // Đẩy hiển thị lên UI
                             
                             if(!e.rteObject) tuDongGianCao(e);
+                            
                             e.style.backgroundColor="#dcfce7"; 
                             if(e.rteObject) { e.rteObject.style.backgroundColor="#dcfce7"; setTimeout(()=>e.rteObject.style.backgroundColor="transparent",1500); }
                             setTimeout(()=>e.style.backgroundColor="transparent",1500); 
@@ -1013,7 +1017,7 @@
         }, () => { ul.innerHTML = '<li style="padding: 15px; text-align: center; color: #ef4444;">Lỗi tải dữ liệu.</li>'; });
     }
 
-    function napDuLieuSua(chuoi) {
+function napDuLieuSua(chuoi) {
         try {
             const dl = typeof chuoi === 'string' ? JSON.parse(chuoi) : chuoi; 
             const loai = dl.loaiVanBan;
@@ -1027,8 +1031,18 @@
                 k.querySelectorAll('[data-key]').forEach(inp => {
                     let key = inp.getAttribute('data-key');
                     if (f[key] !== undefined && f[key] !== null) {
-                        inp.value = f[key];
-                        if(inp.rteObject) inp.rteObject.innerHTML = f[key];
+                        let strVal = f[key].toString();
+                        
+                        // [VÁ LỖI]: Nạp dữ liệu cũ chứa \n thành định dạng thẻ <br> cho Editor
+                        if (inp.rteObject) {
+                            if (!/<\/?(b|i|u|br|div|p)[^>]*>/i.test(strVal)) {
+                                strVal = strVal.replace(/\r?\n/g, '<br>');
+                            }
+                            inp.rteObject.innerHTML = strVal;
+                            inp.value = strVal; // Đồng bộ ngược vào value ẩn để bảo toàn khi lưu
+                        } else {
+                            inp.value = strVal;
+                        }
                     } else {
                         inp.value = "";
                         if(inp.rteObject) inp.rteObject.innerHTML = "";

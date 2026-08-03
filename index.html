@@ -1159,6 +1159,30 @@
     }
     
     khoaTruyCapMaNguon();
+
+    // =========================================================================
+// HÀM TIỀN XỬ LÝ: LÀM SẠCH HTML RÁC TỪ TRÌNH SOẠN THẢO TRƯỚC KHI GỬI
+// =========================================================================
+function lamSachDuLieuTruocKhiGui(htmlTho) {
+    if (!htmlTho) return "";
+    
+    // 1. Quy đổi mọi thẻ tạo khối (block) thành ký tự ngắt dòng \n chuẩn
+    let chuoiXuLy = htmlTho.replace(/<\s*br\s*\/?>/gi, '\n')
+                           .replace(/<\/div>/gi, '\n')
+                           .replace(/<\/p>/gi, '\n')
+                           .replace(/<\/li>/gi, '\n');
+                           
+    // 2. Tiêu diệt mọi thẻ HTML khác, CHỈ GIỮ LẠI thẻ định dạng (b, i, u, strong, em)
+    chuoiXuLy = chuoiXuLy.replace(/<\/?(?!b|i|u|strong|em)[a-z0-9]+[^>]*>/gi, "");
+    
+    // 3. Giải mã các ký tự HTML Entities bị kẹt (&nbsp;, &lt;, &gt;)
+    let phanTuAo = document.createElement('textarea');
+    phanTuAo.innerHTML = chuoiXuLy;
+    let chuoiSach = phanTuAo.value;
+    
+    // 4. Xóa khoảng trắng thừa và dòng trống liên tiếp
+    return chuoiSach.replace(/\n{3,}/g, '\n\n').trim();
+}
 </script>
 </body>
 </html>

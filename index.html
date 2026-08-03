@@ -874,54 +874,22 @@
         if(xl) xl.value = tong >= 18 ? "GIỎI" : (tong >= 13.5 ? "KHÁ" : (tong >= 10 ? "TRUNG BÌNH" : "KHÔNG ĐẠT"));
     }
 
-function layToanBoDuLieuGiaoDien() {
-    const khoi = document.getElementById('khoi_' + document.getElementById('loaiVanBan').value);
-    let dl = {}, nd = {};
-    if(khoi) {
-        khoi.querySelectorAll('input, select, .rich-textarea').forEach(p => { 
-            if(p.dataset.key) { 
-                if (p.classList.contains('rich-textarea')) {
-                    let html = p.innerHTML;
-                    
-                    // 1. Chuyển đổi định dạng thành Marker an toàn
-                    html = html.replace(/<b\b[^>]*>/gi, '___B___').replace(/<\/b>/gi, '___/B___')
-                               .replace(/<strong\b[^>]*>/gi, '___B___').replace(/<\/strong>/gi, '___/B___')
-                               .replace(/<i\b[^>]*>/gi, '___I___').replace(/<\/i>/gi, '___/I___')
-                               .replace(/<em\b[^>]*>/gi, '___I___').replace(/<\/em>/gi, '___/I___')
-                               .replace(/<u\b[^>]*>/gi, '___U___').replace(/<\/u>/gi, '___/U___');
-                    
-                    // 2. Ép các thẻ khối thành ký tự xuống dòng \n
-                    html = html.replace(/<br\s*[\/]?>/gi, '\n')
-                               .replace(/<\/div>\s*<div[^>]*>/gi, '\n')
-                               .replace(/<\/p>\s*<p[^>]*>/gi, '\n')
-                               .replace(/<div[^>]*>/gi, '\n')
-                               .replace(/<p[^>]*>/gi, '\n');
-                    
-                    // 3. Xóa sạch mọi thẻ HTML rác còn sót lại
-                    html = html.replace(/<[^>]+>/g, '');
-                    
-                    // 4. Mẹo cốt lõi: Dùng Textarea để giải mã an toàn các ký tự đặc biệt (&lt; thành <) 
-                    let txt = document.createElement("textarea");
-                    txt.innerHTML = html;
-                    let cleanText = txt.value;
-                    
-                    // 5. Dọn dẹp khoảng trắng và marker rỗng
-                    cleanText = cleanText.replace(/___[BIU]______\/[BIU]___/g, '')
-                                         .replace(/\n{3,}/g, '\n\n')
-                                         .trim();
-                                         
-                    dl[p.dataset.key] = cleanText;
-                } else {
-                    dl[p.dataset.key] = p.value;
+    function layToanBoDuLieuGiaoDien() {
+        const khoi = document.getElementById('khoi_' + document.getElementById('loaiVanBan').value);
+        let dl = {}, nd = {};
+        if(khoi) {
+            // Bao quát cả thẻ nhập thuần túy và thẻ nhập Rich Text
+            khoi.querySelectorAll('input, select, .rich-textarea').forEach(p => { 
+                if(p.dataset.key) { 
+                    // [Nâng cấp logic]: Nếu là rich-text, lấy nội dung HTML. Nếu là input, lấy value bình thường.
+                    dl[p.dataset.key] = p.classList.contains('rich-textarea') ? p.innerHTML : p.value; 
+                    let nhan = p.previousElementSibling; 
+                    nd[p.dataset.key] = nhan ? nhan.innerText.replace(':','').trim() : p.dataset.key; 
                 }
-                
-                let nhan = p.previousElementSibling; 
-                nd[p.dataset.key] = nhan ? nhan.innerText.replace(':','').trim() : p.dataset.key; 
-            }
-        });
+            });
+        }
+        return { data: dl, labels: nd };
     }
-    return { data: dl, labels: nd };
-}
 
     function hienThiXemTruoc() {
         const t = layToanBoDuLieuGiaoDien(); if(document.getElementById('loaiVanBan').value === "0") return;
@@ -1070,48 +1038,35 @@ function layToanBoDuLieuGiaoDien() {
     }
 
 function napDuLieuSua(chuoi) {
-    try {
-        const dl = JSON.parse(chuoi), loai = dl.loaiVanBan, f = dl.duLieu;
-        document.getElementById('loaiVanBan').value = loai;
-        dongTatCaPanel(); chuyenDoiBieuMau(true);
-        setTimeout(() => {
-            const k = document.getElementById('khoi_'+loai);
-            if(k) {
-                for(let c in f) { 
-                    let inp = k.querySelector(`[data-key="${c}"]`); 
-                    if(inp) { 
-                        if(inp.classList.contains('rich-textarea')) { 
-                            let noiDung = f[c] ? String(f[c]) : "";
-                            
-                            // BƯỚC QUAN TRỌNG: Mã hóa ký tự < và > để trình duyệt KHÔNG CẮT VĂN BẢN
-                            noiDung = noiDung.replace(/&/g, '&amp;')
-                                             .replace(/</g, '&lt;')
-                                             .replace(/>/g, '&gt;');
-                            
-                            // Dịch ngược Marker thành thẻ định dạng HTML
-                            noiDung = noiDung.replace(/___B___/g, '<b>').replace(/___\/B___/g, '</b>')
-                                             .replace(/___I___/g, '<i>').replace(/___\/I___/g, '</i>')
-                                             .replace(/___U___/g, '<u>').replace(/___\/U___/g, '</u>')
-                                             .replace(/\{\{B\}\}/g, '<b>').replace(/\{\{\/B\}\}/g, '</b>'); 
-                            
-                            // Khôi phục ngắt dòng cho giao diện
-                            noiDung = noiDung.replace(/\n/g, '<br>'); 
-                            
-                            inp.innerHTML = noiDung; 
-                        }
-                        else { 
-                            inp.value = f[c] || ""; 
-                        }
-                    } 
+        try {
+            const dl = JSON.parse(chuoi), loai = dl.loaiVanBan, f = dl.duLieu;
+            document.getElementById('loaiVanBan').value = loai;
+            dongTatCaPanel(); chuyenDoiBieuMau(true);
+            setTimeout(() => {
+                const k = document.getElementById('khoi_'+loai);
+                if(k) {
+                    for(let c in f) { 
+                        let inp = k.querySelector(`[data-key="${c}"]`); 
+                        if(inp) { 
+                            // [Vá lỗi & Tương thích ngược]: Xử lý đổ dữ liệu cho khối Rich Text
+                            if(inp.classList.contains('rich-textarea')) { 
+                                let noiDung = f[c] ? String(f[c]) : "";
+                                // Chuyển đổi ký tự xuống dòng (\n) của textarea cũ thành thẻ <br> để HTML hiểu và giữ nguyên định dạng
+                                inp.innerHTML = noiDung.replace(/\n/g, '<br>'); 
+                            }
+                            else { 
+                                inp.value = f[c] || ""; 
+                            }
+                        } 
+                    }
+                    if(loai==="1") tinhTongDiemThanhPhan(1);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    let btn = document.getElementById('btnHoSo'); if(btn){ btn.innerText="Cập Nhật Văn Bản"; btn.className="btn btn-orange"; }
+                    k.style.boxShadow="0 0 15px #f97316"; setTimeout(()=>k.style.boxShadow="none", 1500);
                 }
-                if(loai==="1") tinhTongDiemThanhPhan(1);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                let btn = document.getElementById('btnHoSo'); if(btn){ btn.innerText="Cập Nhật Văn Bản"; btn.className="btn btn-orange"; }
-                k.style.boxShadow="0 0 15px #f97316"; setTimeout(()=>k.style.boxShadow="none", 1500);
-            }
-        }, 250);
-    } catch(e) { HeThong.thongBao("Dữ liệu hỏng.", "loi"); }
-}
+            }, 250);
+        } catch(e) { HeThong.thongBao("Dữ liệu hỏng.", "loi"); }
+    }
 
     function kichHoatTruyVanCheo() {
         const cauHoi = document.getElementById('aiCauHoiTruyVan').value.trim();

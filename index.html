@@ -780,15 +780,18 @@
     }
 
 function tuDongGianCao(el) {
-    // 1. Lưu lại tọa độ thanh cuộn hiện tại để "neo" màn hình, chống hiện tượng giật trang
+    // [CẬP NHẬT]: Bảo vệ chống lỗi đo lường khi khối giao diện chưa kịp hiển thị (display: none)
+    if (el.offsetWidth === 0) return; 
+
+    // 1. Lưu lại tọa độ thanh cuộn hiện tại để "neo" màn hình
     const viTriCuon = window.scrollY;
     
     let t = el.style.transition; 
     el.style.transition = 'none'; 
     el.style.flexGrow = '0'; 
     
-    // 2. Tạm thời reset chiều cao để lấy số đo scrollHeight chính xác
-    el.style.height = 'auto'; 
+    // 2. [CẬP NHẬT]: Ép chiều cao về 1px thay vì 'auto' để đo chính xác tuyệt đối scrollHeight
+    el.style.height = '1px'; 
     let h = el.scrollHeight; 
     
     // 3. Áp dụng chiều cao thực tế cho ô nhập liệu
@@ -798,12 +801,10 @@ function tuDongGianCao(el) {
     el.style.flexGrow = ''; 
     el.style.transition = t;
 
-    // 4. Khôi phục lại tọa độ cuộn ban đầu ngay lập tức để màn hình không bị nhảy
+    // 4. Khôi phục lại tọa độ cuộn ban đầu
     window.scrollTo(window.scrollX, viTriCuon);
     
-    // 5. Tính toán bù trừ thông minh: 
-    // Đo lường xem mép dưới của ô nhập liệu có bị vượt quá cạnh đáy màn hình hay không.
-    // Nếu có, chủ động cuộn trang xuống một khoảng hở 20px để người dùng nhìn rõ dòng mới gõ.
+    // 5. Cuộn bù trừ nếu ô nhập liệu bị tràn quá mép dưới màn hình
     const toaDoKhung = el.getBoundingClientRect();
     if (toaDoKhung.bottom > window.innerHeight) {
         window.scrollBy(0, toaDoKhung.bottom - window.innerHeight + 20);
@@ -1033,51 +1034,44 @@ else if (hanhDong === 'LuuHoSo' || hanhDong === 'XuatWord') {
     }
 
 function napDuLieuSua(chuoi) {
-        try {
-            const dl = JSON.parse(chuoi), loai = dl.loaiVanBan, f = dl.duLieu;
-            
-            // 1. Chuyển đổi trạng thái biểu mẫu ngay lập tức
-            document.getElementById('loaiVanBan').value = loai;
-            dongTatCaPanel(); 
-            
-            // [CẬP NHẬT TRÁNH LỖI MẤT NỘI DUNG]: 
-            // 2. Nạp dữ liệu vào DOM TRƯỚC khi hiển thị để trình duyệt có dữ liệu thật
-            const k = document.getElementById('khoi_' + loai);
-            if(k) {
-                for(let c in f) { 
-                    let inp = k.querySelector(`[data-key="${c}"]`); 
-                    if(inp){ inp.value = f[c]; } 
-                }
+    try {
+        const dl = JSON.parse(chuoi), loai = dl.loaiVanBan, f = dl.duLieu;
+        
+        // 1. Chuyển đổi trạng thái phân loại
+        document.getElementById('loaiVanBan').value = loai;
+        dongTatCaPanel(); 
+        
+        // 2. [CẬP NHẬT CỐT LÕI]: Bơm dữ liệu vào thẻ TRƯỚC KHI mở form
+        const k = document.getElementById('khoi_' + loai);
+        if(k) {
+            for(let c in f) { 
+                let inp = k.querySelector(`[data-key="${c}"]`); 
+                if(inp) inp.value = f[c]; 
             }
-
-            // 3. Kích hoạt hiệu ứng mở Form (sẽ mất 200ms theo logic hàm chuyenDoiBieuMau)
-            chuyenDoiBieuMau(true);
-            
-            // 4. Đợi Form render xong hoàn toàn (350ms) mới ép tính toán lại chiều cao
-            setTimeout(() => {
-                if(k) {
-                    // Ép các Textarea giãn nở chính xác theo lượng text đã nạp
-                    k.querySelectorAll('textarea').forEach(ta => tuDongGianCao(ta));
-                    
-                    // Kích hoạt các logic phụ trợ của riêng từng biểu mẫu
-                    if(loai === "1") tinhTongDiemThanhPhan(1);
-                    
-                    // Đưa màn hình về đầu trang để người dùng dễ kiểm soát
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                    
-                    // Cập nhật giao diện nút bấm sang trạng thái Cập nhật
-                    let btn = document.getElementById('btnHoSo'); 
-                    if(btn){ btn.innerText = "Cập Nhật Văn Bản"; btn.className = "btn btn-orange"; }
-                    
-                    // Nháy sáng báo hiệu khu vực đang làm việc
-                    k.style.boxShadow = "0 0 15px #f97316"; 
-                    setTimeout(() => k.style.boxShadow = "none", 1500);
-                }
-            }, 350); // Lùi nhịp về 350ms để triệt tiêu hoàn toàn Race Condition
-        } catch(e) { 
-            HeThong.thongBao("Lỗi giải mã dữ liệu: " + e.message, "loi"); 
         }
+
+        // 3. Gọi lệnh mở form (Lệnh này đã tích hợp sẵn nhịp chờ 200ms để gọi tuDongGianCao)
+        chuyenDoiBieuMau(true);
+        
+        // 4. Trì hoãn xử lý các hiệu ứng phụ trợ sau khi form đã ổn định trên màn hình
+        setTimeout(() => {
+            if(k) {
+                if(loai === "1") tinhTongDiemThanhPhan(1);
+                
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                
+                let btn = document.getElementById('btnHoSo'); 
+                if(btn) { btn.innerText = "Cập Nhật Văn Bản"; btn.className = "btn btn-orange"; }
+                
+                k.style.boxShadow = "0 0 15px #f97316"; 
+                setTimeout(() => k.style.boxShadow = "none", 1500);
+            }
+        }, 250);
+        
+    } catch(e) { 
+        HeThong.thongBao("Dữ liệu gốc bị hỏng hoặc sai định dạng.", "loi"); 
     }
+}
 
     function kichHoatTruyVanCheo() {
         const cauHoi = document.getElementById('aiCauHoiTruyVan').value.trim();

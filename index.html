@@ -69,7 +69,6 @@
         .short-input { flex-grow: 0 !important; width: 100px !important; text-align: center; }
         .med-input { flex-grow: 0 !important; width: 150px !important; }
 
-        /* [Nâng cấp]: Cho phép hiển thị thanh cuộn dọc (overflow-y: auto) để dự phòng khi text quá dài hoặc dán nội dung lớn */
         textarea { resize: none; overflow-x: hidden; overflow-y: auto; min-height: 32px; height: 32px; line-height: 1.5; }
 
         .table-tieu-chi { width: 100%; border-collapse: collapse; margin-top: 8px; margin-bottom: 12px; font-size: 10pt; background: #fff; border-radius: 6px; overflow: hidden; border: 1px solid #e2e8f0; }
@@ -82,7 +81,6 @@
         .dynamic-block { display: none; opacity: 0; transform: translateY(5px); transition: opacity 0.3s ease, transform 0.3s ease; }
         .dynamic-block.active { display: block; opacity: 1; transform: translateY(0); }
 
-        /* THANH CÔNG CỤ */
         .action-bar {
             display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap;
             position: sticky; bottom: 0; background: rgba(255, 255, 255, 0.98);
@@ -94,7 +92,6 @@
         .btn:disabled { background: #cbd5e1 !important; color: #94a3b8; cursor: not-allowed; box-shadow: none; transform: none; }
         .btn-blue { background: #3b82f6; } .btn-sky { background: #0ea5e9; } .btn-green { background: #10b981; } .btn-purple { background: #8b5cf6; } .btn-red { background: #ef4444; } .btn-orange { background: #f97316; }
 
-        /* OVERLAY LOADING MƯỢT MÀ CHUẨN REACTBITS (https://reactbits.dev/) */
         .loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.85); z-index: 3000; justify-content: center; align-items: center; flex-direction: column; backdrop-filter: blur(4px); }
         .reactbits-spinner { 
             width: 50px; height: 50px; 
@@ -110,7 +107,6 @@
         .loading-text { font-weight: 700; color: var(--primary); font-size: 1.1rem; letter-spacing: 0.5px; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
 
-        /* MODAL XEM TRƯỚC */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.7); z-index: 2500; align-items: center; justify-content: center; backdrop-filter: blur(5px); opacity: 0; transition: opacity 0.3s; }
         .modal-overlay.active { opacity: 1; }
         .modal-content { background: #fff; width: 95%; max-width: 850px; max-height: 85vh; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.3); transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
@@ -119,14 +115,12 @@
         .modal-body { padding: 20px; overflow-y: auto; background: #f8fafc; }
         .modal-footer { padding: 12px 20px; background: #fff; display: flex; justify-content: flex-end; border-top: 1px solid #e2e8f0; }
 
-        /* HỆ THỐNG TOAST NOTIFICATION */
         #toastContainer { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
         .toast-msg { background: white; border-left: 4px solid #0284c7; padding: 12px 20px; border-radius: 6px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); font-weight: 600; color: #334155; transform: translateX(120%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); display: flex; align-items: center; gap: 10px; min-width: 250px; }
         .toast-msg.show { transform: translateX(0); }
         .toast-msg.loi { border-left-color: #ef4444; }
         .toast-msg.thanh-cong { border-left-color: #10b981; }
 
-        /* GIAO DIỆN TRƯỢT (OFFCANVAS) CHO KHO LƯU TRỮ VÀ AI */
         .panel-backdrop { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15,23,42,0.5); backdrop-filter: blur(4px); z-index: 1500; opacity: 0; visibility: hidden; transition: 0.3s; }
         .panel-backdrop.open { opacity: 1; visibility: visible; }
         
@@ -138,7 +132,6 @@
         .btn-close-panel:hover { background: #e2e8f0; color: #ef4444; transform: rotate(90deg); }
         .panel-content { flex: 1; overflow-y: auto; padding: 20px; }
 
-        /* Bố cục riêng cho AI trong Panel */
         .ai-dashboard { display: grid; grid-template-columns: 320px 1fr; gap: 20px; height: 100%; }
         @media (max-width: 768px) { .ai-dashboard { grid-template-columns: 1fr; } }
         .ai-control-panel { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); height: fit-content; }
@@ -149,14 +142,24 @@
         .signature-footer { text-align: center; margin-top: 20px; padding-bottom: 20px; color: #64748b; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; }
         .btn-logout { background: #ef4444; padding: 4px 10px; font-size: 0.75rem; border-radius: 4px; border: none; color: white; cursor: pointer; font-weight: bold; transition: 0.2s; }
         .btn-logout:hover { opacity: 0.8; }
+
+        /* [NÂNG CẤP] TRÌNH SOẠN THẢO RICH TEXT (RTE) */
+        .rte-container { border: 1px solid #cbd5e1; border-radius: 6px; overflow: hidden; display: flex; flex-direction: column; width: 100%; transition: 0.2s; background: #fff; }
+        .rte-container:focus-within { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.1); }
+        .rte-toolbar { background: #f8fafc; padding: 4px 8px; border-bottom: 1px solid #e2e8f0; display: flex; gap: 6px; }
+        .rte-btn { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 11pt; color: #475569; background: transparent; border: 1px solid transparent; border-radius: 4px; cursor: pointer; transition: 0.2s; font-family: serif; }
+        .rte-btn:hover { background: #e2e8f0; color: var(--primary); }
+        .rte-btn.active { background: #e0f2fe; color: var(--primary); border-color: #bae6fd; }
+        .rte-editor { padding: 10px; min-height: 40px; max-height: 400px; overflow-y: auto; outline: none; line-height: 1.5; font-size: 11pt; }
+        .rte-editor b, .rte-editor strong { font-weight: bold; color: #000; }
+        .rte-editor i, .rte-editor em { font-style: italic; }
+        .rte-editor u { text-decoration: underline; }
     </style>
 </head>
 <body>
 
-<!-- HỆ THỐNG TOAST NOTIFICATION -->
 <div id="toastContainer"></div>
 
-<!-- MÀN HÌNH ĐĂNG NHẬP -->
 <div id="loginUI" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.95); z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center; backdrop-filter:blur(5px);">
     <div style="background:#fff; padding:30px; border-radius:8px; text-align:center; box-shadow:0 10px 25px rgba(0,0,0,0.5); max-width:400px; width:90%;">
         <img src="" id="loginLogo" style="width:80px; margin-bottom:15px; display:none;">
@@ -167,42 +170,30 @@
     </div>
 </div>
 
-<!-- MÀN HÌNH CHỜ (LOADING) CHUẨN REACTBITS -->
 <div class="loading-overlay" id="boDemTai">
     <div class="reactbits-spinner"></div>
     <span class="loading-text" id="chuoiThongBao">Hệ thống đang xử lý...</span>
 </div>
 
-<!-- ĐẦU TRANG -->
 <div class="top-header">
     <div class="top-header-content">
         <div class="header-title">HỆ THỐNG SOẠN THẢO VĂN BẢN CHUYÊN NGHIỆP</div>
-        
-        <!-- Bố cục Flexbox 3 cột giúp căn giữa ô chọn và đẩy Đăng xuất sang phải ngang hàng -->
         <div style="display: flex; justify-content: space-between; align-items: flex-end; position: relative;">
-            
-            <!-- Cột trái: Tạo khoảng trống đối trọng để ô chọn căn giữa tuyệt đối -->
-            <div style="flex: 1; display: none; /* Hiện trên màn lớn nếu cần */"></div>
+            <div style="flex: 1; display: none;"></div>
             <div style="flex: 1;" class="spacer-desktop"></div>
-            
-            <!-- Cột giữa: Ô chọn loại văn bản -->
             <div class="form-group col-layout" style="margin-bottom:0; flex: 0 1 500px; width: 100%;">
                 <label style="color: #0369a1; font-size: 0.95rem; text-transform: uppercase; text-align: center;">📌 Chọn loại văn bản để khởi tạo:</label>
                 <select id="loaiVanBan" onchange="chuyenDoiBieuMau()" style="font-weight: bold; font-size: 11pt; color: #0284c7; border-bottom: 2px solid #0284c7; padding: 4px 0; text-align: center;">
                 </select>
             </div>
-
-            <!-- Cột phải: Chứa thông tin tài khoản và nút Đăng xuất (Căn đáy bằng padding-bottom) -->
             <div style="flex: 1; display: flex; justify-content: flex-end; padding-bottom: 4px;">
                 <div id="userBadgeArea" style="display: flex; align-items: center; gap: 8px;"></div>
             </div>
-            
         </div>
     </div>
 </div>
 
 <div class="container">
-    <!-- KHỐI 1: PHIẾU ĐÁNH GIÁ BÀI DẠY -->
     <div id="khoi_1" class="dynamic-block">
         <div class="form-panel">
             <div class="section-title">THÔNG TIN BÀI DẠY <span class="badge-ai">✨ Có AI hỗ trợ</span></div>
@@ -275,7 +266,6 @@
         </div>
     </div>
 
-    <!-- KHỐI 2: BIÊN BẢN SỰ VIỆC -->
     <div id="khoi_2" class="dynamic-block">
         <div class="form-panel">
             <div class="section-title">THÔNG TIN HÀNH CHÍNH & THỜI GIAN <span class="badge-ai">✨ Có AI hỗ trợ</span></div>
@@ -317,7 +307,6 @@
         </div>
     </div>
 
-    <!-- KHỐI 3: QUYẾT ĐỊNH ĐẢNG -->
     <div id="khoi_3" class="dynamic-block">
         <div class="form-panel">
             <div class="section-title">THÔNG TIN QUYẾT ĐỊNH KT/GS <span class="badge-no-ai">🔒 Khóa AI</span></div>
@@ -343,7 +332,6 @@
         </div>
     </div>
 
-    <!-- KHỐI 4: KẾ HOẠCH ĐẢNG -->
     <div id="khoi_4" class="dynamic-block">
         <div class="form-panel">
             <div class="section-title">THÔNG TIN KẾ HOẠCH KT/GS <span class="badge-no-ai">🔒 Khóa AI</span></div>
@@ -381,7 +369,6 @@
         </div>
     </div>
 
-    <!-- KHỐI 5: BIÊN BẢN TRIỂN KHAI -->
     <div id="khoi_5" class="dynamic-block">
         <div class="form-panel">
             <div class="section-title">THÔNG TIN BIÊN BẢN TRIỂN KHAI <span class="badge-no-ai">🔒 Khóa AI</span></div>
@@ -405,7 +392,6 @@
         </div>
     </div>
 
-    <!-- KHỐI 6: BÁO CÁO -->
     <div id="khoi_6" class="dynamic-block">
         <div class="form-panel">
             <div class="section-title">THÔNG TIN BÁO CÁO <span class="badge-no-ai">🔒 Khóa AI</span></div>
@@ -446,7 +432,6 @@
         </div>
     </div>
 
-    <!-- KHỐI 7: BÁO CÁO THẨM TRA -->
     <div id="khoi_7" class="dynamic-block">
         <div class="form-panel">
             <div class="section-title">THÔNG TIN BÁO CÁO THẨM TRA <span class="badge-no-ai">🔒 Khóa AI</span></div>
@@ -490,7 +475,6 @@
         </div>
     </div>
 
-    <!-- KHỐI 8: CUỘC HỌP -->
     <div id="khoi_8" class="dynamic-block">
         <div class="form-panel">
             <div class="section-title">THÔNG TIN CUỘC HỌP <span class="badge-ai">✨ Có AI hỗ trợ</span></div>
@@ -524,7 +508,6 @@
         </div>
     </div>
 
-    <!-- KHỐI 9: CÔNG BỐ -->
     <div id="khoi_9" class="dynamic-block">
         <div class="form-panel">
             <div class="section-title">THÔNG TIN CÔNG BỐ <span class="badge-no-ai">🔒 Khóa AI</span></div>
@@ -561,7 +544,6 @@
         </div>
     </div>
 
-    <!-- THANH CÔNG CỤ -->
     <div class="action-bar" id="thanhCongCu" style="display: none;">
         <button class="btn btn-sky" onclick="chayNghiepVu('PhanTichAI')" id="btnAI" title="Kích hoạt trợ lý AI">Trợ Lý Đánh giá</button>
         <button class="btn btn-green" onclick="chayNghiepVu('LuuHoSo')" id="btnHoSo">Tạo Văn Bản</button>
@@ -574,27 +556,18 @@
     <div class="signature-footer">Phát triển bởi<br>Hoàng Ngọc Lâm</div>
 </div>
 
-<!-- ========================================================================= -->
-<!-- KHÔNG GIAN CÁC BẢNG ĐIỀU KHIỂN TRƯỢT (OFFCANVAS PANELS) -->
-<!-- ========================================================================= -->
-
-<!-- Nền mờ phía sau -->
 <div class="panel-backdrop" id="panelBackdrop" onclick="dongTatCaPanel()"></div>
 
-<!-- PANEL 1: KHO LƯU TRỮ (Đã ép mỏng vùng đệm & chia 2 cột chuẩn) -->
 <div class="side-panel" id="panelKhoLuuTru">
     <div class="panel-header" style="padding: 8px 15px;">
         <h3 style="font-size: 1.1rem;">📂 Mục lục tài liệu</h3>
         <button class="btn-close-panel" onclick="dongTatCaPanel()">✖</button>
     </div>
     
-    <!-- Ép mỏng padding của content xuống 10px, chống cuộn tràn -->
     <div class="panel-content" style="padding: 10px; overflow: hidden;">
         
-        <!-- Lưới 2 cột: Cột trái 350px (Danh sách), Cột phải phần còn lại (Khung xem) -->
         <div style="display: grid; grid-template-columns: 350px 1fr; gap: 12px; height: 100%;">
             
-            <!-- CỘT TRÁI: Thanh tìm kiếm được nhúng thẳng vào trên đầu danh sách -->
             <div style="display: flex; flex-direction: column; gap: 8px; height: 100%;">
                 <input type="text" id="oTimKiemTaiLieu" placeholder="Gõ tên văn bản để tìm..." oninput="HeThong.tuDongTimKiem()" style="padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 10.5pt; width: 100%; box-sizing: border-box;">
                 
@@ -605,7 +578,6 @@
                 </div>
             </div>
 
-            <!-- CỘT PHẢI: Khung xem trước tài liệu Word -->
             <div class="ai-preview-frame" style="display: flex; flex-direction: column; border: 1px solid #e2e8f0; border-radius: 6px; background: #fff; height: 100%; overflow: hidden;">
                 <div style="background: #f1f5f9; padding: 6px 12px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
                     <div id="tenHienThiVanBan" style="flex: 1; font-weight: 600; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 10pt;">Chưa chọn văn bản</div>
@@ -615,7 +587,6 @@
                         <button id="nutXoaDoc" class="btn btn-red" style="padding: 4px 10px; font-size: 8pt;">🗑️ XÓA</button>
                     </div>
                 </div>
-                <!-- Giảm chiều cao tối thiểu để vừa vặn khung hình -->
                 <iframe id="khungXemTruoc" style="width: 100%; flex: 1; border: none; min-height: auto;" src="about:blank"></iframe>
             </div>
             
@@ -623,15 +594,12 @@
     </div>
 </div>
 
-<!-- PANEL 2: TRUY VẤN AI CHÉO -->
 <div class="side-panel" id="panelTruyVanAI">
-    <!-- Ép padding thanh tiêu đề từ 15px xuống 6px -->
     <div class="panel-header" style="padding: 6px 15px;">
         <h3 style="color: #6d28d9; font-size: 1.1rem; margin: 0;">🤖 Trợ Lý Phân Tích Dữ Liệu</h3>
         <button class="btn-close-panel" onclick="dongTatCaPanel()">✖</button>
     </div>
     
-    <!-- Ép padding vùng nội dung từ 20px xuống 10px (giống chuẩn kho lưu trữ) -->
     <div class="panel-content" style="padding: 10px 15px;">
         <div class="ai-dashboard">
             <div class="ai-control-panel">
@@ -669,7 +637,6 @@
     </div>
 </div>
 
-<!-- MODAL XEM TRƯỚC BIỂU MẪU ĐANG NHẬP -->
 <div class="modal-overlay" id="previewModal">
     <div class="modal-content">
         <div class="modal-header">
@@ -685,10 +652,6 @@
 
 
 <script>
-    // =========================================================================
-    // KHỐI 1: QUẢN LÝ TRẠNG THÁI VÀ GIAO TIẾP MÁY CHỦ (API WRAPPER LÕI)
-    // =========================================================================
-    
     const HeThong = {
         trangThai: { idFileDangSua: null, boDemTimKiem: null },
         
@@ -759,10 +722,6 @@
         }
     };
 
-    // =========================================================================
-    // KHỐI 2: ĐIỀU KHIỂN GIAO DIỆN VÀ KHÔNG GIAN TRƯỢT
-    // =========================================================================
-
     function moPanel(idPanel) {
         document.getElementById('panelBackdrop').classList.add('open');
         document.querySelectorAll('.side-panel').forEach(p => p.classList.remove('open'));
@@ -779,42 +738,69 @@
         HeThong.kiemSoatNut(false);
     }
 
-function tuDongGianCao(el) {
-    // [CẬP NHẬT]: Bảo vệ chống lỗi khi DOM chưa hiển thị hoàn toàn
-    if (!el || el.offsetWidth === 0) return; 
+    function tuDongGianCao(el) {
+        if (!el || el.offsetWidth === 0) return; 
 
-    // 1. Lưu lại tọa độ thanh cuộn hiện tại để "neo" màn hình, chống giật trang
-    const viTriCuon = window.scrollY;
-    
-    let t = el.style.transition; 
-    el.style.transition = 'none'; 
-    
-    // 2. Ép chiều cao về 1px để đo chính xác tuyệt đối scrollHeight (không bị kẹt bởi height cũ)
-    el.style.height = '1px'; 
-    let h = el.scrollHeight; 
-    
-    // 3. Áp dụng chiều cao thực tế cho ô nhập liệu (thấp nhất là 32px)
-    el.style.height = (h < 32 ? 32 : h) + 'px';
-    void el.offsetHeight; // Kích hoạt Repaint mượt mà
-    
-    el.style.transition = t;
+        const viTriCuon = window.scrollY;
+        
+        let t = el.style.transition; 
+        el.style.transition = 'none'; 
+        
+        el.style.height = '1px'; 
+        let h = el.scrollHeight; 
+        
+        el.style.height = (h < 32 ? 32 : h) + 'px';
+        void el.offsetHeight; 
+        
+        el.style.transition = t;
 
-    // 4. Khôi phục lại tọa độ cuộn ban đầu
-    window.scrollTo(window.scrollX, viTriCuon);
-    
-    // 5. Cuộn bù trừ nếu ô nhập liệu bị tràn mép dưới màn hình
-    const toaDoKhung = el.getBoundingClientRect();
-    if (toaDoKhung.bottom > window.innerHeight) {
-        window.scrollBy(0, toaDoKhung.bottom - window.innerHeight + 20);
+        window.scrollTo(window.scrollX, viTriCuon);
+        
+        const toaDoKhung = el.getBoundingClientRect();
+        if (toaDoKhung.bottom > window.innerHeight) {
+            window.scrollBy(0, toaDoKhung.bottom - window.innerHeight + 20);
+        }
     }
-}
 
-    // =========================================================================
-    // KHỐI 3: QUẢN TRỊ NGHIỆP VỤ BIỂU MẪU CHÍNH
-    // =========================================================================
+    function khoiTaoTrinhSoanThaoRTE() {
+        document.querySelectorAll('textarea').forEach(ta => {
+            if (ta.style.display === 'none') return;
+            
+            const container = document.createElement('div');
+            container.className = 'rte-container';
+            
+            const toolbar = document.createElement('div');
+            toolbar.className = 'rte-toolbar';
+            toolbar.innerHTML = `
+                <button type="button" class="rte-btn" tabindex="-1" onclick="document.execCommand('bold', false, null); this.classList.toggle('active')" style="font-weight:bold;" title="In đậm (Ctrl+B)">B</button>
+                <button type="button" class="rte-btn" tabindex="-1" onclick="document.execCommand('italic', false, null); this.classList.toggle('active')" style="font-style:italic;" title="In nghiêng (Ctrl+I)">I</button>
+                <button type="button" class="rte-btn" tabindex="-1" onclick="document.execCommand('underline', false, null); this.classList.toggle('active')" style="text-decoration:underline;" title="Gạch chân (Ctrl+U)">U</button>
+            `;
+            
+            const editor = document.createElement('div');
+            editor.className = 'rte-editor';
+            editor.contentEditable = true;
+            if (ta.dataset.key) editor.dataset.key = ta.dataset.key;
+            
+            editor.addEventListener('paste', function(e) {
+                e.preventDefault();
+                let text = (e.originalEvent || e).clipboardData.getData('text/plain');
+                document.execCommand('insertText', false, text);
+            });
+            
+            editor.addEventListener('input', () => { ta.value = editor.innerHTML; });
+            
+            ta.style.display = 'none';
+            container.appendChild(toolbar);
+            container.appendChild(editor);
+            ta.parentNode.insertBefore(container, ta);
+            
+            ta.rteObject = editor; 
+        });
+    }
 
     document.addEventListener("DOMContentLoaded", function() {
-    setTimeout(function() {
+        setTimeout(function() {
             try {
                 if (KET_NOI.LOGO_TRUONG) { document.getElementById('loginLogo').src = KET_NOI.LOGO_TRUONG; document.getElementById('loginLogo').style.display = 'inline-block'; }
                 const phien = HeThong.phienLamViec();
@@ -823,7 +809,6 @@ function tuDongGianCao(el) {
                     document.getElementById('loginUI').style.display = 'none';
                 } else { sessionStorage.removeItem('SessionAccountActive'); document.getElementById('loginUI').style.display = 'flex'; }
                 
-                // Khởi tạo luồng xác thực Google
                 if (typeof google !== 'undefined' && google.accounts) {
                     google.accounts.id.initialize({ client_id: KET_NOI.CLIENT_ID, callback: res => {
                         let p = JSON.parse(decodeURIComponent(window.atob(res.credential.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))));
@@ -838,11 +823,12 @@ function tuDongGianCao(el) {
                 KET_NOI.DANH_MUC_VAN_BAN.forEach(m => select.innerHTML += `<option value="${m.giaTri}">${m.tenHienThi}</option>`);
                 document.querySelectorAll('textarea').forEach(ta => ta.addEventListener('input', function() { tuDongGianCao(this); }));
                 
+                khoiTaoTrinhSoanThaoRTE();
+                
             } catch (loiKhoiTao) {
                 console.error("Luồng xác thực bị gián đoạn: ", loiKhoiTao);
             }
         }, 300);
-        
     });
 
     function executeLogout() { if(confirm("Đăng xuất khỏi phiên hiện tại?")) { sessionStorage.removeItem('SessionAccountActive'); location.reload(); } }
@@ -888,31 +874,25 @@ function tuDongGianCao(el) {
     }
     function dongXemTruoc() { document.getElementById('previewModal').classList.remove('active'); setTimeout(() => document.getElementById('previewModal').style.display = 'none', 300); }
 
-function lamMoiForm(boQua = false) {
+    function lamMoiForm(boQua = false) {
         if (boQua || confirm("Xóa toàn bộ dữ liệu đang nhập?")) {
             const loai = document.getElementById('loaiVanBan').value;
             if(loai !== "0") {
                 const khoi = document.getElementById('khoi_' + loai);
                 
-                // 1. Xóa sạch chữ trên giao diện
-                khoi.querySelectorAll('input:not([type="datetime-local"]), textarea').forEach(o => o.value = '');
+                khoi.querySelectorAll('input:not([type="datetime-local"]), textarea').forEach(o => {
+                    o.value = '';
+                    if(o.rteObject) o.rteObject.innerHTML = '';
+                });
                 
-                // 2. VÁ LỖI CSS GRID: Chia thuật toán thu nhỏ làm 2 nhịp để bẻ gãy liên kết chiều cao
                 setTimeout(() => {
                     const textareas = khoi.querySelectorAll('textarea');
-                    
-                    // Nhịp 1: Ép ĐỒNG LOẠT tất cả các ô về 1px cùng lúc để đánh sập khung Grid
-                    textareas.forEach(ta => { 
-                        ta.style.transition = 'none'; 
-                        ta.style.height = '1px'; 
-                    });
-                    
-                    // Nhịp 2: Sau khi khung lưới đã sập xuống, mới đo lại và gán độ cao chuẩn
+                    textareas.forEach(ta => { ta.style.transition = 'none'; ta.style.height = '1px'; });
                     textareas.forEach(ta => {
                         let h = ta.scrollHeight;
                         ta.style.height = (h < 32 ? 32 : h) + 'px';
-                        void ta.offsetHeight; // Kích hoạt vẽ lại giao diện mượt mà
-                        ta.style.transition = ''; // Trả lại hiệu ứng
+                        void ta.offsetHeight; 
+                        ta.style.transition = ''; 
                     });
                 }, 50);
                 
@@ -926,10 +906,6 @@ function lamMoiForm(boQua = false) {
             HeThong.thongBao("Đã làm mới biểu mẫu.");
         }
     }
-
-    // =========================================================================
-    // KHỐI 4: ĐIỀU PHỐI AI VÀ TẠO FILE (Gọi qua Lõi API)
-    // =========================================================================
 
     function chayNghiepVu(hanhDong) {
         const loai = document.getElementById('loaiVanBan').value;
@@ -947,17 +923,27 @@ function lamMoiForm(boQua = false) {
                 if(typeof kq === 'string' && kq.startsWith("LỖI")) return HeThong.thongBao(kq, "loi");
                 try {
                     let json = typeof kq === 'string' ? JSON.parse(kq.replace(/```json/gi, '').replace(/```/g, '').trim()) : kq;
-                    const fill = (id, val) => { let e = document.getElementById(id); if(e){ e.value=val||""; tuDongGianCao(e); e.style.backgroundColor="#dcfce7"; setTimeout(()=>e.style.backgroundColor="transparent",1500); }};
+                    const fill = (id, val) => { 
+                        let e = document.getElementById(id); 
+                        if(e){ 
+                            e.value=val||""; 
+                            if(e.rteObject) e.rteObject.innerHTML = (val||"").replace(/\n/g, '<br>');
+                            
+                            if(!e.rteObject) tuDongGianCao(e);
+                            e.style.backgroundColor="#dcfce7"; 
+                            if(e.rteObject) { e.rteObject.style.backgroundColor="#dcfce7"; setTimeout(()=>e.rteObject.style.backgroundColor="transparent",1500); }
+                            setTimeout(()=>e.style.backgroundColor="transparent",1500); 
+                        }
+                    };
                     if(loai==='1') { fill('ketQuaUuDiem_1', json.UuDiem); fill('ketQuaHanChe_1', json.HanChe); fill('ketQuaCaiTien_1', json.CaiTien); for(let i=1;i<=12;i++){ let oi = document.querySelector(`#khoi_1 input[data-key="Diem_TC${i}"]`); if(oi && json['Diem_TC'+i]!==undefined){ oi.value=json['Diem_TC'+i]; oi.style.backgroundColor="#dcfce7"; setTimeout(()=>oi.style.backgroundColor="transparent",1500); }} tinhTongDiemThanhPhan(1); }
                     else if(loai==='2') { fill('ketQuaKetLuan_2', json.KetLuan); } else if(loai==='8') { fill('ketQuaUuDiem_8', json.UuDiem); fill('ketQuaKhuyetDiem_8', json.HanChe); }
                     HeThong.thongBao("🤖 phân tích hoàn tất.");
                 } catch(e) { HeThong.thongBao("Lỗi định dạng AI trả về.", "loi"); }
             });
         }
-else if (hanhDong === 'LuuHoSo' || hanhDong === 'XuatWord') {
+        else if (hanhDong === 'LuuHoSo' || hanhDong === 'XuatWord') {
             HeThong.hienTai(true, HeThong.trangThai.idFileDangSua ? "Đang ghi đè tài liệu..." : "Đang tạo tài liệu mới...");
             
-            // Lấy trực tiếp phiên tài khoản hiện tại gán thẳng vào gói dữ liệu gửi đi
             const taiKhoanHienTai = HeThong.phienLamViec();
 
             HeThong.goiMayChu(hanhDong, { 
@@ -965,7 +951,7 @@ else if (hanhDong === 'LuuHoSo' || hanhDong === 'XuatWord') {
                     loaiVanBan: loai, 
                     duLieuForm: layToanBoDuLieuGiaoDien().data, 
                     idFileDangCapNhat: HeThong.trangThai.idFileDangSua,
-                    taiKhoanYeuCau: taiKhoanHienTai // [VÁ LỖI] Đảm bảo gói dữ liệu luôn có định danh
+                    taiKhoanYeuCau: taiKhoanHienTai
                 } 
             }, (kq) => {
                 HeThong.hienTai(false);
@@ -980,10 +966,6 @@ else if (hanhDong === 'LuuHoSo' || hanhDong === 'XuatWord') {
             });
         }
     }
-
-    // =========================================================================
-    // KHỐI 5: KHO LƯU TRỮ VÀ TRUY VẤN AI TRONG PANEL
-    // =========================================================================
 
     function thucHienTimKiem() {
        const tuKhoa = document.getElementById('oTimKiemTaiLieu').value;
@@ -1031,69 +1013,55 @@ else if (hanhDong === 'LuuHoSo' || hanhDong === 'XuatWord') {
         }, () => { ul.innerHTML = '<li style="padding: 15px; text-align: center; color: #ef4444;">Lỗi tải dữ liệu.</li>'; });
     }
 
-function napDuLieuSua(chuoi) {
-    try {
-        // [NÂNG CẤP]: Đảm bảo parse an toàn tuyệt đối, đề phòng đầu vào đã là object
-        const dl = typeof chuoi === 'string' ? JSON.parse(chuoi) : chuoi; 
-        const loai = dl.loaiVanBan;
-        const f = dl.duLieu;
-        
-        // 1. Chuyển đổi trạng thái biểu mẫu ngay lập tức
-        document.getElementById('loaiVanBan').value = loai;
-        dongTatCaPanel(); 
-        
-        // 2. Nạp dữ liệu vào DOM TRƯỚC khi hiển thị
-        const k = document.getElementById('khoi_' + loai);
-        if(k) {
-            // [VÁ LỖI CỐT LÕI]: Quét toàn bộ DOM bằng querySelectorAll thay vì duyệt vòng lặp object f.
-            // Điều này đảm bảo quét sạch mọi thẻ input/textarea có data-key, không bỏ sót bất kỳ node nào.
-            k.querySelectorAll('[data-key]').forEach(inp => {
-                let key = inp.getAttribute('data-key');
-                if (f[key] !== undefined && f[key] !== null) {
-                    inp.value = f[key];
-                } else {
-                    inp.value = ""; // Chống nhiễu dữ liệu cũ nếu biểu mẫu gốc không có trường này
-                }
-            });
-        }
-
-        // 3. Kích hoạt hiệu ứng mở Form
-        chuyenDoiBieuMau(true);
-        
-        // [VÁ LỖI HIỂN THỊ]: Điều chỉnh lại thuật toán Polling để giãn ô textarea chuẩn xác.
-        // Triệt tiêu xung đột với setTimeout 200ms của hàm chuyenDoiBieuMau.
-        if(k) {
-            let soLanQuet = 0;
-            let boDemGianO = setInterval(() => {
-                // Chỉ bắt đầu đo chiều cao khi form thực sự có kích thước (đã vượt qua display: none)
-                if (k.offsetWidth > 0) { 
-                    k.querySelectorAll('textarea').forEach(ta => tuDongGianCao(ta));
-                    soLanQuet++;
-                    // Quét 6 nhịp (tương đương ~900ms) để bao trọn vòng đời transition CSS
-                    if (soLanQuet >= 6) {
-                        clearInterval(boDemGianO);
-                    }
-                }
-            }, 150);
+    function napDuLieuSua(chuoi) {
+        try {
+            const dl = typeof chuoi === 'string' ? JSON.parse(chuoi) : chuoi; 
+            const loai = dl.loaiVanBan;
+            const f = dl.duLieu;
             
-            // Khởi động các logic phụ trợ sau khi form đã ổn định hoàn toàn
-            setTimeout(() => {
-                if(loai === "1") tinhTongDiemThanhPhan(1);
+            document.getElementById('loaiVanBan').value = loai;
+            dongTatCaPanel(); 
+            
+            const k = document.getElementById('khoi_' + loai);
+            if(k) {
+                k.querySelectorAll('[data-key]').forEach(inp => {
+                    let key = inp.getAttribute('data-key');
+                    if (f[key] !== undefined && f[key] !== null) {
+                        inp.value = f[key];
+                        if(inp.rteObject) inp.rteObject.innerHTML = f[key];
+                    } else {
+                        inp.value = "";
+                        if(inp.rteObject) inp.rteObject.innerHTML = "";
+                    }
+                });
+            }
+
+            chuyenDoiBieuMau(true);
+            
+            if(k) {
+                let soLanQuet = 0;
+                let boDemGianO = setInterval(() => {
+                    if (k.offsetWidth > 0) { 
+                        k.querySelectorAll('textarea').forEach(ta => tuDongGianCao(ta));
+                        soLanQuet++;
+                        if (soLanQuet >= 6) clearInterval(boDemGianO);
+                    }
+                }, 150);
                 
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                
-                let btn = document.getElementById('btnHoSo'); 
-                if(btn){ btn.innerText = "Cập Nhật Văn Bản"; btn.className = "btn btn-orange"; }
-                
-                k.style.boxShadow = "0 0 15px #f97316"; 
-                setTimeout(() => k.style.boxShadow = "none", 1500);
-            }, 500);
+                setTimeout(() => {
+                    if(loai === "1") tinhTongDiemThanhPhan(1);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    let btn = document.getElementById('btnHoSo'); 
+                    if(btn){ btn.innerText = "Cập Nhật Văn Bản"; btn.className = "btn btn-orange"; }
+                    k.style.boxShadow = "0 0 15px #f97316"; 
+                    setTimeout(() => k.style.boxShadow = "none", 1500);
+                }, 500);
+            }
+            
+        } catch(e) { 
+            HeThong.thongBao("Lỗi giải mã dữ liệu: " + e.message, "loi"); 
         }
-        
-    } catch(e) { 
-        HeThong.thongBao("Lỗi giải mã dữ liệu: " + e.message, "loi"); 
     }
-}
 
     function kichHoatTruyVanCheo() {
         const cauHoi = document.getElementById('aiCauHoiTruyVan').value.trim();
@@ -1142,38 +1110,32 @@ function napDuLieuSua(chuoi) {
             tbody.innerHTML = `<tr><td colspan="3" style="color:red; text-align:center;">Mất kết nối API.</td></tr>`; 
         });
     }
+
     function khoaTruyCapMaNguon() {
-        // 1. Khóa menu chuột phải
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
         });
 
-        // 2. Khóa các tổ hợp phím tắt phổ biến
         document.addEventListener('keydown', function(e) {
-            // Khóa F12
             if (e.key === 'F12' || e.keyCode === 123) {
                 e.preventDefault();
             }
-            // Khóa Ctrl + Shift + I (Mở DevTools)
             if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.keyCode === 73)) {
                 e.preventDefault();
             }
-            // Khóa Ctrl + Shift + J (Mở Console)
             if (e.ctrlKey && e.shiftKey && (e.key === 'J' || e.key === 'j' || e.keyCode === 74)) {
                 e.preventDefault();
             }
-            // Khóa Ctrl + U (Xem nguồn gốc)
             if (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.keyCode === 85)) {
                 e.preventDefault();
             }
-            // Khóa Ctrl + S (Lưu trang web)
             if (e.ctrlKey && (e.key === 'S' || e.key === 's' || e.keyCode === 83)) {
                 e.preventDefault();
             }
         });
     }
     
-      khoaTruyCapMaNguon();
+    khoaTruyCapMaNguon();
 </script>
 </body>
 </html>

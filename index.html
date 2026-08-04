@@ -530,40 +530,30 @@
         });
     }
 
-    // =========================================================================
-    // [VÁ LỖI CỰC MẠNH] LÀM SẠCH HTML TỪ GIAO DIỆN
-    // =========================================================================
     function lamSachDuLieuTruocKhiGui(htmlTho) {
         if (!htmlTho) return "";
         let txt = htmlTho;
         
-        // 1. Chuyển TẤT CẢ các thẻ tạo khối/dòng thành \n (Chống dính dòng đầu tiên)
         txt = txt.replace(/<br\s*\/?>/gi, '\n')
-                 .replace(/<div[^>]*>/gi, '\n')
+                 .replace(/<div(?=\s|>)[^>]*>/gi, '\n')
                  .replace(/<\/div>/gi, '')
-                 .replace(/<p[^>]*>/gi, '\n')
+                 .replace(/<p(?=\s|>)[^>]*>/gi, '\n')
                  .replace(/<\/p>/gi, '')
-                 .replace(/<li[^>]*>/gi, '\n')
+                 .replace(/<li(?=\s|>)[^>]*>/gi, '\n')
                  .replace(/<\/li>/gi, '');
 
-        // 2. Ép tất cả các thẻ in đậm/nghiêng/gạch chân về dạng chuẩn <b>, <i>, <u>
-        txt = txt.replace(/<(b|strong)[^>]*>/gi, '<b>').replace(/<\/(b|strong)>/gi, '</b>');
-        txt = txt.replace(/<(i|em)[^>]*>/gi, '<i>').replace(/<\/(i|em)>/gi, '</i>');
-        txt = txt.replace(/<u[^>]*>/gi, '<u>').replace(/<\/u>/gi, '</u>');
+        txt = txt.replace(/<(b|strong)(?=\s|>)[^>]*>/gi, '<b>').replace(/<\/(b|strong)>/gi, '</b>');
+        txt = txt.replace(/<(i|em)(?=\s|>)[^>]*>/gi, '<i>').replace(/<\/(i|em)>/gi, '</i>');
+        txt = txt.replace(/<u(?=\s|>)[^>]*>/gi, '<u>').replace(/<\/u>/gi, '</u>');
 
-        // 3. Lọc sạch thẻ rác, CHỈ giữ lại thẻ (b, i, u)
         txt = txt.replace(/<\/?(?!(b|i|u)>)[^>]+>/gi, '');
 
-        // 4. Giải mã các ký tự HTML bị kẹt
         let temp = document.createElement('textarea');
         temp.innerHTML = txt;
         txt = temp.value;
         
-        // 5. Diệt sạch khoảng trắng ảo và dồn các dấu xuống dòng liên tiếp
         txt = txt.replace(/&nbsp;|\u00A0/gi, ' ');
         txt = txt.replace(/\n\s*\n/g, '\n\n'); 
-
-        // 6. Xóa các \n thừa ở rìa văn bản
         txt = txt.trim(); 
         
         return txt;
@@ -734,7 +724,7 @@
                 dongGoiTruyenLen: { 
                     loaiVanBan: loai, 
                     duLieuForm: dlGiaoDien.data, 
-                    nhanForm: dlGiaoDien.labels, // TRUYỀN THÊM NHÃN CHO BACKEND IN ĐỘNG
+                    nhanForm: dlGiaoDien.labels,
                     idFileDangCapNhat: HeThong.trangThai.idFileDangSua,
                     taiKhoanYeuCau: taiKhoanHienTai
                 } 
@@ -798,9 +788,6 @@
         }, () => { ul.innerHTML = '<li style="padding: 15px; text-align: center; color: #ef4444;">Lỗi tải dữ liệu.</li>'; });
     }
 
-    // =========================================================================
-    // HÀM HIỂN THỊ DỮ LIỆU ĐỂ SỬA (GIẢI QUYẾT LỖI XUỐNG DÒNG H3)
-    // =========================================================================
     function napDuLieuSua(chuoi) {
         try {
             const dl = typeof chuoi === 'string' ? JSON.parse(chuoi) : chuoi; 
@@ -818,7 +805,6 @@
                         let strVal = f[key].toString();
                         
                         if (inp.rteObject) {
-                            // Khôi phục ký tự \n thành <br> để Rich Text hiển thị đúng
                             let strRTE = strVal.replace(/\r?\n/g, '<br>');
                             inp.rteObject.innerHTML = strRTE;
                             inp.value = strRTE;

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -266,7 +265,7 @@
         </div>
     </div>
 
-    <!-- MẪU SỐ 2 VÀ CÁC MẪU KHÁC GIỮ NGUYÊN GIAO DIỆN -->
+    <!-- MẪU SỐ 2 VÀ CÁC MẪU KHÁC -->
     <div id="khoi_2" class="dynamic-block">
         <div class="form-panel">
             <div class="section-title">THÔNG TIN HÀNH CHÍNH & THỜI GIAN <span class="badge-ai">✨ Có AI hỗ trợ</span></div>
@@ -532,34 +531,38 @@
     }
 
     // =========================================================================
-    // [VÁ LỖI CỰC MẠNH] HÀM TIỀN XỬ LÝ (GIỮ LẠI XUỐNG DÒNG, LOẠI BỎ RÁC)
+    // [VÁ LỖI CỰC MẠNH] HÀM LÀM SẠCH VÀ CHUẨN HÓA HTML TỪ FRONTEND
     // =========================================================================
     function lamSachDuLieuTruocKhiGui(htmlTho) {
         if (!htmlTho) return "";
+        let txt = htmlTho;
         
-        // 1. Chuyển TẤT CẢ các thẻ ngắt dòng/khối thành ký tự xuống dòng thuần \n
-        let chuoiXuLy = htmlTho.replace(/<br\s*\/?>/gi, '\n')
-                               .replace(/<\/div>/gi, '\n')
-                               .replace(/<\/p>/gi, '\n')
-                               .replace(/<\/li>/gi, '\n');
+        // 1. Chuyển TẤT CẢ các thẻ tạo khối (đặc biệt là <div> chứa dòng đầu) thành \n
+        txt = txt.replace(/<br\s*\/?>/gi, '\n')
+                 .replace(/<div[^>]*>/gi, '\n')
+                 .replace(/<p[^>]*>/gi, '\n')
+                 .replace(/<li[^>]*>/gi, '\n');
+
+        // 2. Ép tất cả các thẻ in đậm/nghiêng/gạch chân về dạng siêu tối giản: <b>, <i>, <u>
+        // Bất chấp việc Trình duyệt có gắn thêm style="", class="..." hay <strong >
+        txt = txt.replace(/<(b|strong)[^>]*>/gi, '<b>').replace(/<\/(b|strong)>/gi, '</b>');
+        txt = txt.replace(/<(i|em)[^>]*>/gi, '<i>').replace(/<\/(i|em)>/gi, '</i>');
+        txt = txt.replace(/<u[^>]*>/gi, '<u>').replace(/<\/u>/gi, '</u>');
+
+        // 3. Quét sạch toàn bộ các thẻ rác còn lại bằng Regex (CHỈ trừ đúng 3 cụm thẻ b, i, u)
+        txt = txt.replace(/<(?!\/?(b|i|u)>)[^>]+>/gi, '');
+
+        // 4. Giải mã các ký tự HTML Entities (ví dụ: &nbsp;)
+        let temp = document.createElement('textarea');
+        temp.innerHTML = txt;
+        txt = temp.value;
         
-        // 2. Lọc bỏ HOÀN TOÀN các thẻ HTML rác, CHỈ giữ lại thẻ định dạng b, strong, i, em, u 
-        // Lệnh Regex \b đảm bảo không xóa nhầm chữ b trong <br> ở các luồng khác nếu có
-        chuoiXuLy = chuoiXuLy.replace(/<\/?(?!(b|strong|i|em|u)\b)[a-z0-9]+[^>]*>/gi, "");
-                               
-        // 3. Xử lý triệt để các ký tự đặc biệt HTML (đặc biệt là &nbsp;) thông qua Textarea DOM
-        let phanTuAo = document.createElement('textarea');
-        phanTuAo.innerHTML = chuoiXuLy;
-        chuoiXuLy = phanTuAo.value;
-        
-        // Diệt tận gốc khoảng trắng &nbsp; ảo nếu DOM không xử lý hết
-        chuoiXuLy = chuoiXuLy.replace(/&nbsp;/gi, ' ');
-        
-        // 4. Dọn dẹp các \n dư thừa liên tiếp (chỉ giữ tối đa 2 lần xuống dòng)
-        // KHÔNG DÙNG HÀM .trim() ĐỂ BẢO TOÀN DẤU XUỐNG DÒNG Ở ĐẦU VÀ CUỐI VĂN BẢN
-        chuoiXuLy = chuoiXuLy.replace(/\n{3,}/g, '\n\n');
-        
-        return chuoiXuLy;
+        // 5. Diệt sạch khoảng trắng ảo và dồn các dấu xuống dòng liên tiếp
+        txt = txt.replace(/&nbsp;/gi, ' ');
+        txt = txt.replace(/\n\s*\n/g, '\n\n'); 
+
+        // TRÁNH dùng .trim() ở đây để không làm mất dấu xuống dòng chủ động ở đầu văn bản
+        return txt;
     }
 
     document.addEventListener("DOMContentLoaded", function() {

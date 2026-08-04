@@ -265,6 +265,7 @@
         </div>
     </div>
 
+    <!-- MẪU SỐ 2 VÀ CÁC MẪU KHÁC -->
     <div id="khoi_2" class="dynamic-block">
         <div class="form-panel">
             <div class="section-title">THÔNG TIN HÀNH CHÍNH & THỜI GIAN <span class="badge-ai">✨ Có AI hỗ trợ</span></div>
@@ -530,14 +531,13 @@
     }
 
     // =========================================================================
-    // [VÁ LỖI CỰC MẠNH] HÀM LÀM SẠCH VÀ CHUẨN HÓA HTML TỪ FRONTEND
-    // Khắc phục triệt để lỗi mất dòng đầu và xóa sạch khoảng trắng &nbsp;
+    // [VÁ LỖI CỰC MẠNH] LÀM SẠCH HTML TỪ GIAO DIỆN
     // =========================================================================
     function lamSachDuLieuTruocKhiGui(htmlTho) {
         if (!htmlTho) return "";
         let txt = htmlTho;
         
-        // 1. Chuyển TẤT CẢ các thẻ tạo khối (đặc biệt là <div> chứa dòng đầu) thành \n
+        // 1. Chuyển TẤT CẢ các thẻ tạo khối/dòng thành \n (Chống dính dòng đầu tiên)
         txt = txt.replace(/<br\s*\/?>/gi, '\n')
                  .replace(/<div[^>]*>/gi, '\n')
                  .replace(/<\/div>/gi, '')
@@ -546,15 +546,15 @@
                  .replace(/<li[^>]*>/gi, '\n')
                  .replace(/<\/li>/gi, '');
 
-        // 2. Ép tất cả các thẻ in đậm/nghiêng/gạch chân về dạng siêu tối giản: <b>, <i>, <u>
+        // 2. Ép tất cả các thẻ in đậm/nghiêng/gạch chân về dạng chuẩn <b>, <i>, <u>
         txt = txt.replace(/<(b|strong)[^>]*>/gi, '<b>').replace(/<\/(b|strong)>/gi, '</b>');
         txt = txt.replace(/<(i|em)[^>]*>/gi, '<i>').replace(/<\/(i|em)>/gi, '</i>');
         txt = txt.replace(/<u[^>]*>/gi, '<u>').replace(/<\/u>/gi, '</u>');
 
-        // 3. Quét sạch toàn bộ các thẻ rác còn lại bằng Regex (CHỈ trừ đúng 3 cụm thẻ b, i, u)
-        txt = txt.replace(/<(?!\/?(b|i|u)>)[^>]+>/gi, '');
+        // 3. Lọc sạch thẻ rác, CHỈ giữ lại thẻ (b, i, u)
+        txt = txt.replace(/<\/?(?!(b|i|u)>)[^>]+>/gi, '');
 
-        // 4. Giải mã các ký tự HTML Entities (ví dụ: &nbsp;)
+        // 4. Giải mã các ký tự HTML bị kẹt
         let temp = document.createElement('textarea');
         temp.innerHTML = txt;
         txt = temp.value;
@@ -563,7 +563,7 @@
         txt = txt.replace(/&nbsp;|\u00A0/gi, ' ');
         txt = txt.replace(/\n\s*\n/g, '\n\n'); 
 
-        // 6. Xóa các dấu \n thừa ở rìa văn bản, đảm bảo câu đầu tiên không bị dính khoảng trắng
+        // 6. Xóa các \n thừa ở rìa văn bản
         txt = txt.trim(); 
         
         return txt;
@@ -728,11 +728,13 @@
             HeThong.hienTai(true, HeThong.trangThai.idFileDangSua ? "Đang ghi đè tài liệu..." : "Đang tạo tài liệu mới...");
             
             const taiKhoanHienTai = HeThong.phienLamViec();
+            let dlGiaoDien = layToanBoDuLieuGiaoDien();
 
             HeThong.goiMayChu(hanhDong, { 
                 dongGoiTruyenLen: { 
                     loaiVanBan: loai, 
-                    duLieuForm: layToanBoDuLieuGiaoDien().data, 
+                    duLieuForm: dlGiaoDien.data, 
+                    nhanForm: dlGiaoDien.labels, // TRUYỀN THÊM NHÃN CHO BACKEND IN ĐỘNG
                     idFileDangCapNhat: HeThong.trangThai.idFileDangSua,
                     taiKhoanYeuCau: taiKhoanHienTai
                 } 

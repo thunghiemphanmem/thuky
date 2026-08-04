@@ -265,7 +265,6 @@
         </div>
     </div>
 
-    <!-- MẪU SỐ 2 VÀ CÁC MẪU KHÁC -->
     <div id="khoi_2" class="dynamic-block">
         <div class="form-panel">
             <div class="section-title">THÔNG TIN HÀNH CHÍNH & THỜI GIAN <span class="badge-ai">✨ Có AI hỗ trợ</span></div>
@@ -532,6 +531,7 @@
 
     // =========================================================================
     // [VÁ LỖI CỰC MẠNH] HÀM LÀM SẠCH VÀ CHUẨN HÓA HTML TỪ FRONTEND
+    // Khắc phục triệt để lỗi mất dòng đầu và xóa sạch khoảng trắng &nbsp;
     // =========================================================================
     function lamSachDuLieuTruocKhiGui(htmlTho) {
         if (!htmlTho) return "";
@@ -540,11 +540,13 @@
         // 1. Chuyển TẤT CẢ các thẻ tạo khối (đặc biệt là <div> chứa dòng đầu) thành \n
         txt = txt.replace(/<br\s*\/?>/gi, '\n')
                  .replace(/<div[^>]*>/gi, '\n')
+                 .replace(/<\/div>/gi, '')
                  .replace(/<p[^>]*>/gi, '\n')
-                 .replace(/<li[^>]*>/gi, '\n');
+                 .replace(/<\/p>/gi, '')
+                 .replace(/<li[^>]*>/gi, '\n')
+                 .replace(/<\/li>/gi, '');
 
         // 2. Ép tất cả các thẻ in đậm/nghiêng/gạch chân về dạng siêu tối giản: <b>, <i>, <u>
-        // Bất chấp việc Trình duyệt có gắn thêm style="", class="..." hay <strong >
         txt = txt.replace(/<(b|strong)[^>]*>/gi, '<b>').replace(/<\/(b|strong)>/gi, '</b>');
         txt = txt.replace(/<(i|em)[^>]*>/gi, '<i>').replace(/<\/(i|em)>/gi, '</i>');
         txt = txt.replace(/<u[^>]*>/gi, '<u>').replace(/<\/u>/gi, '</u>');
@@ -558,10 +560,12 @@
         txt = temp.value;
         
         // 5. Diệt sạch khoảng trắng ảo và dồn các dấu xuống dòng liên tiếp
-        txt = txt.replace(/&nbsp;/gi, ' ');
+        txt = txt.replace(/&nbsp;|\u00A0/gi, ' ');
         txt = txt.replace(/\n\s*\n/g, '\n\n'); 
 
-        // TRÁNH dùng .trim() ở đây để không làm mất dấu xuống dòng chủ động ở đầu văn bản
+        // 6. Xóa các dấu \n thừa ở rìa văn bản, đảm bảo câu đầu tiên không bị dính khoảng trắng
+        txt = txt.trim(); 
+        
         return txt;
     }
 

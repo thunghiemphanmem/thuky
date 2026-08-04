@@ -265,6 +265,7 @@
         </div>
     </div>
 
+    <!-- MẪU SỐ 2 VÀ CÁC MẪU KHÁC GIỮ NGUYÊN GIAO DIỆN -->
     <div id="khoi_2" class="dynamic-block">
         <div class="form-panel">
             <div class="section-title">THÔNG TIN HÀNH CHÍNH & THỜI GIAN <span class="badge-ai">✨ Có AI hỗ trợ</span></div>
@@ -530,7 +531,7 @@
     }
 
     // =========================================================================
-    // [VÁ LỖI CỰC MẠNH] HÀM TIỀN XỬ LÝ (KHẮC PHỤC LỖI TẠO RA RÁC <br> VÀ &nbsp;)
+    // [VÁ LỖI CỰC MẠNH] HÀM TIỀN XỬ LÝ (GIỮ LẠI XUỐNG DÒNG, LOẠI BỎ RÁC)
     // =========================================================================
     function lamSachDuLieuTruocKhiGui(htmlTho) {
         if (!htmlTho) return "";
@@ -541,19 +542,21 @@
                                .replace(/<\/p>/gi, '\n')
                                .replace(/<\/li>/gi, '\n');
         
-        // 2. Lọc bỏ HOÀN TOÀN các thẻ HTML rác, CHỈ giữ lại thẻ định dạng 
-        chuoiXuLy = chuoiXuLy.replace(/<\/?(?!b|strong|i|em|u)[a-z0-9]+[^>]*>/gi, "");
+        // 2. Lọc bỏ HOÀN TOÀN các thẻ HTML rác, CHỈ giữ lại thẻ định dạng b, strong, i, em, u 
+        // Lệnh Regex \b đảm bảo không xóa nhầm chữ b trong <br> ở các luồng khác nếu có
+        chuoiXuLy = chuoiXuLy.replace(/<\/?(?!(b|strong|i|em|u)\b)[a-z0-9]+[^>]*>/gi, "");
                                
-        // 3. Xử lý triệt để các ký tự đặc biệt HTML (đặc biệt là &nbsp;)
+        // 3. Xử lý triệt để các ký tự đặc biệt HTML (đặc biệt là &nbsp;) thông qua Textarea DOM
         let phanTuAo = document.createElement('textarea');
         phanTuAo.innerHTML = chuoiXuLy;
         chuoiXuLy = phanTuAo.value;
         
-        // Quét lần cuối bằng Regex để diệt tận gốc khoảng trắng &nbsp; ảo
+        // Diệt tận gốc khoảng trắng &nbsp; ảo nếu DOM không xử lý hết
         chuoiXuLy = chuoiXuLy.replace(/&nbsp;/gi, ' ');
         
-        // 4. Dọn dẹp các khoảng trống và \n dư thừa liên tiếp
-        chuoiXuLy = chuoiXuLy.replace(/\n\s*\n/g, '\n\n').trim();
+        // 4. Dọn dẹp các \n dư thừa liên tiếp (chỉ giữ tối đa 2 lần xuống dòng)
+        // KHÔNG DÙNG HÀM .trim() ĐỂ BẢO TOÀN DẤU XUỐNG DÒNG Ở ĐẦU VÀ CUỐI VĂN BẢN
+        chuoiXuLy = chuoiXuLy.replace(/\n{3,}/g, '\n\n');
         
         return chuoiXuLy;
     }
@@ -805,7 +808,7 @@
                         let strVal = f[key].toString();
                         
                         if (inp.rteObject) {
-                            // Khôi phục ký tự \n thành <br> để Rich Text hiển thị đúng xuống dòng
+                            // Khôi phục ký tự \n thành <br> để Rich Text hiển thị đúng
                             let strRTE = strVal.replace(/\r?\n/g, '<br>');
                             inp.rteObject.innerHTML = strRTE;
                             inp.value = strRTE;

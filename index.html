@@ -323,7 +323,7 @@
     <div class="action-bar" id="thanhCongCu" style="display: none;">
         <button class="btn btn-sky" onclick="chayNghiepVu('PhanTichAI')" id="btnAI" title="Kích hoạt trợ lý AI">Trợ Lý Đánh giá</button>
         <button class="btn btn-green" onclick="chayNghiepVu('LuuHoSo')" id="btnHoSo">Tạo Văn Bản</button>
-        <button class="btn btn-purple" onclick="hienThiXemTruoc()" id="btnXemTruoc">Xem Trước Dữ lưu</button>
+        <button class="btn btn-purple" onclick="hienThiXemTruoc()" id="btnXemTruoc">Xem Trước Dữ liệu</button>
         <button class="btn" style="background: #f59e0b;" onclick="moPanel('panelKhoLuuTru')" id="btnTraCuu">Mục lục tài liệu</button>
         <button class="btn" style="background: #8b5cf6;" onclick="moPanel('panelTruyVanAI')" id="btnGoiAI" title="Tra cứu và tổng hợp dữ liệu từ nhiều cuộc họp">🤖 Truy Vấn thông tin</button>
         <button class="btn btn-red" onclick="lamMoiForm(false)" id="btnLamMoi">Làm Mới Biểu Mẫu</button>
@@ -530,26 +530,29 @@
     }
 
     // =========================================================================
-    // HÀM TIỀN XỬ LÝ (KHẮC PHỤC LỖI TẠO RA RÁC <br> VÀ &nbsp;)
+    // [VÁ LỖI CỰC MẠNH] HÀM TIỀN XỬ LÝ (KHẮC PHỤC LỖI TẠO RA RÁC <br> VÀ &nbsp;)
     // =========================================================================
     function lamSachDuLieuTruocKhiGui(htmlTho) {
         if (!htmlTho) return "";
         
-        // 1. Chuyển các thẻ ngắt dòng (và khối) thành ký tự xuống dòng thuần \n
-        let chuoiXuLy = htmlTho.replace(/<\s*br\s*\/?>/gi, '\n')
+        // 1. Chuyển TẤT CẢ các thẻ ngắt dòng/khối thành ký tự xuống dòng thuần \n
+        let chuoiXuLy = htmlTho.replace(/<br\s*\/?>/gi, '\n')
                                .replace(/<\/div>/gi, '\n')
                                .replace(/<\/p>/gi, '\n')
                                .replace(/<\/li>/gi, '\n');
         
-        // 2. Lọc bỏ hoàn toàn các thẻ HTML rác, CHỈ giữ lại định dạng in đậm, nghiêng, gạch chân
+        // 2. Lọc bỏ HOÀN TOÀN các thẻ HTML rác, CHỈ giữ lại thẻ định dạng 
         chuoiXuLy = chuoiXuLy.replace(/<\/?(?!b|strong|i|em|u)[a-z0-9]+[^>]*>/gi, "");
                                
-        // 3. Dùng textarea ẩn để giải mã hoàn toàn HTML Entities (Xóa sạch lỗi in ra &nbsp;)
+        // 3. Xử lý triệt để các ký tự đặc biệt HTML (đặc biệt là &nbsp;)
         let phanTuAo = document.createElement('textarea');
         phanTuAo.innerHTML = chuoiXuLy;
         chuoiXuLy = phanTuAo.value;
         
-        // 4. Dọn dẹp khoảng trắng thừa và dồn các dòng trống liên tiếp
+        // Quét lần cuối bằng Regex để diệt tận gốc khoảng trắng &nbsp; ảo
+        chuoiXuLy = chuoiXuLy.replace(/&nbsp;/gi, ' ');
+        
+        // 4. Dọn dẹp các khoảng trống và \n dư thừa liên tiếp
         chuoiXuLy = chuoiXuLy.replace(/\n\s*\n/g, '\n\n').trim();
         
         return chuoiXuLy;

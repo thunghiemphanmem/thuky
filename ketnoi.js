@@ -1,3 +1,4 @@
+
 // =========================================================================
 // KHỐI 1: BẢNG CẤU HÌNH TRUNG TÂM HỆ THỐNG GIAO DIỆN (FRONTEND)
 // Tệp: ketnoi.js

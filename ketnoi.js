@@ -25,7 +25,8 @@ const KET_NOI = {
   // 5. DANH SÁCH KIỂM DUYỆT BỀ MẶT (Phục hồi để Frontend chặn tức thời)
   DANH_SACH_TAI_KHOAN: [
       'hoangngoclamlc@gmail.com',
-      'tulieuhopthanh@gmail.com'
+      'tulieuhopthanh@gmail.com',
+    'nguyenthibinh1980thht@gmail.com'
   ],
 
   // 6. DANH MỤC VĂN BẢN

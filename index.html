@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -266,7 +265,6 @@
         </div>
     </div>
 
-    <!-- KHỐI 2 ĐẾN 9 GIỮ NGUYÊN (Để tránh quá tải mã, vẫn bao gồm đầy đủ cấu trúc UI) -->
     <div id="khoi_2" class="dynamic-block">
         <div class="form-panel">
             <div class="section-title">THÔNG TIN HÀNH CHÍNH & THỜI GIAN <span class="badge-ai">✨ Có AI hỗ trợ</span></div>
@@ -308,7 +306,6 @@
         </div>
     </div>
 
-    <!-- KHOI 3, 4, 5, 6, 7, 8, 9 (Tương tự logic đã cấu trúc ở index.html nguyên bản) -->
     <div id="khoi_3" class="dynamic-block"><div class="form-panel"><div class="section-title">THÔNG TIN QUYẾT ĐỊNH KT/GS <span class="badge-no-ai">🔒 Khóa AI</span></div><div class="grid-3"><div class="form-group"><label>Tên Chi bộ:</label><input type="text" data-key="Ten_Chi_Bo"></div><div class="form-group"><label>Nơi ban hành:</label><input type="text" data-key="Noi_Ban_Hanh"></div><div class="form-group"><label>Ngày ban hành:</label><input type="date" class="med-input" data-key="NgayBanHanh"></div></div><div class="grid-3"><div class="form-group"><label>Số Quyết định:</label><input type="text" class="short-input" data-key="So_Quyet_Dinh" placeholder="VD: 12"></div><div class="form-group"><label>Loại hình:</label><input type="text" class="short-input" data-key="Loai_Hinh" placeholder="VD: Kiểm tra"></div><div class="form-group"><label>Đảng viên được KT:</label><input type="text" data-key="Dang_Vien_Duoc_Kiem_Tra"></div></div></div><div class="form-panel"><div class="section-title">NỘI DUNG & TỔ CÔNG TÁC</div><div class="form-group col-layout"><label>Nội dung kiểm tra/giám sát:</label><textarea data-key="Noi_Dung_Kiem_Tra"></textarea></div><div class="grid-3"><div class="form-group"><label>Tổ trưởng:</label><input type="text" data-key="To_Truong"></div><div class="form-group"><label>Thư ký:</label><input type="text" data-key="Thu_Ky"></div><div class="form-group"><label>Thành viên:</label><input type="text" data-key="Thanh_Vien"></div></div></div></div>
 
     <div id="khoi_4" class="dynamic-block"><div class="form-panel"><div class="section-title">THÔNG TIN KẾ HOẠCH KT/GS <span class="badge-no-ai">🔒 Khóa AI</span></div><div class="grid-3"><div class="form-group"><label>Tên Chi bộ:</label><input type="text" data-key="Ten_Chi_Bo"></div><div class="form-group"><label>Nơi ban hành:</label><input type="text" data-key="Noi_Ban_Hanh"></div><div class="form-group"><label>Ngày ban hành:</label><input type="date" class="med-input" data-key="NgayBanHanh"></div></div><div class="grid-2"><div class="form-group"><label>Loại hình (KT/GS):</label><input type="text" class="med-input" data-key="Loai_Hinh"></div><div class="form-group"><label>Đảng viên được KT:</label><input type="text" data-key="Dang_Vien_Duoc_Kiem_Tra"></div></div></div><div class="form-panel" style="border-left: 3px solid var(--accent);"><div class="section-title">CĂN CỨ VÀ THỜI GIAN TIẾN HÀNH</div><div class="grid-2"><div class="form-group"><label style="color:#b45309;">Số Quyết định gốc:</label><input type="text" class="short-input" data-key="So_Quyet_Dinh" style="border-bottom-color:#fcd34d;"></div><div class="form-group"><label style="color:#b45309;">Ngày ra Quyết định:</label><input type="date" class="med-input" data-key="NgayQuyetDinh" style="border-bottom-color:#fcd34d;"></div></div><div class="form-group col-layout"><label>Nội dung kiểm tra/giám sát:</label><textarea data-key="Noi_Dung_Kiem_Tra"></textarea></div><div class="grid-2"><div class="form-group col-layout" style="background:#f8fafc; padding:10px; border-radius:6px; border:1px solid #e2e8f0;"><label>Thời hiệu KT/GS:</label><div style="display:flex; gap:10px; width:100%; align-items: center;"><input type="date" data-key="Tu_Ngay_Hieu_Luc"><span>đến</span><input type="date" data-key="Den_Ngay_Hieu_Luc"></div></div><div class="form-group col-layout" style="background:#f8fafc; padding:10px; border-radius:6px; border:1px solid #e2e8f0;"><label>Thời gian tiến hành:</label><div style="display:flex; gap:10px; width:100%; align-items: center;"><input type="date" data-key="Tu_Ngay_Tien_Hanh"><span>đến</span><input type="date" data-key="Den_Ngay_Tien_Hanh"></div></div></div></div></div>
@@ -326,13 +323,12 @@
     <div class="action-bar" id="thanhCongCu" style="display: none;">
         <button class="btn btn-sky" onclick="chayNghiepVu('PhanTichAI')" id="btnAI" title="Kích hoạt trợ lý AI">Trợ Lý Đánh giá</button>
         <button class="btn btn-green" onclick="chayNghiepVu('LuuHoSo')" id="btnHoSo">Tạo Văn Bản</button>
-        <button class="btn btn-purple" onclick="hienThiXemTruoc()" id="btnXemTruoc">Xem Trước Dữ Liệu</button>
+        <button class="btn btn-purple" onclick="hienThiXemTruoc()" id="btnXemTruoc">Xem Trước Dữ lưu</button>
         <button class="btn" style="background: #f59e0b;" onclick="moPanel('panelKhoLuuTru')" id="btnTraCuu">Mục lục tài liệu</button>
         <button class="btn" style="background: #8b5cf6;" onclick="moPanel('panelTruyVanAI')" id="btnGoiAI" title="Tra cứu và tổng hợp dữ liệu từ nhiều cuộc họp">🤖 Truy Vấn thông tin</button>
         <button class="btn btn-red" onclick="lamMoiForm(false)" id="btnLamMoi">Làm Mới Biểu Mẫu</button>
     </div>
 
-    <!-- Cập nhật theo yêu cầu người dùng: (2 dòng) -->
     <div class="signature-footer">Thiết kế và phát triển<br>Hoàng Ngọc Lâm</div>
 </div>
 
@@ -368,7 +364,6 @@
     </div>
 </div>
 
-<!-- KHỐI PANEL AI GIỮ NGUYÊN -->
 <div class="side-panel" id="panelTruyVanAI"><div class="panel-header" style="padding: 6px 15px;"><h3 style="color: #6d28d9; font-size: 1.1rem; margin: 0;">🤖 Trợ Lý Phân Tích Dữ Liệu</h3><button class="btn-close-panel" onclick="dongTatCaPanel()">✖</button></div><div class="panel-content" style="padding: 10px 15px;"><div class="ai-dashboard"><div class="ai-control-panel"><div class="form-group col-layout"><label style="color: #475569;">Câu hỏi truy vấn:</label><textarea id="aiCauHoiTruyVan" placeholder="Ai được biểu dương trong các cuộc họp chi bộ gần đây? Nội dung là gì?" style="height: 70px; border-radius: 6px; padding: 8px; border: 1px solid #cbd5e1;"></textarea></div><div class="form-group col-layout" style="margin-top: 12px;"><label style="color: #475569;">Phạm vi văn bản:</label><select id="aiLoaiVanBan" style="border-radius: 6px; padding: 6px; border: 1px solid #cbd5e1;"><option value="ALL_EXCEPT_3_4" selected>-- Quét tất cả (Trừ Quyết định, Kế hoạch) --</option><option value="ALL_MEETING">-- Chỉ quét Biên bản / Cuộc họp --</option><option value="1">Phiếu đánh giá bài dạy (1)</option><option value="2">Biên bản sự việc (2)</option><option value="5">Biên bản triển khai kiểm tra (5)</option><option value="6">Báo cáo giải trình (6)</option><option value="7">Báo cáo thẩm tra (7)</option><option value="8">Biên bản họp chi bộ (8)</option><option value="9">Biên bản công bố kết quả (9)</option></select></div><div class="grid-2" style="margin-top: 12px;"><div class="form-group col-layout"><label style="color: #475569;">Từ ngày:</label><input type="date" id="aiTuNgay" style="border-radius: 6px; border: 1px solid #cbd5e1;"></div><div class="form-group col-layout"><label style="color: #475569;">Đến ngày:</label><input type="date" id="aiDenNgay" style="border-radius: 6px; border: 1px solid #cbd5e1;"></div></div><div class="form-group col-layout" style="margin-top: 12px;"><label style="color: #475569;">Giới hạn quét (Mới nhất):</label><select id="aiGioiHanQuet" style="border-radius: 6px; padding: 6px; border: 1px solid #cbd5e1;"><option value="5">5 hồ sơ</option><option value="10" selected>10 hồ sơ</option><option value="20">20 hồ sơ</option></select></div><button class="btn btn-purple" style="width: 100%; margin-top: 15px; padding: 12px 0;" onclick="kichHoatTruyVanCheo()">🤖 YÊU CẦU AI PHÂN TÍCH</button><div id="aiThongBaoTrangThai" style="margin-top: 10px; font-size: 0.85rem; color: #64748b; text-align: center; font-style: italic;"></div></div><div class="ai-result-panel"><div class="ai-table-container"><table class="preview-table" style="width: 100%; margin: 0; border: none;"><thead style="position: sticky; top: 0; z-index: 10;"><tr><th style="width: 25%; background: #f3f4f6;">Văn bản gốc</th><th style="width: 15%; background: #f3f4f6;">Thời gian</th><th style="width: 60%; background: #ede9fe; color: #6d28d9;">Kết luận từ Trợ lý AI</th></tr></thead><tbody id="vungHienThiKetQuaAI"><tr><td colspan="3" style="text-align: center; padding: 30px; color: #94a3b8; font-style: italic;">Vui lòng đặt câu hỏi để AI rà soát.</td></tr></tbody></table></div><div class="ai-preview-frame"><div style="background: #f1f5f9; padding: 8px 15px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;"><div id="aiTieuDeKhungXem" style="font-weight: 600; color: #0f172a; font-size: 10.5pt; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Bản xem trước tài liệu gốc</div><button id="aiNutTaiDocx" class="btn btn-green" style="padding: 4px 12px; font-size: 8.5pt; display: none;">⬇️ TẢI WORD</button></div><iframe id="aiKhungXemTruocTep" style="width: 100%; flex: 1; border: none; min-height: 250px;" src="about:blank"></iframe></div></div></div></div></div>
 
 <div class="modal-overlay" id="previewModal">
@@ -521,7 +516,6 @@
                 document.execCommand('insertText', false, text);
             });
             
-            // Lắng nghe cả sự kiện blur để chốt dữ liệu
             const dongBoDuLieu = () => { ta.value = editor.innerHTML; };
             editor.addEventListener('input', dongBoDuLieu);
             editor.addEventListener('blur', dongBoDuLieu);
@@ -536,23 +530,27 @@
     }
 
     // =========================================================================
-    // HÀM TIỀN XỬ LÝ: CHUẨN HÓA HTML TỪ TRÌNH SOẠN THẢO TRƯỚC KHI GỬI
-    // [BẢN NÂNG CẤP] - Thay thế toàn bộ hàm làm sạch cũ
+    // HÀM TIỀN XỬ LÝ (KHẮC PHỤC LỖI TẠO RA RÁC <br> VÀ &nbsp;)
     // =========================================================================
     function lamSachDuLieuTruocKhiGui(htmlTho) {
         if (!htmlTho) return "";
         
-        // 1. Quy đổi mọi khối tạo dòng (div, p, li) thành thẻ <br> để dễ map sang Paragraph trên Docs
-        let chuoiXuLy = htmlTho.replace(/<\/?(div|p|li)[^>]*>/gi, '<br>');
+        // 1. Chuyển các thẻ ngắt dòng (và khối) thành ký tự xuống dòng thuần \n
+        let chuoiXuLy = htmlTho.replace(/<\s*br\s*\/?>/gi, '\n')
+                               .replace(/<\/div>/gi, '\n')
+                               .replace(/<\/p>/gi, '\n')
+                               .replace(/<\/li>/gi, '\n');
+        
+        // 2. Lọc bỏ hoàn toàn các thẻ HTML rác, CHỈ giữ lại định dạng in đậm, nghiêng, gạch chân
+        chuoiXuLy = chuoiXuLy.replace(/<\/?(?!b|strong|i|em|u)[a-z0-9]+[^>]*>/gi, "");
                                
-        // 2. Lọc tuyệt đối HTML rác, CHỈ giữ lại thẻ định dạng và thẻ <br>
-        chuoiXuLy = chuoiXuLy.replace(/<\/?(?!b|strong|i|em|u|br)[a-z0-9]+[^>]*>/gi, "");
+        // 3. Dùng textarea ẩn để giải mã hoàn toàn HTML Entities (Xóa sạch lỗi in ra &nbsp;)
+        let phanTuAo = document.createElement('textarea');
+        phanTuAo.innerHTML = chuoiXuLy;
+        chuoiXuLy = phanTuAo.value;
         
-        // 3. Xử lý các khoảng trống thừa và dọn dẹp thẻ <br> xếp chồng quá nhiều
-        chuoiXuLy = chuoiXuLy.replace(/(<br>\s*){3,}/g, '<br><br>').trim();
-        
-        // 4. Cắt thẻ <br> vô nghĩa ở đầu và cuối chuỗi
-        chuoiXuLy = chuoiXuLy.replace(/^(<br>)+|(<br>)+$/gi, '');
+        // 4. Dọn dẹp khoảng trắng thừa và dồn các dòng trống liên tiếp
+        chuoiXuLy = chuoiXuLy.replace(/\n\s*\n/g, '\n\n').trim();
         
         return chuoiXuLy;
     }
@@ -784,6 +782,9 @@
         }, () => { ul.innerHTML = '<li style="padding: 15px; text-align: center; color: #ef4444;">Lỗi tải dữ liệu.</li>'; });
     }
 
+    // =========================================================================
+    // HÀM HIỂN THỊ DỮ LIỆU ĐỂ SỬA (GIẢI QUYẾT LỖI XUỐNG DÒNG H3)
+    // =========================================================================
     function napDuLieuSua(chuoi) {
         try {
             const dl = typeof chuoi === 'string' ? JSON.parse(chuoi) : chuoi; 
@@ -801,11 +802,10 @@
                         let strVal = f[key].toString();
                         
                         if (inp.rteObject) {
-                            if (!/<\/?(b|i|u|br|div|p|span)[^>]*>/i.test(strVal)) {
-                                strVal = strVal.replace(/\r?\n/g, '<br>');
-                            }
-                            inp.rteObject.innerHTML = strVal;
-                            inp.value = strVal;
+                            // Khôi phục ký tự \n thành <br> để Rich Text hiển thị đúng xuống dòng
+                            let strRTE = strVal.replace(/\r?\n/g, '<br>');
+                            inp.rteObject.innerHTML = strRTE;
+                            inp.value = strRTE;
                         } else {
                             inp.value = strVal;
                         }

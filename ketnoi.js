@@ -21,7 +21,7 @@ const KET_NOI = {
       'hoangngoclamlc@gmail.com',
       'tulieuhopthanh@gmail.com',
     'nguyenthibinh1980thht@gmail.com',
-    'khotulieuht@gmail.com'
+    'khotailieuht@gmail.com'
   ],
 
   // 6. DANH MỤC VĂN BẢN

@@ -27,7 +27,8 @@ const KET_NOI = {
   DANH_SACH_TAI_KHOAN: [
       'hoangngoclamlc@gmail.com',
       'tulieuhopthanh@gmail.com',
-    'nguyenthibinh1980thht@gmail.com'
+    'nguyenthibinh1980thht@gmail.com',
+    'khotulieuht@gmail.com'
   ],
 
   // 6. DANH MỤC VĂN BẢN

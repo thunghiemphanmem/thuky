@@ -1,10 +1,3 @@
-
-// =========================================================================
-// KHỐI 1: BẢNG CẤU HÌNH TRUNG TÂM HỆ THỐNG GIAO DIỆN (FRONTEND)
-// Tệp: ketnoi.js
-// Nâng cấp: Đã khôi phục mảng kiểm duyệt bề mặt để chặn đăng nhập tức thời
-// =========================================================================
-
 const KET_NOI = {
   // 1. THÔNG SỐ KẾT NỐI MÁY CHỦ
   URL_API_BACKEND: 'https://script.google.com/macros/s/AKfycbykcfF-bHJ8S7W282LSwhrGe8QUoTj9hWJt5SJGn6VgoP3a4xwzvTTEpKk4K-oaCgMXuQ/exec',
